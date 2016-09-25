@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">EmergencyAssistance</string>
+    <string name="profile">Profile</string>
+    <string name="defense_yourself">Defense Yourself</string>
+    <string name="emergency_sound">Emergency Sound</string>
+    <string name="setting">Setting</string>
+    <string name="more">More</string>
+</resources>

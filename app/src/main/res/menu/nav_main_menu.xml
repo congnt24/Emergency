@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:title="Import" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:title="Gallery" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:title="Slideshow" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/bg_rounded_layout"
+            android:title="Tools" />
+    </group>-->
+
+    <item
+        android:id="@+id/nav_profile"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/nav_defense_yourself"
+        android:title="@string/defense_yourself" />
+    <item
+        android:id="@+id/nav_emergency_sound"
+        android:title="@string/emergency_sound" />
+    <item
+        android:id="@+id/nav_setting"
+        android:title="@string/setting" />
+    <item
+        android:id="@+id/nav_more"
+        android:title="@string/more" />
+
+</menu>

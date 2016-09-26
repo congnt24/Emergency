@@ -187,6 +187,7 @@ public abstract class AwesomeActivity extends AppCompatActivity {
         if (enableSearch) {
             if (searchView.isSearchOpen()) {
                 searchView.closeSearch();
+                return;
             } else {
                 super.onBackPressed();
             }
@@ -196,6 +197,7 @@ public abstract class AwesomeActivity extends AppCompatActivity {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+            return;
         } else {
             super.onBackPressed();
         }

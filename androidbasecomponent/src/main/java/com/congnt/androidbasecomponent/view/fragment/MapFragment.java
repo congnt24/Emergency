@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -50,7 +51,6 @@ public class MapFragment extends AwesomeFragment implements OnMapReadyCallback, 
 
     @Override
     protected void initAll(View rootView) {
-        PermissionUtil.getInstance(getActivity()).requestPermissions(locationPermission);
         tv_address = (TextView) rootView.findViewById(R.id.uLocationAddress);
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -88,24 +88,36 @@ public class MapFragment extends AwesomeFragment implements OnMapReadyCallback, 
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    public void updateLocation(Location location) {
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-        Geocoder geo = new Geocoder(getActivity(), Locale.getDefault());
-        try {
-            List<Address> addresses = geo.getFromLocation(lat, lng, 1);
-            if (addresses.isEmpty()) {
-                tv_address.setText("Waiting for location");
-            } else {
-                tv_address.setText(addresses.get(0).getAddressLine(0) + ", "
-                        + addresses.get(0).getAddressLine(1) + ", "
-                        + addresses.get(0).getAddressLine(2) + ", "
-                        + addresses.get(0).getAddressLine(3)
-                );
+    public void updateLocation(final Location location) {
+        final double lat = location.getLatitude();
+        final double lng = location.getLongitude();
+        new AsyncTask<Void, Void, List<Address>>() {
+            @Override
+            protected List<Address> doInBackground(Void... params) {
+                Geocoder geo = new Geocoder(getActivity(), Locale.getDefault());
+                List<Address> addresses = null;
+                try {
+                    addresses = geo.getFromLocation(lat, lng, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return addresses;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+            @Override
+            protected void onPostExecute(List<Address> addresses) {
+                if (addresses.isEmpty()){
+                    tv_address.setText("Waiting for location");
+                } else {
+                    tv_address.setText(addresses.get(0).getAddressLine(0) + ", "
+                            + addresses.get(0).getAddressLine(1) + ", "
+                            + addresses.get(0).getAddressLine(2) + ", "
+                            + addresses.get(0).getAddressLine(3)
+                    );
+                    movingCamera(location);
+                }
+            }
+        }.execute();
     }
 
     @Override
@@ -119,7 +131,6 @@ public class MapFragment extends AwesomeFragment implements OnMapReadyCallback, 
     @Override
     public void onLocationChanged(Location location) {
         updateLocation(location);
-        movingCamera(location);
     }
 
     @Override

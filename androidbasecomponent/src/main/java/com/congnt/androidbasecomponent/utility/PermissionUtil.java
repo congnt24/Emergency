@@ -24,11 +24,11 @@ import java.util.List;
 
 public class PermissionUtil implements PermissionListener, MultiplePermissionsListener {
     public static PermissionUtil instance;
-    private final Context context;
+    private Context context;
 
     public PermissionUtil(Context context) {
-        this.context = context;
         Dexter.initialize(context);
+        this.context = context;
     }
 
     public static PermissionUtil getInstance(Context context) {

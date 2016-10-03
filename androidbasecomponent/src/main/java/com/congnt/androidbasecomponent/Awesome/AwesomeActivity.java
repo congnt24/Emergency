@@ -113,7 +113,7 @@ public abstract class AwesomeActivity extends AppCompatActivity {
             viewStub.setLayoutResource(mainLayoutId);
             View mainView = viewStub.inflate();
             initialize(mainView);
-        }else{
+        } else {
             initialize(null);
         }
 
@@ -188,19 +188,14 @@ public abstract class AwesomeActivity extends AppCompatActivity {
             if (searchView.isSearchOpen()) {
                 searchView.closeSearch();
                 return;
-            } else {
-                super.onBackPressed();
             }
-        } else {
-            super.onBackPressed();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
             return;
-        } else {
-            super.onBackPressed();
         }
+        super.onBackPressed();
     }
 
     //Define annotation

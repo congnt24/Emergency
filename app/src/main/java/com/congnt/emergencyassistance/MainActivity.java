@@ -15,6 +15,8 @@ import com.congnt.androidbasecomponent.adapter.ViewPagerAdapter;
 import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
+import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
+import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
 import com.congnt.emergencyassistance.fragments.MainFragment;
 import com.congnt.emergencyassistance.fragments.WalkingFragment;
 
@@ -32,6 +34,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             , Manifest.permission.ACCESS_COARSE_LOCATION
             , Manifest.permission.RECORD_AUDIO
             , Manifest.permission.CAMERA};
+    private RecognitionProgressView speechView;
 
     @Override
     protected int getLayoutId() {
@@ -54,20 +57,30 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         getNavigationView().inflateMenu(R.menu.nav_main_menu);
         getNavigationView().setNavigationItemSelectedListener(this);
         //init viewpager
-        ViewPager viewPager = (ViewPager) mainView.findViewById(R.id.viewPager);
-        TabLayout tabLayout = (TabLayout) mainView.findViewById(R.id.tabLayout);
+        setupViewPager(mainView);
+    }
+
+    public void setupViewPager(View root) {
+        ViewPager viewPager = (ViewPager) root.findViewById(R.id.viewPager);
         List<AwesomeFragment> listFragment = new ArrayList<>();
         listFragment.add(MainFragment.newInstance());
         listFragment.add(WalkingFragment.newInstance());
         listFragment.add(WalkingFragment.newInstance());
         listFragment.add(WalkingFragment.newInstance());
         viewPager.setAdapter(new ViewPagerAdapter<>(getSupportFragmentManager(), listFragment));
-        viewPager.setOffscreenPageLimit(listFragment.size()-1);
+        viewPager.setOffscreenPageLimit(listFragment.size() - 1);
+        //Setup TabLayout
+        setupTabLayout(root, viewPager);
+    }
+
+    public void setupTabLayout(View root, ViewPager viewPager) {
+        TabLayout tabLayout = (TabLayout) root.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_mic);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_search);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_mic);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search);
+        TabLayoutUtil.setCustomLayouts(tabLayout, R.layout.item_tab_tablayout);
+        TabLayoutUtil.setIcons(tabLayout, R.drawable.ic_home, R.drawable.ic_report_problem, R.drawable.ic_place, R.drawable.ic_directions_run);
+//        TabLayoutUtil.setTexts(tabLayout, "Home", "Setting", "Near By", "Walking");
+        //Best Solution
+        TabLayoutUtil.setColorSelectorIcons(tabLayout, R.color.tab_icon);
     }
 
     @Override

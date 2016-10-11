@@ -28,6 +28,10 @@ public class AnimationUtil {
         fadeOutView(hideView, duration);
     }
 
+    /**
+     * Fade In Default parameter.
+     * @param view view you want to animate
+     */
     public static void fadeInView(View view) {
         fadeInView(view, ANIMATION_DURATION_SHORT);
     }
@@ -65,6 +69,12 @@ public class AnimationUtil {
         ViewCompat.animate(view).alpha(1f).setDuration(duration).setListener(vpListener);
     }
 
+    /**
+     * Reveal animation if targetApi > LOLLIPOP
+     * @param view  view you want to reveal
+     * @param showOrHide true if you wanna show, false otherwise
+     * @param listener Listening for finishing event
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void reveal(final View view, boolean showOrHide, final AnimationListener listener) {
         int cx = view.getWidth() - (int) TypedValue.applyDimension(
@@ -103,6 +113,10 @@ public class AnimationUtil {
         anim.start();
     }
 
+    /**
+     * Fade Out Default parameter.
+     * @param view view you want to animate
+     */
     public static void fadeOutView(View view) {
         fadeOutView(view, ANIMATION_DURATION_SHORT);
     }

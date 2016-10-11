@@ -13,12 +13,12 @@ import java.util.List;
  */
 public abstract class AwesomeRecyclerAdapter<VH extends RecyclerView.ViewHolder, T> extends RecyclerView.Adapter<VH> {
 
-    protected View.OnClickListener onClickListener;
+    protected OnClickListener<T> onClickListener;
     protected List<T> mList;
     private Context context;
     private LayoutInflater mLayoutInflater;
 
-    public AwesomeRecyclerAdapter(Context context, List<T> mList, View.OnClickListener onClickListener) {
+    public AwesomeRecyclerAdapter(Context context, List<T> mList, OnClickListener<T> onClickListener) {
         this.onClickListener = onClickListener;
         this.context = context;
         this.mList = mList;
@@ -33,9 +33,14 @@ public abstract class AwesomeRecyclerAdapter<VH extends RecyclerView.ViewHolder,
 
 
     @Override
-    public void onBindViewHolder(VH holder, int position) {
+    public void onBindViewHolder(VH holder, final int position) {
         bindHolder(holder, position);
-        holder.itemView.setOnClickListener(onClickListener);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickListener.onClick(mList.get(position));
+            }
+        });
     }
 
 
@@ -49,4 +54,8 @@ public abstract class AwesomeRecyclerAdapter<VH extends RecyclerView.ViewHolder,
     protected abstract VH getViewHolder(View itemView);
 
     protected abstract void bindHolder(VH holder, int position);
+
+    public interface OnClickListener<T> {
+        void onClick(T item);
+    }
 }

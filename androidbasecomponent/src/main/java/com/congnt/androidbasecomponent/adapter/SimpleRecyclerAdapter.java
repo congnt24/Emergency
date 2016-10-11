@@ -12,7 +12,8 @@ import java.util.List;
  */
 public class SimpleRecyclerAdapter extends AwesomeRecyclerAdapter<SimpleRecyclerAdapter.ViewHolder, String> {
 
-    public SimpleRecyclerAdapter(Context context, List<String> mList, View.OnClickListener onClickListener) {
+
+    public SimpleRecyclerAdapter(Context context, List<String> mList, OnClickListener<String> onClickListener) {
         super(context, mList, onClickListener);
     }
 

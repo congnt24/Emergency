@@ -80,6 +80,9 @@ public class FlatButtonWithIconTop extends AwesomeLayout {
             tv_text.setVisibility(GONE);
         }
     }
+    public String getText(){
+        return tv_text.getText().toString();
+    }
 
     public void setText(String text) {
         tv_text.setText(text);

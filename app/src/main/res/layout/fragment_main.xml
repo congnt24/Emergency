@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/map_fragment"
-        class="com.congnt.androidbasecomponent.view.fragment.MapFragment"
+        class="com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation"
         android:layout_width="match_parent"
         android:layout_height="180dp" />
 
@@ -56,15 +56,16 @@
         android:orientation="horizontal">
 
         <ToggleButton
-            android:id="@+id/btn_start"
+            android:id="@+id/btn_start_stop"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="@drawable/toggle_start_stop_selector"
             android:textOff="Start"
             android:textOn="Stop" />
 
         <com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView
             android:id="@+id/speechview"
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="60dp" />
     </LinearLayout>
 </RelativeLayout>

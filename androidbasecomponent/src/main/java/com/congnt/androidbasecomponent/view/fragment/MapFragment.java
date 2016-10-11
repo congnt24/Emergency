@@ -29,6 +29,12 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 
 public class MapFragment extends AwesomeFragment implements OnMapReadyCallback, LocationListener {
+    private OnMapReadyListener onMapReadyListener;
+
+    public GoogleMap getMap() {
+        return mMap;
+    }
+
     private GoogleMap mMap;
     private LocationManager locationManager;
     private String provider;
@@ -39,6 +45,7 @@ public class MapFragment extends AwesomeFragment implements OnMapReadyCallback, 
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION};
     private Context context;
+    private boolean enableGestures;
 
     public MapFragment() {
 
@@ -71,18 +78,25 @@ public class MapFragment extends AwesomeFragment implements OnMapReadyCallback, 
         mMap = googleMap;
         if (PermissionUtil.getInstance(context).checkMultiPermission(locationPermission)) {
             mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setScrollGesturesEnabled(false);
+            mMap.getUiSettings().setScrollGesturesEnabled(enableGestures);
             provider = locationManager.getBestProvider(new Criteria(), true);
             location = locationManager.getLastKnownLocation(provider);
-            if (location == null) {
+            if (NetworkUtil.isNetworkConnected(context)) {
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            }
+            /*if (location == null) {
                 if (NetworkUtil.isNetworkConnected(context)) {
                     location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 }
-            }
+            }*/
             if (location != null) {
                 onLocationChanged(location);
             }
             locationManager.requestLocationUpdates(provider, 1000, 1, this);
+
+            if (onMapReadyListener != null){
+                onMapReadyListener.onMapReady();
+            }
         }
     }
 
@@ -113,6 +127,14 @@ public class MapFragment extends AwesomeFragment implements OnMapReadyCallback, 
         }.execute();
     }
 
+    public void setScrollGesturesEnabled(boolean enableGestures) {
+        this.enableGestures = enableGestures;
+        if (mMap != null) mMap.getUiSettings().setScrollGesturesEnabled(enableGestures);
+    }
+    public void SetOnMapReadyListener(OnMapReadyListener onMapReadyListener){
+        this.onMapReadyListener = onMapReadyListener;
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -139,5 +161,9 @@ public class MapFragment extends AwesomeFragment implements OnMapReadyCallback, 
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    public interface OnMapReadyListener {
+        void onMapReady();
     }
 }

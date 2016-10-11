@@ -18,6 +18,7 @@ import com.congnt.androidbasecomponent.utility.PermissionUtil;
 import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
 import com.congnt.emergencyassistance.fragments.MainFragment;
+import com.congnt.emergencyassistance.fragments.NearByFragment;
 import com.congnt.emergencyassistance.fragments.WalkingFragment;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         List<AwesomeFragment> listFragment = new ArrayList<>();
         listFragment.add(MainFragment.newInstance());
         listFragment.add(WalkingFragment.newInstance());
-        listFragment.add(WalkingFragment.newInstance());
+        listFragment.add(NearByFragment.newInstance());
         listFragment.add(WalkingFragment.newInstance());
         viewPager.setAdapter(new ViewPagerAdapter<>(getSupportFragmentManager(), listFragment));
         viewPager.setOffscreenPageLimit(listFragment.size() - 1);

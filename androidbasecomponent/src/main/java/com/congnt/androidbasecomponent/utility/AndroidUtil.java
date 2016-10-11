@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 /**
  * Created by congnt24 on 27/09/2016.
  */
@@ -22,7 +25,32 @@ public class AndroidUtil {
     //The Wake lock.
     private static PowerManager.WakeLock wakeLock;
 
+    //Google Play Service
+
+    /**
+     * Checking Google Play Service is available on your device
+     * @param activity
+     * @return true if has ggPlay on device, false if otherwise
+     */
+    private static boolean CheckGooglePlayServices(Activity activity) {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(activity);
+        if(result != ConnectionResult.SUCCESS) {
+            if(googleAPI.isUserResolvableError(result)) {
+                googleAPI.getErrorDialog(activity, result,
+                        0).show();
+            }
+            return false;
+        }
+        return true;
+    }
+
     //THREAD
+
+    /**
+     * Checking for main thread
+     * @return true if your device on main thread
+     */
     public static boolean isMainThread() {
         return Looper.myLooper() == Looper.getMainLooper();
     }

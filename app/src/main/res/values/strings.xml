@@ -5,4 +5,5 @@
     <string name="emergency_sound">Emergency Sound</string>
     <string name="setting">Setting</string>
     <string name="more">More</string>
+    <string name="dialog_message_make_a_call">Would you want to make a call to</string>
 </resources>

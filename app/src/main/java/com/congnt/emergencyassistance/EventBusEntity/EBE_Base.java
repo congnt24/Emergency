@@ -1,14 +1,21 @@
 package com.congnt.emergencyassistance.EventBusEntity;
 
+import java.util.List;
+
 /**
  * Created by congnt24 on 01/10/2016.
  */
 
-public abstract class EBE_Base {
+public abstract class EBE_Base<T> {
     public boolean aBoolean;
     public int anInt;
     public String aString;
     public float aFloat;
+    public T value;
+
+    public EBE_Base(T value) {
+        this.value = value;
+    }
 
     public EBE_Base(boolean aBoolean) {
         this.aBoolean = aBoolean;
@@ -34,5 +41,13 @@ public abstract class EBE_Base {
         this.anInt = anInt;
         this.aString = aString;
         this.aFloat = aFloat;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
     }
 }

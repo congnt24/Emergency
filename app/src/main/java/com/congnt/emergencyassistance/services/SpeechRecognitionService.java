@@ -16,6 +16,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.congnt.emergencyassistance.EventBusEntity.EBE_Result;
+import com.congnt.emergencyassistance.EventBusEntity.EBE_RmsdB;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.MainActivity;
 
@@ -23,6 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SpeechRecognitionService extends Service implements RecognitionListener {
 
@@ -45,7 +48,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
         super.onCreate();
         EventBus.getDefault().register(this);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//        setStreamMute(true);
+        setStreamMute(true);
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         mSpeechRecognizer.setRecognitionListener(this);
         mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -96,10 +99,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     }
 
     private void startListening() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            // turn off beep sound
-            mAudioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
-        }
+        setStreamMute(true);
         if (!mIsListening) {
             mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
             mIsListening = true;
@@ -137,7 +137,6 @@ public class SpeechRecognitionService extends Service implements RecognitionList
 
     @Override
     public void onReadyForSpeech(Bundle params) {
-        Log.d(TAG, "AAAAAAAAA123 ");
     }
 
     @Override
@@ -147,7 +146,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
 
     @Override
     public void onRmsChanged(float rmsdB) {
-        EventBus.getDefault().post(rmsdB);
+        EventBus.getDefault().post(new EBE_RmsdB(rmsdB));
     }
 
     @Override
@@ -162,7 +161,6 @@ public class SpeechRecognitionService extends Service implements RecognitionList
 
     @Override
     public void onError(int error) {
-        mIsListening = false;
         Log.d(TAG, "AAAAAAAAA " + getErrorText(error));
         stopListening();
         startListening();
@@ -170,12 +168,9 @@ public class SpeechRecognitionService extends Service implements RecognitionList
 
     @Override
     public void onResults(Bundle results) {
-        ArrayList<String> matches = results
+        List<String> matches = results
                 .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        String text = "";
-        for (String result : matches)
-            text += result + "\n";
-        EventBus.getDefault().post("" + text);
+        EventBus.getDefault().post(new EBE_Result(matches));
         stopListening();
         startListening();
     }

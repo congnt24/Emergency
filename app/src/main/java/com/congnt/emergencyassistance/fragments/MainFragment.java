@@ -1,6 +1,7 @@
 package com.congnt.emergencyassistance.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -8,8 +9,13 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
+import com.congnt.androidbasecomponent.utility.CommunicationUtil;
+import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
+import com.congnt.androidbasecomponent.view.fragment.MapFragment;
 import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
+import com.congnt.emergencyassistance.EventBusEntity.EBE_Result;
+import com.congnt.emergencyassistance.EventBusEntity.EBE_RmsdB;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.services.SpeechRecognitionService;
@@ -31,6 +37,9 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private FlatButtonWithIconTop btn_police;
     private FlatButtonWithIconTop btn_fire;
     private FlatButtonWithIconTop btn_ambulance;
+    private static final int DIALOG_POLICE = 1;
+    private static final int DIALOG_AMBULANCE = 3;
+    private static final int DIALOG_FIRE = 2;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -72,20 +81,33 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         speechView.setColors(colors);
         speechView.setBarMaxHeightsInDp(heights);
         service = new Intent(context, SpeechRecognitionService.class);
+        getActivity().startService(service);
 
-        rootView.findViewById(R.id.btn_start).setOnClickListener(this);
+        rootView.findViewById(R.id.btn_start_stop).setOnClickListener(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResult(String str) {
+    public void onResult(EBE_Result result) {
+
+        for (String str :
+                result.getValue()) {
+            if (str.equalsIgnoreCase("help me")){
+
+            }
+        }
+
         speechView.stop();
         speechView.play();
-        Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+
+        String text = "";
+        for (String r : result.value)
+            text += r + "\n";
+        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe
-    public void onRmsChanged(Float rmsdB) {
-        speechView.onRmsChanged(rmsdB);
+    public void onRmsChanged(EBE_RmsdB rmsdB) {
+        speechView.onRmsChanged(rmsdB.aFloat);
     }
 
     @Subscribe
@@ -119,13 +141,10 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     @Override
     public void onStart() {
         super.onStart();
-        getActivity().startService(service);
     }
 
     @Override
     public void onStop() {
-//        EventBus.getDefault().unregister(this);
-//        stopService(service);
         super.onStop();
     }
 
@@ -133,25 +152,51 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_start:
+            case R.id.btn_start_stop:
                 ToggleButton tb = (ToggleButton) v;
                 if (!tb.isChecked()) {
                     EventBus.getDefault().post(new EBE_StartStopService(false));
                     speechView.stop();
                 } else {
                     EventBus.getDefault().post(new EBE_StartStopService(true));
+                    speechView.play();
                 }
-//                speechView.play();
                 break;
-//            case R.id.btn_call_ambulance:
-//                CommunicationUtil.dialTo(getActivity(), btn_ambulance.getText().toString());
-//                break;
-//            case R.id.btn_call_fire:
-//                CommunicationUtil.dialTo(getActivity(), btn_fire.getText().toString());
-//                break;
-//            case R.id.btn_call_police:
-//                CommunicationUtil.dialTo(getActivity(), btn_police.getText().toString());
-//                break;
+            case R.id.btn_call_ambulance:
+                call(DIALOG_AMBULANCE);
+                break;
+            case R.id.btn_call_fire:
+                call(DIALOG_FIRE);
+                break;
+            case R.id.btn_call_police:
+                call(DIALOG_POLICE);
+                break;
         }
+    }
+
+    public void call(int dialogType){
+        String title = "";
+        String number = null;
+        switch (dialogType) {
+            case DIALOG_POLICE:
+                title = "Call Police:";
+                number = btn_police.getText();
+                break;
+            case DIALOG_FIRE:
+                title = "Call Fire:";
+                number = btn_fire.getText();
+                break;
+            case DIALOG_AMBULANCE:
+                title = "Call Ambulance:";
+                number = btn_ambulance.getText();
+                break;
+        }
+        final String finalNumber = number;
+        DialogBuilder.confirmDialog(getActivity(), title, getActivity().getString(R.string.dialog_message_make_a_call) + " "+ finalNumber, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                CommunicationUtil.dialTo(getActivity(), finalNumber);
+            }
+        }).create().show();
     }
 }

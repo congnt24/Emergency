@@ -1,7 +1,6 @@
 package com.congnt.emergencyassistance.Adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +11,7 @@ import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.utility.FormatUtil;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.RetrofitPlaceEntity.Result;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -54,21 +53,21 @@ public class NearByAdapter extends AwesomeRecyclerAdapter<NearByAdapter.ViewHold
         TextView tv_location;
         TextView tv_distance;
         ImageView iv_gmap;
-        SimpleDraweeView iv_type;
+        ImageView iv_type;
         public ViewHolder(View itemView) {
             super(itemView);
             tv_place = (TextView) itemView.findViewById(R.id.tv_place);
             tv_location = (TextView) itemView.findViewById(R.id.tv_location);
             tv_distance = (TextView) itemView.findViewById(R.id.tv_distance);
             iv_gmap = (ImageView) itemView.findViewById(R.id.iv_gmap);
-            iv_type = (SimpleDraweeView) itemView.findViewById(R.id.iv_type);
+            iv_type = (ImageView) itemView.findViewById(R.id.iv_type);
 
         }
         public void bindView(final Result item){
             tv_place.setText(item.getName());
             tv_location.setText(item.getVicinity());
             tv_distance.setText(FormatUtil.formatFloat(item.getDistance()/1000, 1)+" km");
-            iv_type.setImageURI(Uri.parse(item.getIcon()));
+            Picasso.with(itemView.getContext()).load(item.getIcon()).into(iv_type);
             iv_gmap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

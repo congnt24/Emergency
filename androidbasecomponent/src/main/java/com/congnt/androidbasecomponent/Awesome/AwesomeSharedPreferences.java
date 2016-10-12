@@ -33,7 +33,7 @@ public abstract class AwesomeSharedPreferences {
 
     }
 
-    protected abstract class SingleSharedPreferences<T> {
+    public abstract class SingleSharedPreferences<T> {
         protected abstract String ID();
 
         public void save(T t) {

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -16,15 +17,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.congnt.emergencyassistance.EventBusEntity.EBE_Result;
-import com.congnt.emergencyassistance.EventBusEntity.EBE_RmsdB;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.MainActivity;
+import com.congnt.emergencyassistance.MySharedPreferences;
+import com.congnt.emergencyassistance.R;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SpeechRecognitionService extends Service implements RecognitionListener {
@@ -35,11 +35,24 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     protected SpeechRecognizer mSpeechRecognizer;
     protected Intent mSpeechRecognizerIntent;
     protected boolean mIsListening;
+    private boolean mIsStreamSolo;
+    private boolean mMute = true;
     private Notification notification;
+
+    public SpeechRecognizer getSpeechRecognizer() {
+        if (mSpeechRecognizer == null) {
+            mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        }
+        return mSpeechRecognizer;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        Log.d("AAAA", "AAAAAAAAA ON START COMMAND ");
+        if (MySharedPreferences.getInstance(this).isListening.load(false)) {
+            startListening();
+            Log.d("AAAA", "AAAAAAAAA ON START COMMAND Start Listening");
+        }
         return START_STICKY;
     }
 
@@ -48,21 +61,29 @@ public class SpeechRecognitionService extends Service implements RecognitionList
         super.onCreate();
         EventBus.getDefault().register(this);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        setStreamMute(true);
+//        setStreamMute(true);
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         mSpeechRecognizer.setRecognitionListener(this);
         mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
-        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 2000);
-        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2000); // value to wait
+//        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500);
+//        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true); //ERror from server
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
 
+
+        // Create intent that will bring our app to the front, as if it was tapped in the app
+        // launcher
+        Intent showTaskIntent = new Intent(getApplicationContext(), MainActivity.class);
+        showTaskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         notification = new NotificationCompat.Builder(this)
-                .setTicker("Listening for you")
-                .setContentTitle("Listening")
-                .setContentText("Speech")
-                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0))
+                .setTicker("Listening for your help")
+                .setContentTitle("Emergency Assistance")
+                .setContentText("Listening for your help")
+                .setWhen(System.currentTimeMillis())
+                .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, showTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .build();
     }
 
@@ -83,7 +104,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
      * @param startOrstop: true is start, false is stop
      */
     @Subscribe
-    public void onServiceEvent(EBE_StartStopService startOrstop) {
+    public void onEvent(EBE_StartStopService startOrstop) {
         if (startOrstop.aBoolean) {
             startListening();
             startForeground(101,
@@ -99,28 +120,74 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     }
 
     private void startListening() {
-        setStreamMute(true);
+//        setStreamMute(true);
         if (!mIsListening) {
-            mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
             mIsListening = true;
+            MySharedPreferences.getInstance(this).isListening.save(mIsListening);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                // turn off beep sound
+//                if (!mIsStreamSolo && mMute) {
+//                    mAudioManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
+//                    mAudioManager.setStreamMute(AudioManager.STREAM_ALARM, true);
+//                    mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+//                    mAudioManager.setStreamMute(AudioManager.STREAM_RING, true);
+//                    mAudioManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+//                    mIsStreamSolo = true;
+//                }
+//            }
+            mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
             Log.d(TAG, "message start listening"); //$NON-NLS-1$
         }
     }
 
     private void stopListening() {
-        mSpeechRecognizer.cancel();
         mIsListening = false;
+        MySharedPreferences.getInstance(this).isListening.save(mIsListening);
+
+//        if (!mIsStreamSolo) {
+//            mAudioManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
+//            mAudioManager.setStreamMute(AudioManager.STREAM_ALARM, false);
+//            mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+//            mAudioManager.setStreamMute(AudioManager.STREAM_RING, false);
+//            mAudioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+//            mIsStreamSolo = true;
+//        }
+        if (mSpeechRecognizer != null) {
+            mSpeechRecognizer.stopListening();
+            mSpeechRecognizer.cancel();
+//            mSpeechRecognizer.destroy();
+//            mSpeechRecognizer=null;
+        }
         Log.d(TAG, "message canceled recognizer"); //$NON-NLS-1$
+    }
+
+    private void listenAgain() {
+        if (mIsListening) {
+            mIsListening = false;
+            mSpeechRecognizer.cancel();
+            startListening();
+        }
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("AAA", "AAAA ON DESTROY");
+        MySharedPreferences.getInstance(this).isListening.save(mIsListening);
         setStreamMute(false);
         if (mSpeechRecognizer != null) {
             mSpeechRecognizer.destroy();
         }
+    }
+
+
+    public void sendBroadcastToReceiver(String str) {
+        Intent i = new Intent("com.congnt.emergencyasistance.ACCIDENT_RECEIVER");
+        Bundle b = new Bundle();
+        b.putString("data", str);
+        i.putExtras(b);
+        sendBroadcast(i);
     }
 
     /**
@@ -141,12 +208,12 @@ public class SpeechRecognitionService extends Service implements RecognitionList
 
     @Override
     public void onBeginningOfSpeech() {
-        EventBus.getDefault().post(0);
+//        EventBus.getDefault().post(0);
     }
 
     @Override
     public void onRmsChanged(float rmsdB) {
-        EventBus.getDefault().post(new EBE_RmsdB(rmsdB));
+//        EventBus.getDefault().post(new EBE_RmsdB(rmsdB));
     }
 
     @Override
@@ -156,23 +223,28 @@ public class SpeechRecognitionService extends Service implements RecognitionList
 
     @Override
     public void onEndOfSpeech() {
-        EventBus.getDefault().post(1);
+//        EventBus.getDefault().post(1);
     }
 
     @Override
     public void onError(int error) {
         Log.d(TAG, "AAAAAAAAA " + getErrorText(error));
-        stopListening();
-        startListening();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                listenAgain();
+            }
+        }, 100);
     }
 
     @Override
     public void onResults(Bundle results) {
         List<String> matches = results
                 .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        EventBus.getDefault().post(new EBE_Result(matches));
-        stopListening();
-        startListening();
+        Log.d("AAAA", matches.get(0));
+//        EventBus.getDefault().post(new EBE_Result(matches));
+        sendBroadcastToReceiver(matches.get(0).toString());
+        listenAgain();
     }
 
     @Override
@@ -184,7 +256,6 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     public void onEvent(int eventType, Bundle params) {
 
     }
-
 
     public String getErrorText(int errorCode) {
         String message;

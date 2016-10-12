@@ -25,7 +25,5 @@ dependencies {
     compile 'com.android.support:design:24.2.0'
     compile project(':androidbasecomponent')
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.beardedhen:androidbootstrap:2.3.0'
-    compile 'com.facebook.fresco:fresco:0.14.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
 }

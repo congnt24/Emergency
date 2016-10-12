@@ -1,6 +1,7 @@
 package com.congnt.emergencyassistance;
 
 import android.Manifest;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -15,11 +16,11 @@ import com.congnt.androidbasecomponent.adapter.ViewPagerAdapter;
 import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
-import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
 import com.congnt.emergencyassistance.fragments.MainFragment;
 import com.congnt.emergencyassistance.fragments.NearByFragment;
 import com.congnt.emergencyassistance.fragments.WalkingFragment;
+import com.congnt.emergencyassistance.services.SpeechRecognitionService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,6 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             , Manifest.permission.ACCESS_COARSE_LOCATION
             , Manifest.permission.RECORD_AUDIO
             , Manifest.permission.CAMERA};
-    private RecognitionProgressView speechView;
 
     @Override
     protected int getLayoutId() {
@@ -82,6 +82,14 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 //        TabLayoutUtil.setTexts(tabLayout, "Home", "Setting", "Near By", "Walking");
         //Best Solution
         TabLayoutUtil.setColorSelectorIcons(tabLayout, R.color.tab_icon);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent service = new Intent(this, SpeechRecognitionService.class);
+        startService(service);
+
     }
 
     @Override

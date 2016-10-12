@@ -3,22 +3,20 @@ package com.congnt.emergencyassistance.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
-import com.congnt.androidbasecomponent.view.fragment.MapFragment;
 import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_Result;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_RmsdB;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.R;
-import com.congnt.emergencyassistance.services.SpeechRecognitionService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,17 +27,16 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 
 public class MainFragment extends AwesomeFragment implements View.OnClickListener {
+    private static final int DIALOG_POLICE = 1;
+    private static final int DIALOG_AMBULANCE = 3;
+    private static final int DIALOG_FIRE = 2;
     private RecognitionProgressView speechView;
-    private Intent service;
     private int number_police = 113;
     private int number_fire = 114;
     private int number_ambulance = 115;
     private FlatButtonWithIconTop btn_police;
     private FlatButtonWithIconTop btn_fire;
     private FlatButtonWithIconTop btn_ambulance;
-    private static final int DIALOG_POLICE = 1;
-    private static final int DIALOG_AMBULANCE = 3;
-    private static final int DIALOG_FIRE = 2;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -80,13 +77,10 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
         speechView.setColors(colors);
         speechView.setBarMaxHeightsInDp(heights);
-        service = new Intent(context, SpeechRecognitionService.class);
-        getActivity().startService(service);
-
         rootView.findViewById(R.id.btn_start_stop).setOnClickListener(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe
     public void onResult(EBE_Result result) {
 
         for (String str :
@@ -95,14 +89,15 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
             }
         }
-
-        speechView.stop();
-        speechView.play();
-
         String text = "";
         for (String r : result.value)
             text += r + "\n";
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        Intent i = new Intent("com.congnt.emergencyasistance.ACCIDENT_RECEIVER");
+        Bundle b = new Bundle();
+        b.putString("data", text);
+        i.putExtras(b);
+
+//        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe
@@ -110,7 +105,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         speechView.onRmsChanged(rmsdB.aFloat);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onBeginOrEndOfSpeech(Integer x) {
         if (x == 0) {
             speechView.onBeginningOfSpeech();
@@ -123,7 +118,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     }
 
     public void setupEmergencyNumber(View rootView) {
-//        BootstrapButtonGroup btn_group = (BootstrapButtonGroup) rootView.findViewById(R.id.btn_group);
         btn_police = (FlatButtonWithIconTop) rootView.findViewById(R.id.btn_call_police);
         btn_fire = (FlatButtonWithIconTop) rootView.findViewById(R.id.btn_call_fire);
         btn_ambulance = (FlatButtonWithIconTop) rootView.findViewById(R.id.btn_call_ambulance);
@@ -136,18 +130,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         btn_fire.setOnClickListener(this);
         btn_ambulance.setOnClickListener(this);
     }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
 
     @Override
     public void onClick(View v) {

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/md_red_A400</color>
-    <color name="colorPrimaryDark">@color/md_red_A700</color>
+    <color name="colorPrimary">@color/md_purple_600</color>
+    <color name="colorPrimaryDark">@color/md_purple_800</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorTabLayout">@color/colorPrimary</color>
+    <color name="tab_icon_select">@color/md_white_1000</color>
+    <color name="tab_icon_default">@color/md_green_A700</color>
 </resources>

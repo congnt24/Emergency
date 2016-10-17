@@ -3,6 +3,11 @@ package com.congnt.emergencyassistance;
 import android.content.Context;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeSharedPreferences;
+import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Created by congnt24 on 12/10/2016.
@@ -15,15 +20,16 @@ public class MySharedPreferences extends AwesomeSharedPreferences {
         protected String ID() {
             return "IS_LISTENING";
         }
-
+    };
+    public SingleSharedPreferences<List<ItemSettingSpeech>> emergency_command = new SingleSharedPreferences<List<ItemSettingSpeech>>() {
         @Override
-        public void save(Boolean aBoolean) {
-            super.save(aBoolean);
+        protected String ID() {
+            return "emergency_command";
         }
 
         @Override
-        public Boolean load(Boolean defaultT) {
-            return super.load(defaultT);
+        protected Type getType() {
+            return new TypeToken<List<ItemSettingSpeech>>() {}.getType();
         }
     };
 

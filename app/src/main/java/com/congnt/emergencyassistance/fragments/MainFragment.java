@@ -16,6 +16,7 @@ import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_Result;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_RmsdB;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_StartStopService;
+import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,6 +38,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private FlatButtonWithIconTop btn_police;
     private FlatButtonWithIconTop btn_fire;
     private FlatButtonWithIconTop btn_ambulance;
+    private ToggleButton btn_start_stop;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -73,11 +75,14 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 ContextCompat.getColor(context, R.color.color4),
                 ContextCompat.getColor(context, R.color.color5)
         };
-        int[] heights = {60, 76, 58, 80, 55, 44, 66, 77, 88, 55};
+        int[] heights = {50, 66, 48, 70, 45, 34, 56, 67, 68, 45};
 
         speechView.setColors(colors);
         speechView.setBarMaxHeightsInDp(heights);
-        rootView.findViewById(R.id.btn_start_stop).setOnClickListener(this);
+        btn_start_stop = (ToggleButton) rootView.findViewById(R.id.btn_start_stop);
+        btn_start_stop.setOnClickListener(this);
+        //If service is running, change start of btn to starty
+        btn_start_stop.setChecked(MySharedPreferences.getInstance(getActivity()).isListening.load(false));
     }
 
     @Subscribe
@@ -92,10 +97,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         String text = "";
         for (String r : result.value)
             text += r + "\n";
-        Intent i = new Intent("com.congnt.emergencyasistance.ACCIDENT_RECEIVER");
-        Bundle b = new Bundle();
-        b.putString("data", text);
-        i.putExtras(b);
 
 //        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }

@@ -38,7 +38,7 @@ public abstract class AwesomeRecyclerAdapter<VH extends RecyclerView.ViewHolder,
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickListener.onClick(mList.get(position));
+                onClickListener.onClick(mList.get(position), position);
             }
         });
     }
@@ -56,6 +56,6 @@ public abstract class AwesomeRecyclerAdapter<VH extends RecyclerView.ViewHolder,
     protected abstract void bindHolder(VH holder, int position);
 
     public interface OnClickListener<T> {
-        void onClick(T item);
+        void onClick(T item, int position);
     }
 }

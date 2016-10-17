@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.utility.FormatUtil;
+import com.congnt.androidbasecomponent.utility.StringUtil;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.RetrofitPlaceEntity.Result;
 import com.squareup.picasso.Picasso;
@@ -37,7 +38,7 @@ public class NearByAdapter extends AwesomeRecyclerAdapter<NearByAdapter.ViewHold
 
     @Override
     protected void bindHolder(ViewHolder holder, int position) {
-        Result item = mList.get(position);
+        Result item = mList.get(holder.getAdapterPosition());
         if (item != null) {
             holder.bindView(item);
         }
@@ -71,9 +72,14 @@ public class NearByAdapter extends AwesomeRecyclerAdapter<NearByAdapter.ViewHold
             iv_gmap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CommunicationUtil.dialTo(v.getContext(), "1234");
+                    CommunicationUtil.dialTo(v.getContext(), item.getPhone());
                 }
             });
+            if (StringUtil.isNullOrEmpty(item.getPhone())){
+                iv_gmap.setVisibility(View.INVISIBLE);
+            }else{
+                iv_gmap.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

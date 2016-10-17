@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,11 +9,47 @@
         class="com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation"
         android:layout_width="match_parent"
         android:layout_height="180dp" />
+
+    <info.hoang8f.android.segmented.SegmentedGroup
+        xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/segmentedgroup_nearby"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        segmentedgroup:sc_border_width="2dp"
+        segmentedgroup:sc_corner_radius="10dp">
+
+        <RadioButton
+            android:layout_weight="1"
+            android:id="@+id/rb_nearby_police"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Police"
+            style="@style/RadioButton" />
+
+        <RadioButton
+            android:layout_weight="1"
+            android:id="@+id/rb_nearby_fire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fire"
+            style="@style/RadioButton" />
+        <RadioButton
+            android:layout_weight="1"
+            android:id="@+id/rb_nearby_hospital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hospital"
+            style="@style/RadioButton" />
+    </info.hoang8f.android.segmented.SegmentedGroup>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/map_fragment2">
+        android:layout_height="match_parent">
         <include layout="@layout/recycler"/>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

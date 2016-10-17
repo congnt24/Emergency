@@ -47,6 +47,16 @@ public class Result {
     @SerializedName("price_level")
     @Expose
     private Integer priceLevel;
+    private String phone;
+    private float distance;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public float getDistance() {
         return distance;
@@ -55,8 +65,6 @@ public class Result {
     public void setDistance(float distance) {
         this.distance = distance;
     }
-
-    private float distance;
 
     /**
      * @return The geometry

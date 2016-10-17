@@ -227,4 +227,9 @@ public abstract class AwesomeActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        startTransition(transitionAnim);
+    }
 }

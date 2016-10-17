@@ -4,8 +4,12 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".MainApplication"
@@ -14,26 +18,81 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme2.NoActionBar">
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_key"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
         <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTask">
+            android:name=".activities.MainActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateUnchanged">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".services.SpeechRecognitionService"
-            android:label="Speech Recognition">
+            android:label="Speech Recognition" />
 
-        </service>
-        <receiver android:name=".receiver.DetectAccidentRecervier">
+        <receiver android:name=".receiver.DetectBySpeechRecervier">
             <intent-filter>
                 <action android:name="com.congnt.emergencyasistance.ACCIDENT_RECEIVER" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".receiver.DetectByVolumeReceiver">
+            <intent-filter>
+                <action android:name="android.media.VOLUME_CHANGED_ACTION" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme2">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.DialogEmergencyActivity"
+            android:theme="@style/Theme.AppCompat.Translucent" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme2">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.FakeSoundActivity"
+            android:label="@string/title_activity_fake_sound"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.DefenseYourselfActivity"
+            android:label="@string/title_activity_defense"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

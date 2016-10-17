@@ -18,7 +18,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.congnt.emergencyassistance.EventBusEntity.EBE_StartStopService;
-import com.congnt.emergencyassistance.MainActivity;
+import com.congnt.emergencyassistance.activities.MainActivity;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 
@@ -182,10 +182,8 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     }
 
 
-    public void sendBroadcastToReceiver(String str) {
+    public void sendBroadcastToReceiver(Bundle b) {
         Intent i = new Intent("com.congnt.emergencyasistance.ACCIDENT_RECEIVER");
-        Bundle b = new Bundle();
-        b.putString("data", str);
         i.putExtras(b);
         sendBroadcast(i);
     }
@@ -243,7 +241,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
                 .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         Log.d("AAAA", matches.get(0));
 //        EventBus.getDefault().post(new EBE_Result(matches));
-        sendBroadcastToReceiver(matches.get(0).toString());
+        sendBroadcastToReceiver(results);
         listenAgain();
     }
 

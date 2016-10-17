@@ -118,12 +118,19 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
         mGoogleApiClient.connect();
     }
 
-    public void movingCamera(Location location) {
+    public void movingCamera(Location location, int zoom) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                .zoom(16)                   // Sets the zoom
+                .zoom(zoom)                   // Sets the zoom
                 .build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+    public void animateCamera(Location location, int zoom) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                .zoom(zoom)                   // Sets the zoom
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     public void updateLocation(final Location location) {
@@ -140,7 +147,7 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
                     tv_address.setText("Waiting for location");
                 } else {
                     tv_address.setText(LocationUtil.getAddress(addresses, 4));
-                    movingCamera(location);
+                    movingCamera(location, 16);
                 }
             }
         }.execute();

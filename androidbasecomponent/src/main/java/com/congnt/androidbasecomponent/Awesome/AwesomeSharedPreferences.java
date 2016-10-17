@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Created by NGUYEN TRUNG CONG on 09/13/2016
@@ -33,21 +34,26 @@ public abstract class AwesomeSharedPreferences {
 
     }
 
+
     public abstract class SingleSharedPreferences<T> {
         protected abstract String ID();
 
+        /**
+         *  new TypeToken<T>(){}.getType()
+         * @return TypeToken
+         */
+        protected Type getType(){
+            return new TypeToken<T>() {}.getType();
+        }
+//        protected final Type type = ;
         public void save(T t) {
-            Type type = new TypeToken<T>() {
-            }.getType();
-            editor.putString(ID(), new Gson().toJson(t, type));
+            editor.putString(ID(), new Gson().toJson(t, getType()));
             editor.commit();
         }
 
         public T load(T defaultT) {
-            Type type = new TypeToken<T>() {
-            }.getType();
             String str = pref.getString(ID(), "");
-            return str.equals("") ? defaultT : (T) new Gson().fromJson(str, type);
+            return str.equals("") ? defaultT : (T) new Gson().fromJson(str, getType());
         }
     }
 

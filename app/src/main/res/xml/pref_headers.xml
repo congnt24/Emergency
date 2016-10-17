@@ -1,0 +1,16 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="com.congnt.emergencyassistance.activities.SettingsActivity$SpeechPreferenceFragment"
+        android:icon="@drawable/ic_home"
+        android:title="@string/pref_header_general" />
+
+    <!--<header-->
+        <!--android:fragment="com.congnt.emergencyassistance.activities.SettingsActivity$NotificationPreferenceFragment"-->
+        <!--android:icon="@drawable/ic_settings"-->
+        <!--android:title="@string/pref_header_notifications" />-->
+
+
+</preference-headers>

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/CountryCodePicker/CountryCodePicker.iml" filepath="$PROJECT_DIR$/CountryCodePicker/CountryCodePicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/EmergencyAssistance.iml" filepath="$PROJECT_DIR$/EmergencyAssistance.iml" />
       <module fileurl="file://$PROJECT_DIR$/androidbasecomponent/androidbasecomponent.iml" filepath="$PROJECT_DIR$/androidbasecomponent/androidbasecomponent.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />

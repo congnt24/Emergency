@@ -1,7 +1,6 @@
 package com.congnt.emergencyassistance.fragments;
 
 import android.location.Location;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -48,7 +47,7 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
     private List<Result> listNearBy = new ArrayList<>();
     private NearByAdapter adapter;
     private SegmentedGroup segmentedgroup_nearby;
-    private String nearbyName = "police station";
+    private String nearbyName = "police";
 
     public static AwesomeFragment newInstance() {
         return new NearByFragment();
@@ -62,6 +61,23 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
     @Override
     protected void initAll(View rootView) {
         segmentedgroup_nearby = (SegmentedGroup) rootView.findViewById(R.id.segmentedgroup_nearby);
+        //InitView
+        setupRecyclerView(rootView);
+        //Init Function
+        retrofit = RetrofitBuilder.getRetrofit(AppConfig.GOOGLE_PLACE_URL_BASE, null, 0, 0);
+        mapFragment = (MapFragmentWithFusedLocation) getChildFragmentManager().findFragmentById(R.id.map_fragment2);
+        mapFragment.setScrollGesturesEnabled(true);
+        mapFragment.setOnMapListener(new MapFragmentWithFusedLocation.OnMapListener() {
+            @Override
+            public void onLocationChange(Location location) {
+                segmentedgroup_nearby.check(R.id.rb_nearby_police);
+                mapFragment.animateCamera(location, 13);
+            }
+
+            @Override
+            public void onConnected() {
+            }
+        });
         segmentedgroup_nearby.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -81,28 +97,6 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
                 }catch (Exception e){
 
                 }
-            }
-        });
-        //InitView
-        setupRecyclerView(rootView);
-        //Init Function
-        retrofit = RetrofitBuilder.getRetrofit(AppConfig.GOOGLE_PLACE_URL_BASE, null, 0, 0);
-        mapFragment = (MapFragmentWithFusedLocation) getChildFragmentManager().findFragmentById(R.id.map_fragment2);
-        mapFragment.setScrollGesturesEnabled(true);
-        mapFragment.setOnMapListener(new MapFragmentWithFusedLocation.OnMapListener() {
-            @Override
-            public void onLocationChange(Location location) {
-                mapFragment.animateCamera(location, 13);
-            }
-
-            @Override
-            public void onConnected() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        segmentedgroup_nearby.check(R.id.rb_nearby_police);
-                    }
-                }, 1000);
             }
         });
     }

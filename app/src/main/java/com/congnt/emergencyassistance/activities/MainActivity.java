@@ -2,7 +2,6 @@ package com.congnt.emergencyassistance.activities;
 
 import android.Manifest;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -26,9 +25,9 @@ import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
 import com.congnt.emergencyassistance.MainActionBar;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
+import com.congnt.emergencyassistance.fragments.EmergencySoundFragment;
 import com.congnt.emergencyassistance.fragments.MainFragment;
 import com.congnt.emergencyassistance.fragments.NearByFragment;
-import com.congnt.emergencyassistance.fragments.SocialNetworkFragment;
 import com.congnt.emergencyassistance.fragments.WalkingFragment;
 import com.congnt.emergencyassistance.services.SpeechRecognitionService;
 import com.google.firebase.auth.FirebaseAuth;
@@ -102,7 +101,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         ViewPager viewPager = (ViewPager) root.findViewById(R.id.viewPager);
         List<AwesomeFragment> listFragment = new ArrayList<>();
         listFragment.add(MainFragment.newInstance());
-        listFragment.add(SocialNetworkFragment.newInstance());
+        listFragment.add(EmergencySoundFragment.newInstance());
         listFragment.add(NearByFragment.newInstance());
         listFragment.add(WalkingFragment.newInstance());
         viewPager.setAdapter(new ViewPagerAdapter<>(getSupportFragmentManager(), listFragment));
@@ -141,8 +140,8 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             case R.id.nav_defense_yourself:
                 startActivity(new Intent(this, DefenseYourselfActivity.class));
                 break;
-            case R.id.nav_emergency_sound:
-                startActivity(new Intent(this, FakeSoundActivity.class));
+            case R.id.nav_change_country:
+                startActivity(new Intent(this, ChangeCountryActivity.class));
                 break;
             case R.id.nav_setting:
                 startActivity(new Intent(this, SettingsActivity.class));

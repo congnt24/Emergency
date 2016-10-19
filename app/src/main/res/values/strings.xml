@@ -99,4 +99,6 @@
     <string name="title_activity_fake_sound">Emergency Sound</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_defense">Defense Yourself</string>
+    <string name="title_activity_country">Change Country</string>
+    <string name="change_country">Change Country</string>
 </resources>

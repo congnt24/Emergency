@@ -24,8 +24,8 @@
         android:id="@+id/nav_defense_yourself"
         android:title="@string/defense_yourself" />
     <item
-        android:id="@+id/nav_emergency_sound"
-        android:title="@string/emergency_sound" />
+        android:id="@+id/nav_change_country"
+        android:title="@string/change_country" />
     <item
         android:id="@+id/nav_setting"
         android:title="@string/setting" />

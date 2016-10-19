@@ -1,1 +1,1 @@
-include ':app', ':androidbasecomponent'
+include ':app', ':androidbasecomponent', ':CountryCodePicker'

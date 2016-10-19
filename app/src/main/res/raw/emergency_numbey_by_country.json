@@ -1,0 +1,2114 @@
+{
+  "countries": [
+    {
+      "ambulance": "111",
+      "countryCode": "PG",
+      "countryName": "Papua New Guinea",
+      "dispatch": "",
+      "fire": "110",
+      "notes": "Police 000, Fire 325-5188, Ambulance 325-6822",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "AAB",
+      "countryName": "Bali",
+      "dispatch": "112",
+      "fire": "113",
+      "notes": "Fire 118",
+      "police": "112"
+    },
+    {
+      "ambulance": "119",
+      "countryCode": "KH",
+      "countryName": "Cambodia",
+      "dispatch": "",
+      "fire": "118",
+      "notes": "Child Helpline 1280, Ambulance 199",
+      "police": "117"
+    },
+    {
+      "ambulance": "124",
+      "countryCode": "BA",
+      "countryName": "Bosnia Herzegovina",
+      "dispatch": "112",
+      "fire": "123",
+      "notes": "Civil Protection 121, Dispatch 911",
+      "police": "122"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "KZ",
+      "countryName": "Kazakhstan",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Gas Leak 104, Police 102, Ambulance 103, Fire 101",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "PY",
+      "countryName": "Paraguay",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Police 912, Fire 132 or 131, Ambulance 141",
+      "police": "911"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "AG",
+      "countryName": "Antigua & Barbuda",
+      "dispatch": "999",
+      "fire": "911",
+      "notes": "Fire Medical Police 999",
+      "police": "911"
+    },
+    {
+      "ambulance": "110",
+      "countryCode": "SY",
+      "countryName": "Syria",
+      "dispatch": "",
+      "fire": "113",
+      "notes": "",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "BS",
+      "countryName": "Bahamas",
+      "dispatch": "112",
+      "fire": "112",
+      "notes": "Dispatch 911 or 919, Dial 112 for mobile phones",
+      "police": "112"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "SB",
+      "countryName": "Solomon Islands",
+      "dispatch": "911",
+      "fire": "999",
+      "notes": "In cities, local numbers exist which connect more quickly than either 911 or 999",
+      "police": "999"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "MS",
+      "countryName": "Montserrat",
+      "dispatch": "999",
+      "fire": "911",
+      "notes": "Dispatch 999",
+      "police": "911"
+    },
+    {
+      "ambulance": "15",
+      "countryCode": "ML",
+      "countryName": "Mali",
+      "dispatch": "",
+      "fire": "18",
+      "notes": "Ambulance and Fire 112",
+      "police": "17"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "MH",
+      "countryName": "Marshall Islands",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Police 625-8666, Ambulance 625-4111",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "GP",
+      "countryName": "Guadeloupe",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 17, Ambulance 15, Fire 18",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "PA",
+      "countryName": "Panama",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Police 104, Fire 103, Dispatch 112, Ambulance 2-699-778",
+      "police": "911"
+    },
+    {
+      "ambulance": "195",
+      "countryCode": "LA",
+      "countryName": "Laos",
+      "dispatch": "",
+      "fire": "190",
+      "notes": "Police 212-706, Ambulance 214-022, Road 191",
+      "police": "191"
+    },
+    {
+      "ambulance": "107",
+      "countryCode": "AR",
+      "countryName": "Argentina",
+      "dispatch": "911",
+      "fire": "100",
+      "notes": "Dispatch 911 or 112, Fire 107, Ambulance 101",
+      "police": "101"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "FK",
+      "countryName": "Falkland Islands",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "",
+      "police": "999"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "SC",
+      "countryName": "Seychelles",
+      "dispatch": "112",
+      "fire": "999",
+      "notes": "Police 133, Ambulance 151",
+      "police": "999"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "BZ",
+      "countryName": "Belize",
+      "dispatch": "911",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "ZM",
+      "countryName": "Zambia",
+      "dispatch": "112",
+      "fire": "999",
+      "notes": "Police - 911, Ambulance - 992, Fire - 993, Mobile phones - 112",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "BH",
+      "countryName": "Bahrain",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Dispatch 999 or 112, 112 for mobile phones",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "NA",
+      "countryName": "Namibia",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police  290-2239 or 1011, Fire 203-2270, Ambulance 203-2276",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "FI",
+      "countryName": "Finland",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Rescue 02-04-10-00 or Road 10022",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "AN",
+      "countryName": "Netherlands Antilles",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "GE",
+      "countryName": "Georgia",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 122, Ambulance 22 or 113, Fire 111",
+      "police": "112"
+    },
+    {
+      "ambulance": "191",
+      "countryCode": "YE",
+      "countryName": "Yemen",
+      "dispatch": "",
+      "fire": "191",
+      "notes": "Road 194, Police 199, Ambulance 195 or 20-31-31",
+      "police": "194"
+    },
+    {
+      "ambulance": "114",
+      "countryCode": "ER",
+      "countryName": "Eritrea",
+      "dispatch": "",
+      "fire": "116",
+      "notes": "Police 127799, Ambulance and Fire 124422",
+      "police": "113"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "PR",
+      "countryName": "Puerto Rico",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "AW",
+      "countryName": "Aruba",
+      "dispatch": "911",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "124",
+      "countryCode": "MG",
+      "countryName": "Madagascar",
+      "dispatch": "",
+      "fire": "118",
+      "notes": "Traffic Police 3600, Ambulance 020-222-0040 or 020-226-2566",
+      "police": "117"
+    },
+    {
+      "ambulance": "185",
+      "countryCode": "CI",
+      "countryName": "Ivory Coast",
+      "dispatch": "",
+      "fire": "180",
+      "notes": "Police 170, Ambulance 22-44-53-53",
+      "police": "111"
+    },
+    {
+      "ambulance": "1515",
+      "countryCode": "LY",
+      "countryName": "Libya",
+      "dispatch": "",
+      "fire": "1515",
+      "notes": "Ambulance 193",
+      "police": "1515"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "AAM",
+      "countryName": "Western Samoa",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "SE",
+      "countryName": "Sweden",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Non Emergency Police 114 14, Non Emergency Medical 1177, Information during accidents and crises 113 13, Poison 8331231",
+      "police": "112"
+    },
+    {
+      "ambulance": "998",
+      "countryCode": "MW",
+      "countryName": "Malawi",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "Police 990",
+      "police": "997"
+    },
+    {
+      "ambulance": "118",
+      "countryCode": "AD",
+      "countryName": "Andorra",
+      "dispatch": "112",
+      "fire": "118",
+      "notes": "Rescue 112, Ambulance 116",
+      "police": "110"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "LI",
+      "countryName": "Liechtenstein",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 117, Ambulance 144, Fire 118",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "PL",
+      "countryName": "Poland",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 997, Ambulance 999, Fire 998, Municipal Police 986, Road Help 981, Gas Leak 992",
+      "police": "112"
+    },
+    {
+      "ambulance": "150",
+      "countryCode": "BG",
+      "countryName": "Bulgaria",
+      "dispatch": "112",
+      "fire": "160",
+      "notes": "Dispatch 112 for all emergencies, Child Help Line 116-111",
+      "police": "166"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "JO",
+      "countryName": "Jordan",
+      "dispatch": "112",
+      "fire": "911",
+      "notes": "Dispatch 911 or use 112 on mobile phones, , Ambulance 198 or 193, Police 191, Fire 199, Road 190",
+      "police": "911"
+    },
+    {
+      "ambulance": "190",
+      "countryCode": "TN",
+      "countryName": "Tunisia",
+      "dispatch": "",
+      "fire": "198",
+      "notes": "National Guard 193",
+      "police": "197"
+    },
+    {
+      "ambulance": "116",
+      "countryCode": "GM",
+      "countryName": "Gambia or The",
+      "dispatch": "",
+      "fire": "118",
+      "notes": "Police 17 or 112, Electricity Emergency 124, Water Emergency 125, Ambulance 16, Fire 18",
+      "police": "117"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "VC",
+      "countryName": "St. Vincent and the Grenadines",
+      "dispatch": "911",
+      "fire": "999",
+      "notes": "",
+      "police": "999"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "TV",
+      "countryName": "Tuvalu",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "998",
+      "countryCode": "AE",
+      "countryName": "United Arab Emirates",
+      "dispatch": "112",
+      "fire": "997",
+      "notes": "Dispatch 999, Coast Guard 996, Non Emergency Police 901, Road 800-4430",
+      "police": "999"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "KE",
+      "countryName": "Kenya",
+      "dispatch": "112",
+      "fire": "999",
+      "notes": "",
+      "police": "999"
+    },
+    {
+      "ambulance": "991",
+      "countryCode": "BN",
+      "countryName": "Brunei",
+      "dispatch": "",
+      "fire": "995",
+      "notes": "Medical 2-24-24-24, Rescue 998",
+      "police": "993"
+    },
+    {
+      "ambulance": "19",
+      "countryCode": "DJ",
+      "countryName": "Djibouti",
+      "dispatch": "",
+      "fire": "18",
+      "notes": "Ambulance 351351",
+      "police": "17"
+    },
+    {
+      "ambulance": "140",
+      "countryCode": "LB",
+      "countryName": "Lebanon",
+      "dispatch": "",
+      "fire": "175",
+      "notes": "Dispatch 999, Police 160, Civil Defense 125, Rescue 1701",
+      "police": "112"
+    },
+    {
+      "ambulance": "104",
+      "countryCode": "CU",
+      "countryName": "Cuba",
+      "dispatch": "",
+      "fire": "105",
+      "notes": "Medical Emergencies 26811",
+      "police": "106"
+    },
+    {
+      "ambulance": "155",
+      "countryCode": "CZ",
+      "countryName": "Czech Republic",
+      "dispatch": "112",
+      "fire": "150",
+      "notes": "Dispatch 112, Municipal Police 156",
+      "police": "158"
+    },
+    {
+      "ambulance": "101",
+      "countryCode": "MR",
+      "countryName": "Mauritania",
+      "dispatch": "",
+      "fire": "118",
+      "notes": "Ambulance 525-8080, Gendarmerie 116, Traffic Police 119",
+      "police": "117"
+    },
+    {
+      "ambulance": "101",
+      "countryCode": "IL",
+      "countryName": "Israel",
+      "dispatch": "112",
+      "fire": "102",
+      "notes": "Israel Electric Corporation 103, Non Emergency Municipal Hazards 106, ",
+      "police": "100"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "SM",
+      "countryName": "San Marino",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 113, Ambulance 118, Fire 115, Gas Leak 0549-887777, Fire 0549-887777 or 116 or 155",
+      "police": "112"
+    },
+    {
+      "ambulance": "000",
+      "countryCode": "AU",
+      "countryName": "Australia",
+      "dispatch": "000",
+      "fire": "000",
+      "notes": "Dispatch 000 or 112 or 911, Police 11-444, State Emergency service 132-500, National Relay Service 106, Non Emergency Police 131-444, Crime Stoppers 1-800-333-000, Threats to national security 1-800-123-400",
+      "police": "000"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "BQ",
+      "countryName": "Bonaire",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "TJ",
+      "countryName": "Tajikistan",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 102, Ambulance 103, Fire 101, Gas Leak 104, Ambulance 03",
+      "police": "112"
+    },
+    {
+      "ambulance": "192",
+      "countryCode": "MM",
+      "countryName": "Myanmar",
+      "dispatch": "999",
+      "fire": "191",
+      "notes": "",
+      "police": "199"
+    },
+    {
+      "ambulance": "119",
+      "countryCode": "CM",
+      "countryName": "Cameroon",
+      "dispatch": "112",
+      "fire": "118",
+      "notes": "",
+      "police": "117"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "GI",
+      "countryName": "Gibraltar",
+      "dispatch": "999",
+      "fire": "112",
+      "notes": "Fire and Ambulance 190, Police 199",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "CY",
+      "countryName": "Cyprus",
+      "dispatch": "112",
+      "fire": "112",
+      "notes": "Dispatch 112 or 199, Poison Control 1401, Anti Drug Support 1410 or 1498, Police 155 or 122, Air Sea Rescue 1441",
+      "police": "199"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "AAA",
+      "countryName": "Ascension Island",
+      "dispatch": "999",
+      "fire": "999",
+      "notes": "Police 6666 Ambulance 6000, Police General Inquiries 66-412, Confidential Crimeline 66-777",
+      "police": "999"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "MY",
+      "countryName": "Malaysia",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "Police 994",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "IS",
+      "countryName": "Iceland",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Dispatch +354 570 2112 from abroad,Non-emergency police (Reykjavík area) – 444 10 00. 911",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "OM",
+      "countryName": "Oman",
+      "dispatch": "999",
+      "fire": "112",
+      "notes": "Dispatch on mobile phone 112",
+      "police": "112"
+    },
+    {
+      "ambulance": "103",
+      "countryCode": "AM",
+      "countryName": "Armenia",
+      "dispatch": "112",
+      "fire": "101",
+      "notes": "Dispatch 911 or 112, Road 177, Gas Leak 104",
+      "police": "102"
+    },
+    {
+      "ambulance": "1300",
+      "countryCode": "GA",
+      "countryName": "Gabon",
+      "dispatch": "",
+      "fire": "18",
+      "notes": "Ambulance 1300-1399",
+      "police": "1730"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "LU",
+      "countryName": "Luxembourg",
+      "dispatch": "112",
+      "fire": "112",
+      "notes": "",
+      "police": "113"
+    },
+    {
+      "ambulance": "192",
+      "countryCode": "BR",
+      "countryName": "Brazil",
+      "dispatch": "112",
+      "fire": "193",
+      "notes": "Emergency in Mercosul area - 128 and 112 and 911 redirect to 190 on mobile phones, Dispatch 911, Civil Police 197, Federal Highway Police 191, Federal Police 194, State Highway Police 198, Civil Defense 199, Municipal Guard 153, Human Rights 100",
+      "police": "190"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "TC",
+      "countryName": "Turks and Caicos Islands",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Dispatch 999",
+      "police": "911"
+    },
+    {
+      "ambulance": "14",
+      "countryCode": "DZ",
+      "countryName": "Algeria",
+      "dispatch": "112",
+      "fire": "14",
+      "notes": "Police 17, Rescue 14, Road 123, Family Violence 3033, Ambulance 021-23-63-81 or 2160 6666, Counter Terrorist Unit 1548, National Gendarmerie 1055, ",
+      "police": "18"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "SI",
+      "countryName": "Slovenia",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 113, Road Help 1987, Emergency at sea 080 - 18 - 00",
+      "police": "112"
+    },
+    {
+      "ambulance": "125",
+      "countryCode": "CO",
+      "countryName": "Colombia",
+      "dispatch": "123",
+      "fire": "119",
+      "notes": "Dispatch 112 or 119, Police 112 or 123 or 156, Ambulance 132, Anti Kidnapping Hotline 165, Road 127",
+      "police": "112"
+    },
+    {
+      "ambulance": "131",
+      "countryCode": "EC",
+      "countryName": "Ecuador",
+      "dispatch": "911",
+      "fire": "102",
+      "notes": "Emergency in Guayaguil 112, Traffic Police in Guayaquil, 103",
+      "police": "101"
+    },
+    {
+      "ambulance": "903",
+      "countryCode": "MD",
+      "countryName": "Moldova",
+      "dispatch": "112",
+      "fire": "901",
+      "notes": "",
+      "police": "902"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "VU",
+      "countryName": "Vanuatu",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "",
+      "police": "112"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "BUR",
+      "countryName": "Burma Myanmar",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "Police 199, Ambulance 192, Fire 191",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "GW",
+      "countryName": "Guinea Bissau",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 117, Ambulance 119 or 215-202, Fire 118",
+      "police": "112"
+    },
+    {
+      "ambulance": "195",
+      "countryCode": "HN",
+      "countryName": "Honduras",
+      "dispatch": "",
+      "fire": "198",
+      "notes": "Police 911 or 199, Dispatch 119, Ambulance 322-322, Road 222",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "IT",
+      "countryName": "Italy",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Dispatch 911, Coast Guard 1530, Police 113, Ambulance 118, Fire 115",
+      "police": "112"
+    },
+    {
+      "ambulance": "111",
+      "countryCode": "NR",
+      "countryName": "Nauru",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "",
+      "police": "110"
+    },
+    {
+      "ambulance": "199",
+      "countryCode": "BD",
+      "countryName": "Bangladesh (Dhaka)",
+      "dispatch": "",
+      "fire": "199",
+      "notes": "Police 665-513, Fire 955-5555, Above numbers are valid for Dhaka and Chittagong only",
+      "police": "999"
+    },
+    {
+      "ambulance": "116",
+      "countryCode": "HT",
+      "countryName": "Haiti",
+      "dispatch": "",
+      "fire": "115",
+      "notes": "Police 122 or 118, Family Violence 572",
+      "police": "114"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "AF",
+      "countryName": "Afghanistan",
+      "dispatch": "119",
+      "fire": "119",
+      "notes": "Dispatch 112 or 119",
+      "police": "119"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "BI",
+      "countryName": "Burundi",
+      "dispatch": "",
+      "fire": "118",
+      "notes": "Support for Children 116, Ambulance 257-228-435 or 257225050",
+      "police": "117"
+    },
+    {
+      "ambulance": "995",
+      "countryCode": "SG",
+      "countryName": "Singapore",
+      "dispatch": "911",
+      "fire": "995",
+      "notes": "Dispatch 112 or 911, Non emergency ambulance 1777, Police hotline 1800 - 225 - 0000, Traffic Police 6547 - 0000",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "GF",
+      "countryName": "French Guiana",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 17, Ambulance 15, Fire 18",
+      "police": "112"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "LC",
+      "countryName": "St. Lucia",
+      "dispatch": "911",
+      "fire": "999",
+      "notes": "Dispatch 911 or 999",
+      "police": "999"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "AS",
+      "countryName": "American Samoa",
+      "dispatch": "911",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "AAI",
+      "countryName": "Scotland",
+      "dispatch": "999",
+      "fire": "999",
+      "notes": "",
+      "police": "101"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "AAK",
+      "countryName": "Vatican City",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police – 113, Ambulance – 118, Fire – 115",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "RU",
+      "countryName": "Russia",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 102, Ambulance 103, Fire 101, Gas Leak 104, Anti-terror 105",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "NL",
+      "countryName": "Netherlands",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Family Violence 0900-0113, Text phone – 0800 81 12, Non-emergency police – 0900 88 44 or 0343 578 844, Non-emergency police (text phone) - 0900 18 44; Suicide prevention – 0900 01 13; Animal emergency - 144; Child abuse - 0900 123 12 30, Anti Bullying Hotline 0800 90 50  ",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "MQ",
+      "countryName": "Martinique",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 17, Ambulance 15, Fire 18",
+      "police": "112"
+    },
+    {
+      "ambulance": "103",
+      "countryCode": "KG",
+      "countryName": "Kyrgyzstan",
+      "dispatch": "",
+      "fire": "101",
+      "notes": "Police 133 or 103",
+      "police": "102"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "RE",
+      "countryName": "Reunion",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Fire 18, Police 17, Ambulance 15",
+      "police": "112"
+    },
+    {
+      "ambulance": "110",
+      "countryCode": "BT",
+      "countryName": "Bhutan",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "",
+      "police": "113"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "AAH",
+      "countryName": "Marianas Island",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "RO",
+      "countryName": "Romania",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 955, Ambulance 961, Fire 981",
+      "police": "112"
+    },
+    {
+      "ambulance": "8200",
+      "countryCode": "TG",
+      "countryName": "Togo",
+      "dispatch": "",
+      "fire": "118",
+      "notes": "Police 172 or 101",
+      "police": "117"
+    },
+    {
+      "ambulance": "117",
+      "countryCode": "PH",
+      "countryName": "Philippines",
+      "dispatch": "112",
+      "fire": "117",
+      "notes": "117 may also be texted from mobile phones, Emergency in Davao City 911, Police and Fire 757, Red Cross 143, Ambulance 166, Child Abuse 163 (Bantay Bata area), Motorist Assistance 136 (Metro Manila only) ",
+      "police": "117"
+    },
+    {
+      "ambulance": "",
+      "countryCode": "AAE",
+      "countryName": "Cote d'Ivoire",
+      "dispatch": "",
+      "fire": "110",
+      "notes": "Fire 111 or 170",
+      "police": "180"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "UZ",
+      "countryName": "Uzbekistan",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police - 102, Ambulance - 103, Fire - 101",
+      "police": "112"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "IO",
+      "countryName": "British Virgin Islands",
+      "dispatch": "999",
+      "fire": "999",
+      "notes": "Dispatch 911",
+      "police": "999"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "ZW",
+      "countryName": "Zimbabwe",
+      "dispatch": "112",
+      "fire": "999",
+      "notes": "Police - 995, Ambulance - 994, Fire - 993, Mobile phones - 112",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "ME",
+      "countryName": "Montenegro",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 122, Ambulance 124, Fire 123, Ambulance 94",
+      "police": "112"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "DM",
+      "countryName": "Dominica",
+      "dispatch": "999",
+      "fire": "999",
+      "notes": "",
+      "police": "999"
+    },
+    {
+      "ambulance": "118",
+      "countryCode": "ID",
+      "countryName": "Indonesia",
+      "dispatch": "112",
+      "fire": "113",
+      "notes": "Ambulance or Dispatch 119, Search and Rescue 115, Gas Leak 021-315-0361, Natural Disasters 129, Electricity Emergency 123, Poison 021-425-0767, Ambulance 021-420-7051",
+      "police": "110"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "BJ",
+      "countryName": "Benin",
+      "dispatch": "",
+      "fire": "118",
+      "notes": "Ambulance  90-30-02 or 301-769, Support for children 160, Anti corruption 115",
+      "police": "117"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "AO",
+      "countryName": "Angola",
+      "dispatch": "",
+      "fire": "115",
+      "notes": "Fire 118, Ambulance 118, Police 110",
+      "police": "113"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "TMP",
+      "countryName": "East Timor",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "",
+      "police": "112"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "SD",
+      "countryName": "Sudan",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "Traffic Police 777 - 777",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "PT",
+      "countryName": "Portugal",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Forest Fire 117, Social Emergency 144, Fire 214-247-100, Poison 808-250-143 or Family Violence 144",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "NC",
+      "countryName": "New Caledonia",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 17, Ambulance 15, Fire 18",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "GD",
+      "countryName": "Grenada",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Ambulance 434, Dispatch 112",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "KP",
+      "countryName": "North Korea",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Landline dispatch 119, Dispatch 819",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "KY",
+      "countryName": "Cayman Islands",
+      "dispatch": "911",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "GR",
+      "countryName": "Greece",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 100 or 171, Ambulance 166, Fire 199, Forest Fire 1591, Coast Guard 108, Counter Narcotics 109, Tourist Police 171, Family Violence and Social Aid 197",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "LV",
+      "countryName": "Latvia",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Fire 114 or 01, Police 110 or  02, Ambulance 113 or 03, Gas Leak 114",
+      "police": "112"
+    },
+    {
+      "ambulance": "105",
+      "countryCode": "MN",
+      "countryName": "Mongolia",
+      "dispatch": "",
+      "fire": "105",
+      "notes": "Police 102 or 100, Ambulance 103, Fire 101",
+      "police": "105"
+    },
+    {
+      "ambulance": "115",
+      "countryCode": "IR",
+      "countryName": "Iran",
+      "dispatch": "112",
+      "fire": "125",
+      "notes": "Traffic Police 141, Child Help Line 123, Fire 123",
+      "police": "110"
+    },
+    {
+      "ambulance": "15",
+      "countryCode": "MA",
+      "countryName": "Morocco",
+      "dispatch": "112",
+      "fire": "15",
+      "notes": "Royal gendarmerie - 177, Drugs & alcohol service - 113, Racial discrimination hotline - 114, Non-emergency disturbances - 110, General information - 160, National Freeway call center - 5050",
+      "police": "19"
+    },
+    {
+      "ambulance": "128",
+      "countryCode": "GT",
+      "countryName": "Guatemala",
+      "dispatch": "",
+      "fire": "122",
+      "notes": "Police 120, Fire 123, Ambulance 123",
+      "police": "110"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "GY",
+      "countryName": "Guyana",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "Police 911, Ambulance 913, Fire 912",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "IQ",
+      "countryName": "Iraq",
+      "dispatch": "911",
+      "fire": "112",
+      "notes": "Police 104, Ambulance 122, Fire 115",
+      "police": "112"
+    },
+    {
+      "ambulance": "131",
+      "countryCode": "CL",
+      "countryName": "Chile",
+      "dispatch": "",
+      "fire": "132",
+      "notes": "Rescue 137",
+      "police": "133"
+    },
+    {
+      "ambulance": "102",
+      "countryCode": "MV",
+      "countryName": "Maldives Republic",
+      "dispatch": "",
+      "fire": "118",
+      "notes": "Traffic Police 191",
+      "police": "119"
+    },
+    {
+      "ambulance": "102",
+      "countryCode": "NP",
+      "countryName": "Nepal",
+      "dispatch": "112",
+      "fire": "101",
+      "notes": "Police 100, Traffic Police 103, Ambulance 22-80-94, Mobile Phones 112",
+      "police": "100"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "IM",
+      "countryName": "Isle of Man",
+      "dispatch": "112",
+      "fire": "999",
+      "notes": "",
+      "police": "999"
+    },
+    {
+      "ambulance": "115",
+      "countryCode": "TZ",
+      "countryName": "Tanzania",
+      "dispatch": "",
+      "fire": "114",
+      "notes": "Police 999",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "UA",
+      "countryName": "Ukraine",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police - 102, Ambulance - 103, Fire - 101,  Gas emergency - 104",
+      "police": "112"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "GH",
+      "countryName": "Ghana",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "Police  191 or 171, Ambulance 193 or 7761115, Fire 192",
+      "police": "999"
+    },
+    {
+      "ambulance": "102",
+      "countryCode": "IN",
+      "countryName": "India",
+      "dispatch": "112",
+      "fire": "101",
+      "notes": "General Emergency 112, Disaster Management 108, Women's Help Line 181, AIDS Help Line 1097, Child Abuse Hotline 1098, Air Ambulance +91 954-016-1344, Road or Traffic Accident 103",
+      "police": "100"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "CA",
+      "countryName": "Canada",
+      "dispatch": "911",
+      "fire": "911",
+      "notes": "Dispatch 112 for mobile phones or 911 landline",
+      "police": "911",
+      "txt": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "TR",
+      "countryName": "Turkey",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police – 155, Fire brigade – 110, Gendarmerie – 156, Coast Guard – 158, Municipal Police - 153, Gas emergency - 187, Electricity emergency - 186, Water emergency - 185, Poison control - 114, Child abuse and family violence - 183, Forest fire - 177",
+      "police": "112"
+    },
+    {
+      "ambulance": "100",
+      "countryCode": "BE",
+      "countryName": "Belgium",
+      "dispatch": "112",
+      "fire": "100",
+      "notes": "Ambulance 115, Missing Children 116-000, Mental Problems Hotline 106, Red Cross 105, Poison 070-245-245, Family Violence 103",
+      "police": "101"
+    },
+    {
+      "ambulance": "119",
+      "countryCode": "TW",
+      "countryName": "Taiwan",
+      "dispatch": "112",
+      "fire": "119",
+      "notes": "Dispatch 119, Police 100244, Ambulance 100215, Fire 100264",
+      "police": "110"
+    },
+    {
+      "ambulance": "10177",
+      "countryCode": "ZA",
+      "countryName": "South Africa",
+      "dispatch": "112",
+      "fire": "10177",
+      "notes": "Emergency in Cape Town 107, Fire 10111",
+      "police": "10111"
+    },
+    {
+      "ambulance": "990",
+      "countryCode": "TT",
+      "countryName": "Trinidad and Tobago",
+      "dispatch": "",
+      "fire": "990",
+      "notes": "Police 911",
+      "police": "999"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "BM",
+      "countryName": "Bermuda",
+      "dispatch": "911",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "1220",
+      "countryCode": "CF",
+      "countryName": "Central African Republic",
+      "dispatch": "",
+      "fire": "118",
+      "notes": "Ambulance 61-21-84 or 610-600",
+      "police": "117"
+    },
+    {
+      "ambulance": "110",
+      "countryCode": "JM",
+      "countryName": "Jamaica",
+      "dispatch": "",
+      "fire": "110",
+      "notes": "",
+      "police": "119"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "PE",
+      "countryName": "Peru",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Police 105, Ambulance 116, Fire 116, Civicl Defense 115, Domestic Violence 100, Ambulance 115 or 5114 or 011, Rescue 119",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "TM",
+      "countryName": "Turkmenistan",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police - 102, Ambulance - 103, Fire - 101, Gas leaks - 104",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "DE",
+      "countryName": "Germany",
+      "dispatch": "112",
+      "fire": "112",
+      "notes": "",
+      "police": "110"
+    },
+    {
+      "ambulance": "100215",
+      "countryCode": "AAG",
+      "countryName": "Easter Island",
+      "dispatch": "",
+      "fire": "100264",
+      "notes": "",
+      "police": "100244"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "FJ",
+      "countryName": "Fiji",
+      "dispatch": "911",
+      "fire": "9170",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "HK",
+      "countryName": "Hong Kong",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Deaf Fax SMS 992, Dispatch 999 or use 112 if mobile phone",
+      "police": "112"
+    },
+    {
+      "ambulance": "442020",
+      "countryCode": "GN",
+      "countryName": "Guinea",
+      "dispatch": "",
+      "fire": "1717",
+      "notes": "",
+      "police": "122"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "US",
+      "countryName": "United States",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911",
+      "txt": "911"
+    },
+    {
+      "ambulance": "22514242",
+      "countryCode": "TD",
+      "countryName": "Chad",
+      "dispatch": "",
+      "fire": "18",
+      "notes": "Ambulance  2251-1237",
+      "police": "17"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "SO",
+      "countryName": "Somalia",
+      "dispatch": "",
+      "fire": "555",
+      "notes": "Traffic Police 777",
+      "police": "888"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "ST",
+      "countryName": "Sao Tome and Principe",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Dispatch 22-22-22",
+      "police": "112"
+    },
+    {
+      "ambulance": "1669",
+      "countryCode": "TH",
+      "countryName": "Thailand",
+      "dispatch": "112",
+      "fire": "199",
+      "notes": "Ambulance (Bangkok only) - 1646, Tourist Police - 1155, Traffic control center (Bangkok Metro only) - 1197, Highway patrol - 1193",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "GQ",
+      "countryName": "Equatorial Guinea",
+      "dispatch": "",
+      "fire": "115",
+      "notes": "Ambulance 333-083-403 or 556-666-153, Traffic Police 116",
+      "police": "114"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "KI",
+      "countryName": "Kiribati",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "Police 192 or 992, Ambulance 194 or 994, Fire 193 or 993",
+      "police": "999"
+    },
+    {
+      "ambulance": "107",
+      "countryCode": "ZA",
+      "countryName": "South Africa (Cape Town)",
+      "dispatch": "",
+      "fire": "107",
+      "notes": "",
+      "police": "107"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "CR",
+      "countryName": "Costa Rica",
+      "dispatch": "112",
+      "fire": "911",
+      "notes": "Dispatch 112",
+      "police": "911"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "SM",
+      "countryName": "St. Martin",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Police 542-2111, Fire 120",
+      "police": "911"
+    },
+    {
+      "ambulance": "115",
+      "countryCode": "VN",
+      "countryName": "Vietnam",
+      "dispatch": "",
+      "fire": "114",
+      "notes": "Police 03, Ambulance 05, Fire 08",
+      "police": "113"
+    },
+    {
+      "ambulance": "7732604",
+      "countryCode": "KM",
+      "countryName": "Comoros Islands",
+      "dispatch": "",
+      "fire": "18",
+      "notes": "Ambulance  772-03-73",
+      "police": "17"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "KW",
+      "countryName": "Kuwait",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Dispatch 777",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "NG",
+      "countryName": "Nigeria",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Dispatch 119, Police 119, Fire 190, Ambulance 199 or 7411",
+      "police": "112"
+    },
+    {
+      "ambulance": "194",
+      "countryCode": "HR",
+      "countryName": "Croatia",
+      "dispatch": "112",
+      "fire": "193",
+      "notes": "Road Help 1987, Search and Rescue at sea 195",
+      "police": "192"
+    },
+    {
+      "ambulance": "998",
+      "countryCode": "CK",
+      "countryName": "Cook Islands",
+      "dispatch": "999",
+      "fire": "996",
+      "notes": "",
+      "police": "999"
+    },
+    {
+      "ambulance": "110",
+      "countryCode": "LK",
+      "countryName": "Sri Lanka",
+      "dispatch": "",
+      "fire": "110",
+      "notes": "Dispatch 112, Traffic Police 11-269-11-11, Road 691-111, Ambulance 691-095 or 699-935",
+      "police": "119"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "UY",
+      "countryName": "Uruguay",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Police - 109, Ambulance - 105, Fire - 104",
+      "police": "911"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "GB",
+      "countryName": "United Kingdom",
+      "dispatch": "112",
+      "fire": "999",
+      "notes": "Non-emergency police - 101, Non-emergency health issues - 111. SMS messages can be sent to 999 after registration by sending a text message with the word Register to 999",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "CH",
+      "countryName": "Switzerland",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police – 117; Ambulance – 144, Fire – 118, Poison control – 145, Traffic police – 140, Psychological support – 143, Psychological support for teens and children – 147, Rega air rescue – 1414 or by radio on 161.300 MHz, Air Glaciers air-rescue (Valais only) – 1415",
+      "police": "112"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "WS",
+      "countryName": "Samoa",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "Police 995, Ambulance 996, Fire 994",
+      "police": "999"
+    },
+    {
+      "ambulance": "101",
+      "countryCode": "PS",
+      "countryName": "Palestine",
+      "dispatch": "",
+      "fire": "101",
+      "notes": "",
+      "police": "100"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "ES",
+      "countryName": "Spain",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "National Police 091, Local Police 092, Fire 080, Ambulance 061, Civil Protection 1006, Civil Guard Gendarmerie 062, Coast Guard 902-202-202, Red Cross 901-222-222",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "LR",
+      "countryName": "Liberia",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "VE",
+      "countryName": "Venezuela",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Fire 166, Dispatch 171",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "BF",
+      "countryName": "Burkina Faso",
+      "dispatch": "",
+      "fire": "18",
+      "notes": "Water Emergency 1111, Electricity Emergency 1130, Ambulance 50-30-66-45 or 50-30-6644",
+      "police": "17"
+    },
+    {
+      "ambulance": "977",
+      "countryCode": "SZ",
+      "countryName": "Swaziland",
+      "dispatch": "",
+      "fire": "933",
+      "notes": "Ambulance 606-0911",
+      "police": "999"
+    },
+    {
+      "ambulance": "120",
+      "countryCode": "CN",
+      "countryName": "China or The People's Republic of",
+      "dispatch": "",
+      "fire": "119",
+      "notes": "Road or Traffic Accident 122, Private Ambulance Service 999, Dialling 112 on a mobile phone plays a bilingual message in English and Chinese about other accessible emergency numbers",
+      "police": "110"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "PW",
+      "countryName": "Palau",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "EE",
+      "countryName": "Estonia",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 110",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "TL",
+      "countryName": "Timor Leste",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Ambulance 7-233-212",
+      "police": "112"
+    },
+    {
+      "ambulance": "144",
+      "countryCode": "AT",
+      "countryName": "Austria",
+      "dispatch": "112",
+      "fire": "122",
+      "notes": "Deaf Fax SMS 0800-133-133, Doctors 141, Crisi Hotline 142, Non Emergency Police 059-133, Mountain Rescue 140, Road 123, Gas Leak 128 , Family Violence 147",
+      "police": "133"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "AAD",
+      "countryName": "Canary Islands",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "",
+      "police": "112"
+    },
+    {
+      "ambulance": "119",
+      "countryCode": "KR",
+      "countryName": "South Korea",
+      "dispatch": "",
+      "fire": "119",
+      "notes": "National Security 111, Reporting Spies 113, Missing Persons 182, Phone Service Provider 114, Family Violence 182",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "SH",
+      "countryName": "St. Helena",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "",
+      "police": "999"
+    },
+    {
+      "ambulance": "117",
+      "countryCode": "MZ",
+      "countryName": "Mozambique",
+      "dispatch": "",
+      "fire": "198",
+      "notes": "",
+      "police": "119"
+    },
+    {
+      "ambulance": "132",
+      "countryCode": "SV",
+      "countryName": "El Salvador",
+      "dispatch": "911",
+      "fire": "913",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "MC",
+      "countryName": "Monaco",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 17, Ambulance 15, Fire 18",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "GU",
+      "countryName": "Guam",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "121",
+      "countryCode": "LS",
+      "countryName": "Lesotho",
+      "dispatch": "",
+      "fire": "122",
+      "notes": "Police 124, Ambulance 124",
+      "police": "123"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "TO",
+      "countryName": "Tonga",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Police - 922, Ambulance - 933, Fire - 999",
+      "police": "911"
+    },
+    {
+      "ambulance": "150",
+      "countryCode": "EH",
+      "countryName": "Western Sahara",
+      "dispatch": "",
+      "fire": "150",
+      "notes": "",
+      "police": "150"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "HU",
+      "countryName": "Hungary",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 107, Ambulance 104, Fire 105, Water Emergency 1817",
+      "police": "112"
+    },
+    {
+      "ambulance": "119",
+      "countryCode": "JP",
+      "countryName": "Japan",
+      "dispatch": "",
+      "fire": "119",
+      "notes": "Coast Guard 118, Info about emergeneis 7119, 911 redirects to 110",
+      "police": "110"
+    },
+    {
+      "ambulance": "103",
+      "countryCode": "BY",
+      "countryName": "Belarus",
+      "dispatch": "",
+      "fire": "101",
+      "notes": "Dispatch 112, Fire 112, Fire 01, Police 02, Ambulance 03, Gas Leak 104",
+      "police": "102"
+    },
+    {
+      "ambulance": "912",
+      "countryCode": "CW",
+      "countryName": "Curacao",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Police 444444, Ambulance 112, Fire 114",
+      "police": "911"
+    },
+    {
+      "ambulance": "114",
+      "countryCode": "MU",
+      "countryName": "Mauritius",
+      "dispatch": "",
+      "fire": "115",
+      "notes": "Police 148 or 999 or 208-1212, Fire 995, Road 211-8434, Family Violence 210-2116",
+      "police": "112"
+    },
+    {
+      "ambulance": "127",
+      "countryCode": "AL",
+      "countryName": "Albania",
+      "dispatch": "112",
+      "fire": "128",
+      "notes": "Traffic Police 126, Emergency at sea 125, Vehicle Breakdown 234872 or mobile 068 2152808, Information 124, Road 124, Police 19, Ambulance 17, Fire 18",
+      "police": "129"
+    },
+    {
+      "ambulance": "111",
+      "countryCode": "NZ",
+      "countryName": "New Zealand",
+      "dispatch": "",
+      "fire": "111",
+      "notes": "Dispatch 112 or 911 landlines, Traffic 555, Deaf TTY - 0800 161 610, Deaf fax - 0800 161 616, Crime Stoppers - 0800 555 111\\nTap this link to register for Text 111\\n{http://www.police.govt.nz/111-txt/how-register-111-txt/register}\\ngo straight to browser\\n\\nAdditional info about Text 111\\n{http://www.police.govt.nz/111-txt}\\ngo straight to browser",
+      "police": "111",
+      "popup": "Tap this link to register for Text 111\\n{http://www.police.govt.nz/111-txt/how-register-111-txt/register}\\ngo straight to browser\\n\\nAdditional info about Text 111\\n{http://www.police.govt.nz/111-txt}\\ngo straight to browser",
+      "txt": "111"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "KN",
+      "countryName": "St. Kitts and Nevis",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "15",
+      "countryCode": "SN",
+      "countryName": "Senegal",
+      "dispatch": "",
+      "fire": "18",
+      "notes": "Ambulance 889 - 1515",
+      "police": "17"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "MK",
+      "countryName": "Macedonia",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 192, Ambulance 194, Fire 193, Rescue 195",
+      "police": "112"
+    },
+    {
+      "ambulance": "907",
+      "countryCode": "ET",
+      "countryName": "Ethiopia",
+      "dispatch": "911",
+      "fire": "939",
+      "notes": "Traffic Police 945, Police 91, Ambulance 92, Fire 93",
+      "police": "991"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "VI",
+      "countryName": "US Virgin Islands",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "",
+      "police": "911"
+    },
+    {
+      "ambulance": "123",
+      "countryCode": "EG",
+      "countryName": "Egypt",
+      "dispatch": "112",
+      "fire": "180",
+      "notes": "Dispatch 112, Tourist Police 126, Traffic Police 128, Gas Leak 129",
+      "police": "122"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "MO",
+      "countryName": "Macau",
+      "dispatch": "112",
+      "fire": "999",
+      "notes": "",
+      "police": "999"
+    },
+    {
+      "ambulance": "999",
+      "countryCode": "SL",
+      "countryName": "Sierra Leone",
+      "dispatch": "",
+      "fire": "999",
+      "notes": "",
+      "police": "019"
+    },
+    {
+      "ambulance": "118",
+      "countryCode": "BO",
+      "countryName": "Bolivia",
+      "dispatch": "911",
+      "fire": "119",
+      "notes": "Civil Protection 114, National Police 120",
+      "police": "110"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "MT",
+      "countryName": "Malta",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Help Line 119, Police 191, Ambulance 196, Fire 199",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "SA",
+      "countryName": "Saudi Arabia",
+      "dispatch": "112",
+      "fire": "911",
+      "notes": "Police 999, Ambulance 997, Fire 998, Traffic Police 993",
+      "police": "911"
+    },
+    {
+      "ambulance": "130",
+      "countryCode": "CV",
+      "countryName": "Cape Verde",
+      "dispatch": "",
+      "fire": "131",
+      "notes": "Water or Electricity Emergency 800-11-33",
+      "police": "132"
+    },
+    {
+      "ambulance": "115",
+      "countryCode": "PK",
+      "countryName": "Pakistan",
+      "dispatch": "112",
+      "fire": "16",
+      "notes": "Ambulance 1122, Traffic Police 1915",
+      "police": "15"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "XK",
+      "countryName": "Kosovo",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Fire 192, Ambulance 194 or 94, Fire 193",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "IE",
+      "countryName": "Ireland",
+      "dispatch": "999",
+      "fire": "112",
+      "notes": "Fire 122, SMS messages can be sent to 112 after registration by sending a text message with the word Register to 112",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "QA",
+      "countryName": "Qatar",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Dispatch 999 for landlines, 112 for mobile",
+      "police": "112"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "SK",
+      "countryName": "Slovakia",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 158, Ambulance 155, Fire 150",
+      "police": "112"
+    },
+    {
+      "ambulance": "15",
+      "countryCode": "FR",
+      "countryName": "France",
+      "dispatch": "112",
+      "fire": "18",
+      "notes": "Deaf FAX or SMS 114, Hotline for beaten children 119, Missing children 116 - 000, Maritime Rescue 1616, Dispatch 911, Homeless 115, Rescue 05-61-49-33-33, Rescue 0-800-121-123 or Family Violence 119",
+      "police": "17"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "LT",
+      "countryName": "Lithuania",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 02, Ambulance 03, Fire 01",
+      "police": "112"
+    },
+    {
+      "ambulance": "194",
+      "countryCode": "RS",
+      "countryName": "Serbia",
+      "dispatch": "112",
+      "fire": "193",
+      "notes": "Ambulance 94, Civil Protection 1985, Dialing 112 may redirect you to 192",
+      "police": "192"
+    },
+    {
+      "ambulance": "124",
+      "countryCode": "",
+      "countryName": "Bosnia and Herzegovina",
+      "dispatch": "112",
+      "fire": "123",
+      "notes": "Civil Protection 121, Police 92, Ambulance 94, Fire 93",
+      "police": "122"
+    },
+    {
+      "ambulance": "15",
+      "countryCode": "NE",
+      "countryName": "Niger",
+      "dispatch": "",
+      "fire": "18",
+      "notes": "Ambulance 723-141",
+      "police": "17"
+    },
+    {
+      "ambulance": "912",
+      "countryCode": "RW",
+      "countryName": "Rwanda",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Dispatch 999, Police Abuse 3511, Ambulance 0252-588-888, Traffic Police 113",
+      "police": "112"
+    },
+    {
+      "ambulance": "511",
+      "countryCode": "BB",
+      "countryName": "Barbados",
+      "dispatch": "",
+      "fire": "311",
+      "notes": "Dispatch 112 or 119 or 911, Ambulance 115",
+      "police": "211"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "PF",
+      "countryName": "French Polynesia Tahiti",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 17, Ambulance 15, Fire 18",
+      "police": "112"
+    },
+    {
+      "ambulance": "128",
+      "countryCode": "NI",
+      "countryName": "Nicaragua",
+      "dispatch": "",
+      "fire": "115",
+      "notes": "Fire 911, Ambulance 2-651-761",
+      "police": "118"
+    },
+    {
+      "ambulance": "103",
+      "countryCode": "AZ",
+      "countryName": "Azerbaijan (Baku)",
+      "dispatch": "112",
+      "fire": "101",
+      "notes": "Traffic Police 126, Gas Leak 104, Electricity Emergency 199, Family Violence 050-680-22-80",
+      "police": "102"
+    },
+    {
+      "ambulance": "113",
+      "countryCode": "NO",
+      "countryName": "Norway",
+      "dispatch": "",
+      "fire": "110",
+      "notes": "Emergency at sea - 120; Non-emergency police – 02 800; Child abuse and family violence - 116 111, Text phone - 1412. Nearest health care outside office hours - 116 117, Ambulance 110, Family Violence 110\t",
+      "police": "112"
+    },
+    {
+      "ambulance": "997",
+      "countryCode": "BW",
+      "countryName": "Botswana",
+      "dispatch": "112",
+      "fire": "998",
+      "notes": "Dispatch 999 or 911, 112 for mobile phones",
+      "police": "999"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "DK",
+      "countryName": "Denmark",
+      "dispatch": "112",
+      "fire": "112",
+      "notes": "Non Emergency Police 114, Helpline for guidance from doctors and nurses 1813",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "DO",
+      "countryName": "Dominican Republic",
+      "dispatch": "911",
+      "fire": "911",
+      "notes": "Dispatch 112 or 911",
+      "police": "911"
+    },
+    {
+      "ambulance": "066",
+      "countryCode": "MX",
+      "countryName": "Mexico",
+      "dispatch": "",
+      "fire": "066",
+      "notes": "Police 080, Ambulance 065 or 114, Fire 068, Information about emergencies 060, Rescue 797-627-462",
+      "police": "066"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "UG",
+      "countryName": "Uganda",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police or Fire 999, Ambulance 0414-342-222",
+      "police": "112"
+    },
+    {
+      "ambulance": "911",
+      "countryCode": "FM",
+      "countryName": "Micronesia",
+      "dispatch": "",
+      "fire": "911",
+      "notes": "Police 320-2221, Ambulance 320-2213 or 330-2444, Fire 320-2223",
+      "police": "911"
+    },
+    {
+      "ambulance": "112",
+      "countryCode": "SR",
+      "countryName": "Suriname",
+      "dispatch": "",
+      "fire": "112",
+      "notes": "Police 111, Ambulance 113, Fire 110, Police 115 or 47-11-11",
+      "police": "112"
+    }
+  ]
+}

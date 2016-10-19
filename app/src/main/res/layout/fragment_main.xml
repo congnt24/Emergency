@@ -4,13 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <fragment
-        android:id="@+id/map_fragment"
-        class="com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation"
-        android:layout_width="match_parent"
-        android:layout_height="180dp" />
-
     <LinearLayout
         android:id="@+id/layout_emergency_number2"
         android:layout_width="match_parent"
@@ -49,10 +42,21 @@
             app:flat_text_top="AMBULANCE" />
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/layout_emergency_number2">
+
+        <fragment
+            android:id="@+id/map_fragment"
+            class="com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/map_fragment"
+        android:layout_height="50dp"
+        android:layout_above="@id/layout_emergency_number2"
         android:orientation="horizontal">
 
         <ToggleButton
@@ -68,4 +72,22 @@
             android:layout_width="match_parent"
             android:layout_height="60dp" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ib_walk_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:src="@android:drawable/ic_menu_share" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/sw_share_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:text="Share Location:" />
 </RelativeLayout>

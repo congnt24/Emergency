@@ -2,8 +2,7 @@ package com.congnt.emergencyassistance.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
+import android.location.Location;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ToggleButton;
@@ -11,6 +10,7 @@ import android.widget.ToggleButton;
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
+import com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation;
 import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
 import com.congnt.emergencyassistance.EventBusEntity.EBE_Result;
@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
  * Created by congnt24 on 25/09/2016.
  */
 
-public class MainFragment extends AwesomeFragment implements View.OnClickListener {
+public class MainFragment extends AwesomeFragment implements View.OnClickListener, MapFragmentWithFusedLocation.OnMapListener {
     private static final int DIALOG_POLICE = 1;
     private static final int DIALOG_AMBULANCE = 3;
     private static final int DIALOG_FIRE = 2;
@@ -39,6 +39,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private FlatButtonWithIconTop btn_fire;
     private FlatButtonWithIconTop btn_ambulance;
     private ToggleButton btn_start_stop;
+    //Map fragment
+    private MapFragmentWithFusedLocation mapFragment;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -54,6 +56,12 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         EventBus.getDefault().register(this);
         setupSpeechRecognitionService(rootView);
         setupEmergencyNumber(rootView);
+
+        //Bind Map Fragment
+        mapFragment = (MapFragmentWithFusedLocation) getChildFragmentManager().findFragmentById(R.id.map_fragment);
+        mapFragment.setUpdatable(true);
+        mapFragment.setScrollGesturesEnabled(true);
+        mapFragment.setOnMapListener(this);
     }
 
     /**
@@ -75,7 +83,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 ContextCompat.getColor(context, R.color.color4),
                 ContextCompat.getColor(context, R.color.color5)
         };
-        int[] heights = {50, 66, 48, 70, 45, 34, 56, 67, 68, 45};
+        int[] heights = {30, 46, 28, 40, 25, 14, 36, 37, 48, 25};
 
         speechView.setColors(colors);
         speechView.setBarMaxHeightsInDp(heights);
@@ -181,5 +189,15 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 CommunicationUtil.dialTo(getActivity(), finalNumber);
             }
         }).create().show();
+    }
+
+    @Override
+    public void onLocationChange(Location location) {
+        mapFragment.animateCamera(location, 13);
+    }
+
+    @Override
+    public void onConnected() {
+
     }
 }

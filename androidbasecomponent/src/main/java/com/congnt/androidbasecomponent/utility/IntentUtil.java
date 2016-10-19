@@ -2,6 +2,7 @@ package com.congnt.androidbasecomponent.utility;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 
 /**
@@ -19,4 +20,10 @@ public class IntentUtil {
         Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
         context.startActivity(intent);
     }
+
+    public static Intent getContactIntent() {
+        return new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+    }
+
+
 }

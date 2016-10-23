@@ -91,7 +91,7 @@ public class EmergencyContactActivity extends AwesomeActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.finish();
+                finish();
                 break;
             case R.id.action_add_contact:
                 startActivityForResult(IntentUtil.getContactIntent(), REQUEST_CONTACT_CODE);
@@ -102,5 +102,18 @@ public class EmergencyContactActivity extends AwesomeActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void finish() {
+        //Save data
+        MySharedPreferences.getInstance(this).listContact.save(listContact);
+        super.finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }

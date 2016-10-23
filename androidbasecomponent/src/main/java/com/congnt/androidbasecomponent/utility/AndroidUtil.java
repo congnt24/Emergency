@@ -34,7 +34,7 @@ public class AndroidUtil {
      * @param activity
      * @return true if has ggPlay on device, false if otherwise
      */
-    private static boolean CheckGooglePlayServices(Activity activity) {
+    private static boolean checkGooglePlayServices(Activity activity) {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         int result = googleAPI.isGooglePlayServicesAvailable(activity);
         if(result != ConnectionResult.SUCCESS) {

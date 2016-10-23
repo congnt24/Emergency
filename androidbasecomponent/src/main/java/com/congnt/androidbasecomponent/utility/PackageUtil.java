@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.speech.RecognizerIntent;
 
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -29,6 +30,7 @@ public class PackageUtil {
     public static final String TUMBLR = "com.tumblr";
     public static final String FANCY = "com.thefancy.app";
     public static final String FLIPBOARD = "flipboard.app";
+    public static final String SPEECH_TO_TEXT = RecognizerIntent.ACTION_RECOGNIZE_SPEECH;
     public static final MessageFormat MARKET_APP_URL_TEMPLATE = new MessageFormat("market://details?id={0}", Locale.ENGLISH);
     public static final MessageFormat PLAYSTORE_APP_URL_TEMPLATE = new MessageFormat("https://play.google.com/store/apps/details?id={0}", Locale.ENGLISH);
 
@@ -42,6 +44,14 @@ public class PackageUtil {
         return (isIntentAvailable(new Intent(Intent.ACTION_DIAL), paramContext)) && ((!paramBoolean) || (paramContext.getPackageManager().hasSystemFeature("android.hardware.telephony")));
     }
 
+    /**
+     * get resolve info for openning one of these application: GMAIL, MAIL ....
+     *
+     * @param context
+     * @param packageName
+     * @param intentCategory
+     * @return
+     */
     public static ResolveInfo getResolveInfo(Context context, String packageName, String intentCategory) {
         PackageManager packageManager = context.getPackageManager();
         Intent intent = new Intent();
@@ -50,6 +60,12 @@ public class PackageUtil {
         return packageManager.resolveActivity(intent, PackageManager.GET_RESOLVED_FILTER);
     }
 
+    /**
+     * Check if an application was installed
+     * @param context
+     * @param packageName   com.xxxx.xxxxx
+     * @return
+     */
     public static boolean isInstalled(Context context, String packageName) {
         PackageManager packageManager = context.getPackageManager();
         try {
@@ -64,6 +80,11 @@ public class PackageUtil {
         openPlayStore(context, context.getPackageName());
     }
 
+    /**
+     * Open in google play for user to download
+     * @param context
+     * @param packageName
+     */
     public static void openPlayStore(Context context, String packageName) {
         Intent intent = null;
         try {

@@ -2,6 +2,7 @@ package com.congnt.emergencyassistance.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -23,6 +24,8 @@ import com.congnt.androidbasecomponent.adapter.ViewPagerAdapter;
 import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
+import com.congnt.androidbasecomponent.utility.LocationUtil;
+import com.congnt.androidbasecomponent.utility.PackageUtil;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
 import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
 import com.congnt.emergencyassistance.MainActionBar;
@@ -55,8 +58,11 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     public ItemCountryEmergencyNumber countrynumber;
     private String[] permission = new String[]{Manifest.permission.ACCESS_FINE_LOCATION
             , Manifest.permission.ACCESS_COARSE_LOCATION
+            , Manifest.permission.READ_CONTACTS
             , Manifest.permission.RECORD_AUDIO
-            , Manifest.permission.CAMERA};
+            , Manifest.permission.CAMERA
+            , Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     private DrawerLayout mDrawer;
     private ImageView mImgHeader;
     private TextView mTvHeader;
@@ -79,13 +85,20 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         if (!PermissionUtil.getInstance(this).checkMultiPermission(permission)) {
             PermissionUtil.getInstance(this).requestPermissions(permission);
         }
+        //Require gps, speech2text
+        if (!PackageUtil.isInstalled(this, PackageUtil.SPEECH_TO_TEXT)) {
+            PackageUtil.openPlayStore(this, PackageUtil.SPEECH_TO_TEXT);
+        }
+        if (!LocationUtil.isGpsEnable(this)) {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        }
         //Init Service
         if (!AndroidUtil.isServiceRunning(this, SpeechRecognitionService.class)) {
             MySharedPreferences.getInstance(this).isListening.save(false);
         }
         Intent service = new Intent(this, SpeechRecognitionService.class);
         startService(service);
-
         //setup country
         setupCountry();
         //init nav

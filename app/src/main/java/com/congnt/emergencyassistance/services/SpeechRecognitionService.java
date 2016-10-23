@@ -17,10 +17,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.congnt.emergencyassistance.EventBusEntity.EBE_StartStopService;
-import com.congnt.emergencyassistance.activities.MainActivity;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
+import com.congnt.emergencyassistance.view.activity.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

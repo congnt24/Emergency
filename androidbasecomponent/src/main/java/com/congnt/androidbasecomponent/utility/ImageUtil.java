@@ -2,12 +2,19 @@ package com.congnt.androidbasecomponent.utility;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by congn_000 on 9/20/2016.
@@ -15,6 +22,61 @@ import java.io.IOException;
 
 public class ImageUtil {
     public static String filePath;
+
+    /**
+     * add a picture to a gallary
+     *
+     * @param context
+     * @param mCurrentPhotoPath
+     */
+    public static void galleryAddPic(Context context, String mCurrentPhotoPath) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        context.sendBroadcast(mediaScanIntent);
+    }
+
+    public static boolean createFileFromData(byte[] data) {
+        File pictureFile = getOutputMediaFile();
+        if (pictureFile == null) {
+            return false;
+        }
+        FileOutputStream outStream = null;
+        try {
+            outStream = new FileOutputStream(pictureFile);//String.format("/sdcard/%d.jpg", System.currentTimeMillis())
+            outStream.write(data);
+            outStream.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    private static File getOutputMediaFile() {
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "MyCameraApp");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+                .format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "IMG_" + timeStamp + ".jpg");
+
+        return mediaFile;
+    }
 
     /**
      * Save bitmap to file

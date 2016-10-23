@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -72,12 +71,12 @@ public class ContactUtil {
 
             if (inputStream != null) {
                 photo = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
             }
-            assert inputStream != null;
-            inputStream.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+//            assert inputStream != null;
+//            inputStream.close();
+        } catch (Exception e) {
+//            e.printStackTrace();
         }
         return photo;
     }

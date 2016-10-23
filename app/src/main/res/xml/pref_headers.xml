@@ -3,7 +3,7 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.congnt.emergencyassistance.activities.SettingsActivity$SpeechPreferenceFragment"
+        android:fragment="com.congnt.emergencyassistance.view.activity.SettingsActivity$SpeechPreferenceFragment"
         android:icon="@drawable/ic_home"
         android:title="@string/pref_header_general" />
 

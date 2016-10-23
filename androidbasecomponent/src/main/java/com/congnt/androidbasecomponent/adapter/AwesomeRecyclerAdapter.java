@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public abstract class AwesomeRecyclerAdapter<VH extends RecyclerView.ViewHolder,
 
     protected OnClickListener<T> onClickListener;
     protected List<T> mList;
-    private Context context;
+    protected Context context;
     private LayoutInflater mLayoutInflater;
 
     public AwesomeRecyclerAdapter(Context context, List<T> mList, OnClickListener<T> onClickListener) {
@@ -33,12 +34,19 @@ public abstract class AwesomeRecyclerAdapter<VH extends RecyclerView.ViewHolder,
 
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, final int position) {
         bindHolder(holder, position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickListener.onClick(mList.get(position), position);
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                return onItemLongClick(holder, mList.get(position), position);
             }
         });
     }
@@ -54,6 +62,34 @@ public abstract class AwesomeRecyclerAdapter<VH extends RecyclerView.ViewHolder,
     protected abstract VH getViewHolder(View itemView);
 
     protected abstract void bindHolder(VH holder, int position);
+
+    protected boolean onItemLongClick(VH holder, T t, int position) {
+        return false;
+    }
+
+    ;
+
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mList, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mList, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    ;
+
+    public void onItemDismiss(int position) {
+        mList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    ;
 
     public interface OnClickListener<T> {
         void onClick(T item, int position);

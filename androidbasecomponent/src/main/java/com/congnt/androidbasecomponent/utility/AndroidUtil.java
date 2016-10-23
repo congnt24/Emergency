@@ -16,6 +16,8 @@ import android.view.inputmethod.InputMethodManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.util.Locale;
+
 /**
  * Created by congnt24 on 27/09/2016.
  */
@@ -163,5 +165,11 @@ public class AndroidUtil {
         if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
+    }
+
+    //COUNTRY
+
+    public static String getCountryCode() {
+        return Locale.getDefault().getCountry();
     }
 }

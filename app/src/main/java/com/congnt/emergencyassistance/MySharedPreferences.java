@@ -3,10 +3,14 @@ package com.congnt.emergencyassistance;
 import android.content.Context;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeSharedPreferences;
+import com.congnt.emergencyassistance.entity.ItemContact;
+import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
+import com.congnt.emergencyassistance.entity.firebase.User;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +25,7 @@ public class MySharedPreferences extends AwesomeSharedPreferences {
             return "IS_LISTENING";
         }
     };
+    //Contain list emergency command
     public SingleSharedPreferences<List<ItemSettingSpeech>> emergency_command = new SingleSharedPreferences<List<ItemSettingSpeech>>() {
         @Override
         protected String ID() {
@@ -30,6 +35,84 @@ public class MySharedPreferences extends AwesomeSharedPreferences {
         @Override
         protected Type getType() {
             return new TypeToken<List<ItemSettingSpeech>>() {}.getType();
+        }
+    };
+    //Contain list contact
+    public CollectionSharedPreferences<List<ItemContact>> listContact = new CollectionSharedPreferences<List<ItemContact>>() {
+        @Override
+        public boolean put(Object obj) {
+            if (!has(obj)) {
+                List<ItemContact> list = load(new ArrayList<ItemContact>());
+                list.add((ItemContact) obj);
+                save(list);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Object get(Object id) {
+            List<ItemContact> list = load(new ArrayList<ItemContact>());
+            return list.get((int) id);
+        }
+
+        @Override
+        public boolean has(Object obj) {
+            ItemContact contact = (ItemContact) obj;
+            List<ItemContact> list = load(new ArrayList<ItemContact>());
+            for (ItemContact item : list) {
+                if (item.getContactNumber() == null) {
+                    return false;
+                }
+                if (item.getContactNumber().equalsIgnoreCase(contact.getContactNumber())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        protected String ID() {
+            return "emergency_contact";
+        }
+
+        @Override
+        protected Type getType() {
+            return new TypeToken<List<ItemContact>>() {
+            }.getType();
+        }
+    };
+    //Contain current emergency number
+    public SingleSharedPreferences<ItemCountryEmergencyNumber> countryNumber = new SingleSharedPreferences<ItemCountryEmergencyNumber>() {
+        @Override
+        protected String ID() {
+            return "country_emergency_number";
+        }
+
+        @Override
+        protected Type getType() {
+            return new TypeToken<ItemCountryEmergencyNumber>() {
+            }.getType();
+        }
+    };
+    //Share location state
+    public SingleSharedPreferences<Boolean> shareLocationState = new SingleSharedPreferences<Boolean>() {
+        @Override
+        protected String ID() {
+            return "share_location";
+        }
+    };
+    //Save User Profile
+    public SingleSharedPreferences<User> userProfile = new SingleSharedPreferences<User>() {
+        @Override
+        protected String ID() {
+            return "user_profile";
+        }
+
+        @Override
+        protected Type getType() {
+            return new TypeToken<User>() {
+            }.getType();
         }
     };
 

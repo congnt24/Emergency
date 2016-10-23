@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * Created by NGUYEN TRUNG CONG on 09/13/2016
@@ -26,7 +25,12 @@ public abstract class AwesomeSharedPreferences {
 
     public abstract class CollectionSharedPreferences<T> extends SingleSharedPreferences<T> {
 
-        public abstract void put(Object id, Object value);
+        public void put(Object id, Object obj) {
+        }
+
+        ;
+
+        public abstract boolean put(Object obj);
 
         public abstract Object get(Object id);
 

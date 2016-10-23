@@ -25,9 +25,6 @@ public class ImageSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         super(context);
         this.camera = camera;
         mSupportedPreviewSizes = camera.getParameters().getSupportedPreviewSizes();
-        for (Camera.Size str : mSupportedPreviewSizes) {
-            Log.e(TAG, str.width + "/" + str.height);
-        }
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);

@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.congnt.emergencyassistance.MySharedPreferences;
-import com.congnt.emergencyassistance.activities.DialogEmergencyActivity;
 import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
+import com.congnt.emergencyassistance.view.activity.DialogEmergencyActivity;
 
 import java.util.List;
 
@@ -30,8 +29,6 @@ public class DetectBySpeechRecervier extends BroadcastReceiver {
             String text = "";
             for (String r : matches)
                 text += r + "\n";
-
-            Log.d("AAAA", text);
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
             List<ItemSettingSpeech> list = MySharedPreferences.getInstance(context).emergency_command.load(null);
             for (ItemSettingSpeech item : list) {

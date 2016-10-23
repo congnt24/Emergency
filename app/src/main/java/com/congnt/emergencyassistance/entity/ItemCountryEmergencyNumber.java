@@ -13,6 +13,15 @@ public class ItemCountryEmergencyNumber {
     public String notes;
     public String police;
 
+    public ItemCountryEmergencyNumber(String countryCode, String countryName, String police, String ambulance, String fire, String notes) {
+        this.countryName = countryName;
+        this.ambulance = ambulance;
+        this.countryCode = countryCode;
+        this.fire = fire;
+        this.notes = notes;
+        this.police = police;
+    }
+
     @Override
     public String toString() {
         return "ItemCountryEmergencyNumber{" +

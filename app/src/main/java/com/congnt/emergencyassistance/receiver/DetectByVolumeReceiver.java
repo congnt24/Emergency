@@ -4,18 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
-import com.congnt.emergencyassistance.activities.DialogEmergencyActivity;
+import com.congnt.emergencyassistance.view.activity.DialogEmergencyActivity;
 
 /**
  * Created by congnt24 on 13/10/2016.
  */
 
 public class DetectByVolumeReceiver extends BroadcastReceiver{
+    private static final int DURATION = 500;
     static long lastTime = 0;
     private static int count = 0;
-    private static final int DURATION = 500;
 
     @Override
     public void onReceive(final Context context, Intent intent) {

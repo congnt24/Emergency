@@ -46,7 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/layout_emergency_number2">
-
         <fragment
             android:id="@+id/map_fragment"
             class="com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation"
@@ -55,39 +54,32 @@
     </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_above="@id/layout_emergency_number2"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
         android:orientation="horizontal">
 
-        <ToggleButton
-            android:id="@+id/btn_start_stop"
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_start_service"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/toggle_start_stop_selector"
-            android:textOff="Start"
-            android:textOn="Stop" />
-
+            android:layout_height="match_parent" />
         <com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView
             android:id="@+id/speechview"
-            android:layout_width="match_parent"
-            android:layout_height="60dp" />
+            android:layout_width="200dp"
+            android:layout_height="40dp" />
     </LinearLayout>
-
     <ImageButton
         android:id="@+id/ib_walk_mode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/transparent"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorPrimary"
         android:src="@android:drawable/ic_menu_share" />
-
-    <android.support.v7.widget.SwitchCompat
+    <!--<android.support.v7.widget.SwitchCompat
         android:id="@+id/sw_share_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
-        android:text="Share Location:" />
+        android:text="Share Location:" />-->
 </RelativeLayout>

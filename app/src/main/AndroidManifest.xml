@@ -23,7 +23,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateUnchanged">
             <intent-filter>
@@ -49,58 +49,56 @@
         </receiver>
 
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name=".view.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity"
+            android:parentActivityName=".view.activity.MainActivity"
             android:theme="@style/AppTheme2">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+                android:value=".view.activity.MainActivity" />
         </activity>
+        <activity android:name=".view.activity.DialogEmergencyActivity" />
         <activity
-            android:name=".activities.DialogEmergencyActivity"
-            android:theme="@style/Theme.AppCompat.Translucent" />
-        <activity
-            android:name=".activities.LoginActivity"
+            android:name=".view.activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".activities.MainActivity"
+            android:parentActivityName=".view.activity.MainActivity"
             android:theme="@style/AppTheme2">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+                android:value=".view.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.FakeSoundActivity"
-            android:label="@string/title_activity_fake_sound"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
-        </activity>
-        <activity
-            android:name=".activities.ProfileActivity"
+            android:name=".view.activity.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".view.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+                android:value=".view.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.DefenseYourselfActivity"
+            android:name=".view.activity.DefenseYourselfActivity"
             android:label="@string/title_activity_defense"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".view.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+                android:value=".view.activity.MainActivity" />
         </activity>
 
         <activity
-            android:name=".activities.ChangeCountryActivity"
+            android:name=".view.activity.ChangeCountryActivity"
             android:label="@string/title_activity_country"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".view.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.congnt.emergencyassistance.activities.MainActivity" />
+                android:value=".view.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.EmergencyContactActivity"
+            android:label="@string/title_activity_emergency_contact"
+            android:parentActivityName=".view.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.MainActivity" />
         </activity>
     </application>
 

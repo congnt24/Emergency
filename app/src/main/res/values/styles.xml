@@ -5,20 +5,21 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlActivated">@color/md_blue_700</item>
+        <item name="colorControlActivated">@color/md_blue_900</item>
     </style>
 
     <style name="AppTheme2.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme2.AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+
+    <style name="AppTheme2.AlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <!-- Used for the buttons -->
-        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!-- Used for the title and text -->
-        <!--<item name="android:textColorPrimary">#111111</item>-->
+        <item name="android:textColorPrimary">#111111</item>
         <!--<item name="android:background">@color/md_grey_500</item>-->
         <!--<item name="android:windowTitleStyle">@style/DialogTitleTextStyle</item>-->
     </style>
@@ -36,5 +37,15 @@
         <item name="android:button">@null</item>
         <item name="android:paddingLeft">5dp</item>
         <item name="android:paddingRight">5dp</item>
+    </style>
+
+    <style name="text_medium_black">
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Medium</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="text_large_black">
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Large</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 </resources>

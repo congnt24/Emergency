@@ -3,6 +3,7 @@ package com.congnt.androidbasecomponent.utility;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.provider.Settings;
 
 /**
@@ -23,6 +24,10 @@ public class IntentUtil {
 
     public static Intent getContactIntent() {
         return new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+    }
+
+    public static Intent getCameraIntent() {
+        return new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     }
 
 

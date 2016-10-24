@@ -30,6 +30,7 @@ public class PackageUtil {
     public static final String TUMBLR = "com.tumblr";
     public static final String FANCY = "com.thefancy.app";
     public static final String FLIPBOARD = "flipboard.app";
+    public static final String GOOGLE_APP = "com.google.android.googlequicksearchbox";
     public static final String SPEECH_TO_TEXT = RecognizerIntent.ACTION_RECOGNIZE_SPEECH;
     public static final MessageFormat MARKET_APP_URL_TEMPLATE = new MessageFormat("market://details?id={0}", Locale.ENGLISH);
     public static final MessageFormat PLAYSTORE_APP_URL_TEMPLATE = new MessageFormat("https://play.google.com/store/apps/details?id={0}", Locale.ENGLISH);

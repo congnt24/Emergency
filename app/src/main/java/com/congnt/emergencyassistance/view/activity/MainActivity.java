@@ -1,6 +1,7 @@
 package com.congnt.emergencyassistance.view.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.PackageUtil;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
+import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
 import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
 import com.congnt.emergencyassistance.MainActionBar;
 import com.congnt.emergencyassistance.MySharedPreferences;
@@ -86,12 +88,25 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             PermissionUtil.getInstance(this).requestPermissions(permission);
         }
         //Require gps, speech2text
-        if (!PackageUtil.isInstalled(this, PackageUtil.SPEECH_TO_TEXT)) {
-            PackageUtil.openPlayStore(this, PackageUtil.SPEECH_TO_TEXT);
+        if (!PackageUtil.isInstalled(this, PackageUtil.GOOGLE_APP)) {
+            DialogBuilder.confirmDialog(this, getString(R.string.require_google_app), getString(R.string.require_google_app_message)
+                    , R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            PackageUtil.openPlayStore(MainActivity.this, PackageUtil.GOOGLE_APP);
+                        }
+                    }).create().show();
         }
+        //require gps
         if (!LocationUtil.isGpsEnable(this)) {
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
+            DialogBuilder.confirmDialog(this, getString(R.string.enable_gps), getString(R.string.enable_gps_message)
+                    , R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(intent);
+                        }
+                    }).create().show();
         }
         //Init Service
         if (!AndroidUtil.isServiceRunning(this, SpeechRecognitionService.class)) {
@@ -225,12 +240,11 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         if (fuser != null) {
             if (user == null) {
                 user = new User();
-                user.setName(fuser.getDisplayName());
-                MySharedPreferences.getInstance(this).userProfile.save(user);
-                mTvHeader.setText(fuser.getDisplayName());
-            } else {
-                mTvHeader.setText(user.getName());
             }
+            user.setName(fuser.getDisplayName());
+            user.setPhotoUrl(fuser.getPhotoUrl().toString());
+            MySharedPreferences.getInstance(this).userProfile.save(user);
+            mTvHeader.setText(user.getName());
             Picasso.with(this).load(fuser.getPhotoUrl()).into(mImgHeader);
         } else {
             if (user != null) {

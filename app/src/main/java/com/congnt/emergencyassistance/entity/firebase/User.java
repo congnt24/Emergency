@@ -10,6 +10,7 @@ public class User {
     public String address;
     public String gender;
     public String phone;
+    public String photoUrl;
 
     public User() {
     }
@@ -20,6 +21,23 @@ public class User {
         this.address = address;
         this.gender = gender;
         this.phone = phone;
+    }
+
+    public User(String name, String date, String address, String gender, String phone, String photoUrl) {
+        this.name = name;
+        this.date = date;
+        this.address = address;
+        this.gender = gender;
+        this.phone = phone;
+        this.photoUrl = photoUrl;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public String getName() {

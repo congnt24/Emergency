@@ -84,6 +84,7 @@ public class ProfileActivity extends AwesomeActivity {
     private void createDialog(final TextView textView, String title) {
         View customView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_profile, null);
         final EditText editText = (EditText) customView.findViewById(R.id.edit_text);
+        editText.setText(textView.getText());
         DialogBuilder.customDialog(this, "Enter your " + title, customView, R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

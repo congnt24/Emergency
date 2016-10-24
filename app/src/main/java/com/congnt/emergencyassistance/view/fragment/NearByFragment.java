@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
 import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
@@ -159,7 +158,7 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
                     }
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
                     adapter.notifyDataSetChanged();
-                    Toast.makeText(getActivity(), "Adapter Size(): " + listNearBy.size() + " : ", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Adapter Size(): " + listNearBy.size() + " : ", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

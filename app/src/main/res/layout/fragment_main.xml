@@ -74,6 +74,16 @@
         android:layout_marginTop="40dp"
         android:background="@color/colorPrimary"
         android:src="@android:drawable/ic_menu_share" />
+
+    <ImageButton
+        android:id="@+id/ib_timmer"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/ib_walk_mode"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_directions_run"
+        android:tint="@color/md_white_1000" />
     <!--<android.support.v7.widget.SwitchCompat
         android:id="@+id/sw_share_location"
         android:layout_width="wrap_content"
@@ -82,4 +92,27 @@
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:text="Share Location:" />-->
+    <cn.iwgang.countdownview.CountdownView
+        android:id="@+id/cdv_timmer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:visibility="gone"
+        app:isHideTimeBackground="false"
+        app:isShowDay="false"
+        app:isShowHour="false"
+        app:isShowMillisecond="true"
+        app:isShowMinute="true"
+        app:isShowSecond="true"
+        app:suffixGravity="center"
+        app:suffixTextColor="#000000"
+        app:suffixTextSize="40sp"
+        app:timeBgDivisionLineSize="2dp"
+        app:timeBgRadius="6dp"
+        app:timeBgSize="80dp"
+        app:timeTextColor="#FFFFFF"
+        app:timeTextSize="40sp" />
+
 </RelativeLayout>

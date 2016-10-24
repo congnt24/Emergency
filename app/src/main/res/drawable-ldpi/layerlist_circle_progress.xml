@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape android:shape="oval">
+            <solid android:color="@color/md_green_400" />
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <shape
+            android:innerRadiusRatio="3"
+            android:shape="ring"
+            android:thickness="20dp"
+            android:useLevel="true">
+            <gradient
+                android:centerY="0.5"
+                android:endColor="@color/md_red_A700"
+                android:startColor="@color/md_light_green_A100"
+                android:type="sweep"
+                android:useLevel="false" />
+        </shape>
+    </item>
+</layer-list>

@@ -109,4 +109,17 @@
     <string name="gender">Gender</string>
     <string name="address">Address</string>
     <string name="phone">Phone</string>
+    <string name="enable_take_picture">Enable Take Picture</string>
+    <string name="enable_take_picture_desc">Taking a picture automatically while emergency is detected.</string>
+    <string name="enable_record">Enable Record Audio</string>
+    <string name="enable_record_desc">Recording automatically while emergency is detected.</string>
+    <string name="enable_call_to">Direct Call To</string>
+    <string name="enable_call_to_desc">Call/Dial automatically while emergency state is detected.</string>
+    <string name="pref_header_speech">Speech commands</string>
+    <string name="pref_header_emergency">Emergency Action</string>
+    <string name="enable_gps">Enable GPS</string>
+    <string name="enable_gps_message">Would you want to enable GPS for better performent.</string>
+    <string name="require_google_app">Google App</string>
+    <string name="require_google_app_message">Please download Google App for recognizing speech.</string>
+    <string name="timmer_cannot_be_0">Timmer cannot set to 0</string>
 </resources>

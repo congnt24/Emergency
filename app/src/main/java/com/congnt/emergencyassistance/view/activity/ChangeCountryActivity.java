@@ -44,10 +44,7 @@ public class ChangeCountryActivity extends AwesomeActivity implements CountryPic
         tv_current_country = (TextView) mainView.findViewById(R.id.tv_current_country);
         ItemCountryEmergencyNumber country = MySharedPreferences.getInstance(this).countryNumber.load(null);
         if (country != null) {
-            tv_police.setText(country.police);
-            tv_fire.setText(country.fire);
-            tv_ambulance.setText(country.ambulance);
-            tv_current_country.setText(getString(R.string.current_country) + country.countryName);
+            updateData(country);
         }
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -65,11 +62,16 @@ public class ChangeCountryActivity extends AwesomeActivity implements CountryPic
         } else {
             country = new ItemCountryEmergencyNumber(code, name, "911", "911", "911", "");
         }
+        updateData(country);
+        MySharedPreferences.getInstance(this).countryNumber.save(country);
+        EventBus.getDefault().post(country);
+    }
+
+    public void updateData(ItemCountryEmergencyNumber country) {
         tv_police.setText(country.police);
         tv_fire.setText(country.fire);
         tv_ambulance.setText(country.ambulance);
         tv_note.setText(country.notes);
-        MySharedPreferences.getInstance(this).countryNumber.save(country);
-        EventBus.getDefault().post(country);
+        tv_current_country.setText(getString(R.string.current_country) + " " + country.countryName);
     }
 }

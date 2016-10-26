@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.location.Location;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
@@ -24,7 +23,14 @@ import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_Result;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_RmsdB;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
+import com.congnt.emergencyassistance.entity.firebase.LocationForFirebase;
 import com.congnt.emergencyassistance.view.activity.MainActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -55,6 +61,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private ImageButton ibWalkMode;
     private ImageButton ibTimmer;
     private CountdownView cdvTimmer;
+    //Firebase defination
+    private FirebaseDatabase firebaseDatabase;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -68,6 +76,9 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     @Override
     protected void initAll(View rootView) {
         EventBus.getDefault().register(this);
+        //init firebase
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        //get views
         countrynumber = ((MainActivity) getActivity()).countrynumber;
         ibWalkMode = (ImageButton) rootView.findViewById(R.id.ib_walk_mode);
         ibTimmer = (ImageButton) rootView.findViewById(R.id.ib_timmer);
@@ -83,6 +94,24 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         mapFragment.setUpdatable(true);
         mapFragment.setScrollGesturesEnabled(true);
         mapFragment.setOnMapListener(this);
+
+        //Update friend location real time
+        firebaseDatabase.getReference().child("users").child("ntc0222@gmailcom").child("location").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                LocationForFirebase friendLocation = dataSnapshot.getValue(LocationForFirebase.class);
+                Location location = new Location("");
+                location.setLatitude(friendLocation.getLat());
+                location.setLongitude(friendLocation.getLng());
+//              move marker
+                mapFragment.addMarker("ntc0222@gmail.com", location);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void initTimmer() {
@@ -101,7 +130,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         if (!isCancel) {
                             isCancel = false;
-                            //TODO:
                             long time = (hourOfDay * 60 + minute) * 60000;
                             if (time > 0) {
                                 cdvTimmer.setVisibility(View.VISIBLE);
@@ -111,7 +139,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                             }
                         }
                     }
-                }, 0, 0, DateFormat.is24HourFormat(getActivity()));
+                }, 0, 0, true);
 
                 timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getContext().getText(android.R.string.cancel), new DialogInterface.OnClickListener() {
 
@@ -165,46 +193,11 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         btn_start_stop.setChecked(MySharedPreferences.getInstance(getActivity()).isListening.load(false));
     }
 
-    @Subscribe
-    public void onResult(EBE_Result result) {
-
-        for (String str :
-                result.getValue()) {
-            if (str.equalsIgnoreCase("help me")){
-
-            }
-        }
-        String text = "";
-        for (String r : result.value)
-            text += r + "\n";
-
-//        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-    }
-
-    @Subscribe
-    public void onRmsChanged(EBE_RmsdB rmsdB) {
-        speechView.onRmsChanged(rmsdB.aFloat);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onBeginOrEndOfSpeech(Integer x) {
-        if (x == 0) {
-            speechView.onBeginningOfSpeech();
-            speechView.play();
-        } else if (x == 1) {
-            speechView.onEndOfSpeech();
-            speechView.stop();
-        }
-
-    }
-
-    @Subscribe
-    public void onCountryChange(ItemCountryEmergencyNumber countrynumber) {
-        btn_police.setText("" + countrynumber.police);
-        btn_fire.setText("" + countrynumber.fire);
-        btn_ambulance.setText("" + countrynumber.ambulance);
-    }
-
+    /**
+     * Setup emergency number for a country
+     *
+     * @param rootView
+     */
     public void setupEmergencyNumber(View rootView) {
         btn_police = (FlatButtonWithIconTop) rootView.findViewById(R.id.btn_call_police);
         btn_fire = (FlatButtonWithIconTop) rootView.findViewById(R.id.btn_call_fire);
@@ -273,11 +266,72 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
     @Override
     public void onLocationChange(Location location) {
-        mapFragment.animateCamera(location, 13);
+//        mapFragment.animateCamera(location, 13);
+        //update location to friend using firebase if option share location is enable
+        if (MySharedPreferences.getInstance(getActivity()).shareLocationState.load(false)) {//is share location
+            //Get firebase user
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (firebaseUser == null) {//Not login, require login before share location
+                //TODO: Nothing while user not login
+            } else {//if User islogged, change data on database
+                LocationForFirebase fLocation = new LocationForFirebase(location.getLatitude(), location.getLongitude());
+                firebaseDatabase.getReference().child("users").child(firebaseUser.getEmail().replace(".", "")).child("location").setValue(fLocation);
+            }
+
+        }
+
     }
 
     @Override
     public void onConnected() {
 
+    }
+
+    //Eventbus subscriber
+
+
+    @Subscribe
+    public void onResult(EBE_Result result) {
+
+        for (String str :
+                result.getValue()) {
+            if (str.equalsIgnoreCase("help me")) {
+
+            }
+        }
+        String text = "";
+        for (String r : result.value)
+            text += r + "\n";
+
+//        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onRmsChanged(EBE_RmsdB rmsdB) {
+        speechView.onRmsChanged(rmsdB.aFloat);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBeginOrEndOfSpeech(Integer x) {
+        if (x == 0) {
+            speechView.onBeginningOfSpeech();
+            speechView.play();
+        } else if (x == 1) {
+            speechView.onEndOfSpeech();
+            speechView.stop();
+        }
+
+    }
+
+    /**
+     * Update emergency number while country is changed
+     *
+     * @param countrynumber
+     */
+    @Subscribe
+    public void onCountryChange(ItemCountryEmergencyNumber countrynumber) {
+        btn_police.setText("" + countrynumber.police);
+        btn_fire.setText("" + countrynumber.fire);
+        btn_ambulance.setText("" + countrynumber.ambulance);
     }
 }

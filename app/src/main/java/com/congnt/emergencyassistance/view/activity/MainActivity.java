@@ -57,6 +57,7 @@ import java.util.List;
 public class MainActivity extends AwesomeActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int REQUEST_PROFILE = 1;
     private static final int REQUEST_LOGIN = 2;
+    private static final int REQUEST_LOGIN_FOR_SHARE_LOCATION = 3;
     public ItemCountryEmergencyNumber countrynumber;
     private String[] permission = new String[]{Manifest.permission.ACCESS_FINE_LOCATION
             , Manifest.permission.ACCESS_COARSE_LOCATION
@@ -70,6 +71,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     private TextView mTvHeader;
     private SwitchCompat switchCompat;
     private boolean isLoadUserProfile = true;
+    private boolean isLogged;
 
     @Override
     protected int getLayoutId() {
@@ -87,6 +89,8 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         if (!PermissionUtil.getInstance(this).checkMultiPermission(permission)) {
             PermissionUtil.getInstance(this).requestPermissions(permission);
         }
+        //Requite network
+        //TODO: Require network
         //Require gps, speech2text
         if (!PackageUtil.isInstalled(this, PackageUtil.GOOGLE_APP)) {
             DialogBuilder.confirmDialog(this, getString(R.string.require_google_app), getString(R.string.require_google_app_message)
@@ -204,8 +208,14 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         switchCompat = (SwitchCompat) item.getActionView().findViewById(R.id.switch_compat);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                MySharedPreferences.getInstance(MainActivity.this).shareLocationState.save(isChecked);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {//Require login
+                if (isLogged) {
+                    MySharedPreferences.getInstance(MainActivity.this).shareLocationState.save(isChecked);
+                } else {
+                    //Start login activity for result
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivityForResult(intent, REQUEST_LOGIN_FOR_SHARE_LOCATION);
+                }
             }
         });
         switchCompat.setChecked(MySharedPreferences.getInstance(this).shareLocationState.load(false));
@@ -223,6 +233,12 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                 case REQUEST_LOGIN:
                     bindUserData();
                     break;
+                case REQUEST_LOGIN_FOR_SHARE_LOCATION:
+                    bindUserData();
+                    if (isLogged) {
+                        switchCompat.setChecked(MySharedPreferences.getInstance(this).shareLocationState.load(false));
+                    }
+                    break;
             }
         }
     }
@@ -233,6 +249,9 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         super.onResume();
     }
 
+    /**
+     * Update user profile when user was login or update profile
+     */
     public void bindUserData() {
         //Bind user
         FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -241,12 +260,14 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             if (user == null) {
                 user = new User();
             }
+            isLogged = true;
             user.setName(fuser.getDisplayName());
             user.setPhotoUrl(fuser.getPhotoUrl().toString());
             MySharedPreferences.getInstance(this).userProfile.save(user);
             mTvHeader.setText(user.getName());
             Picasso.with(this).load(fuser.getPhotoUrl()).into(mImgHeader);
         } else {
+            isLogged = false;
             if (user != null) {
                 mTvHeader.setText(fuser.getDisplayName());
             }

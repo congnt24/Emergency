@@ -25,9 +25,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -143,7 +145,7 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
                     tv_address.setText("Waiting for location");
                 } else {
                     tv_address.setText(LocationUtil.getAddress(addresses, 4));
-                    movingCamera(location, 16);
+                    movingCamera(location, 13);
                 }
             }
         }.execute();
@@ -219,6 +221,20 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    public void addMarker(String title, Location location) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        // Position of Marker on Map
+        markerOptions.position(latLng);
+        // Adding Title to the Marker
+        markerOptions.title(title);
+        // Adding Marker to the Camera.
+        Marker m = getMap().addMarker(markerOptions);
+        // Adding colour to the marker
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+    }
+
 
 
     public interface OnMapListener {

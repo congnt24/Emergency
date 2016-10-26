@@ -27,4 +27,6 @@ public class FireBaseUtil {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, getGoogleSigninOption(activity))
                 .build();
     }
+
+
 }

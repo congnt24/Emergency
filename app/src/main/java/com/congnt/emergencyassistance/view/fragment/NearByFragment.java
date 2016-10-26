@@ -20,10 +20,6 @@ import com.congnt.emergencyassistance.entity.RetrofitPlaceEntity.Result;
 import com.congnt.emergencyassistance.network.RetrofitPlace;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,7 +150,7 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
                         String placeName = response.body().getResults().get(i).getName();
                         String vicinity = response.body().getResults().get(i).getVicinity();
                         //Marker
-                        makeMarker(mMap, placeName + " : " + vicinity, location);
+                        mapFragment.addMarker(placeName + " : " + vicinity, location);
                     }
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
                     adapter.notifyDataSetChanged();
@@ -188,17 +184,17 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
             }
         });
     }
-
-    private void makeMarker(GoogleMap mMap,String title, Location location){
-        MarkerOptions markerOptions = new MarkerOptions();
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        // Position of Marker on Map
-        markerOptions.position(latLng);
-        // Adding Title to the Marker
-        markerOptions.title(title);
-        // Adding Marker to the Camera.
-        Marker m = mMap.addMarker(markerOptions);
-        // Adding colour to the marker
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-    }
+//
+//    private void makeMarker(GoogleMap mMap,String title, Location location){
+//        MarkerOptions markerOptions = new MarkerOptions();
+//        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+//        // Position of Marker on Map
+//        markerOptions.position(latLng);
+//        // Adding Title to the Marker
+//        markerOptions.title(title);
+//        // Adding Marker to the Camera.
+//        Marker m = mMap.addMarker(markerOptions);
+//        // Adding colour to the marker
+//        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+//    }
 }

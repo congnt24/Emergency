@@ -21,9 +21,9 @@ public class RetrofitBuilder {
 
     public static Retrofit getRetrofit(String baseUrl, @Nullable final Map<String, String> headerMap
             , @Nullable int connectTimeoutInMs, @Nullable int readTimeoutInMs) {
-        if (instance != null) {
-            return instance;
-        }
+//        if (instance != null) {
+//            return instance;
+//        }
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         if (connectTimeoutInMs > 0) {
             httpClient.connectTimeout(connectTimeoutInMs, TimeUnit.MILLISECONDS);

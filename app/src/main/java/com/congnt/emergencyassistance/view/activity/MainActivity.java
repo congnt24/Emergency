@@ -40,7 +40,6 @@ import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.fragment.EmergencySoundFragment;
 import com.congnt.emergencyassistance.view.fragment.MainFragment;
 import com.congnt.emergencyassistance.view.fragment.NearByFragment;
-import com.congnt.emergencyassistance.view.fragment.WalkingFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -159,7 +158,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         listFragment.add(MainFragment.newInstance());
         listFragment.add(EmergencySoundFragment.newInstance());
         listFragment.add(NearByFragment.newInstance());
-        listFragment.add(WalkingFragment.newInstance());
+//        listFragment.add(WalkingFragment.newInstance());
         viewPager.setAdapter(new ViewPagerAdapter<>(getSupportFragmentManager(), listFragment));
         viewPager.setOffscreenPageLimit(listFragment.size() - 1);
         //Setup TabLayout
@@ -268,7 +267,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             Picasso.with(this).load(fuser.getPhotoUrl()).into(mImgHeader);
         } else {
             isLogged = false;
-            if (user != null) {
+            if (fuser != null) {
                 mTvHeader.setText(fuser.getDisplayName());
             }
         }

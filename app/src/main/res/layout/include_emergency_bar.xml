@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/layout_emergency_number2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop
+            android:id="@+id/btn_call_police"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            app:flat_icon="@drawable/police"
+            app:flat_text="113"
+            app:flat_text_top="POLICE" />
+
+        <com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop
+            android:id="@+id/btn_call_fire"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            app:flat_icon="@drawable/fire"
+            app:flat_text="114"
+            app:flat_text_top="FIRE" />
+
+        <com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop
+            android:id="@+id/btn_call_ambulance"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            app:flat_icon="@drawable/ambulance"
+            app:flat_text="115"
+            app:flat_text_top="AMBULANCE" />
+    </LinearLayout>
+</LinearLayout>

@@ -29,6 +29,7 @@ public class SettingSpeechAdapter extends AwesomeRecyclerAdapter<SettingSpeechAd
 
     @Override
     protected ViewHolder getViewHolder(View itemView) {
+        itemView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         return new ViewHolder(itemView);
     }
 

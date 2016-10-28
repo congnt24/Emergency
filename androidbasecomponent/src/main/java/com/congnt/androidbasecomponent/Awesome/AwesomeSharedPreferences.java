@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
  * Created by NGUYEN TRUNG CONG on 09/13/2016
  */
 public abstract class AwesomeSharedPreferences {
-    protected final SharedPreferences pref;
+    public final SharedPreferences pref;
     protected final SharedPreferences.Editor editor;
     protected Context context;
 

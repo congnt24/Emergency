@@ -54,6 +54,7 @@ public class CommunicationUtil {
 
     public static void dialTo(Context context, String phoneNumber) {
         Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(callIntent);
     }
 

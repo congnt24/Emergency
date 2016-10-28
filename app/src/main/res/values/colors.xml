@@ -6,4 +6,5 @@
     <color name="colorTabLayout">@color/colorPrimary</color>
     <color name="tab_icon_select">@color/md_white_1000</color>
     <color name="tab_icon_default">@color/colorPrimaryDark</color>
+    <color name="colorTransparent">#787b1fa2</color>
 </resources>

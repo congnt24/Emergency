@@ -8,6 +8,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeActivity;
 import com.congnt.androidbasecomponent.Awesome.AwesomeLayout;
@@ -71,11 +72,15 @@ public class EmergencyContactActivity extends AwesomeActivity {
                     Uri uriContact = data.getData();
                     String contactName = ContactUtil.retrieveContactName(this, uriContact);
                     String contactNumber = ContactUtil.retrieveContactNumber(this, uriContact);
-                    ItemContact item = new ItemContact(uriContact.toString(), contactName, contactNumber);
-                    if (MySharedPreferences.getInstance(this).listContact.put(item)) {
-                        listContact.add(item);
+                    if (contactNumber == null) {
+                        Toast.makeText(this, "Your contact not have phone number", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ItemContact item = new ItemContact(uriContact.toString(), contactName, contactNumber);
+                        if (MySharedPreferences.getInstance(this).listContact.put(item)) {
+                            listContact.add(item);
+                        }
+                        adapter.notifyDataSetChanged();
                     }
-                    adapter.notifyDataSetChanged();
                     break;
             }
         }

@@ -117,6 +117,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSwitchToValue(findPreference("setting_take_picture"));
             bindPreferenceSwitchToValue(findPreference("setting_call_to"));
             bindPreferenceSwitchToValue(findPreference("setting_record_audio"));
+            bindPreferenceSummaryToValue(findPreference("setting_countdown_time"));
         }
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {

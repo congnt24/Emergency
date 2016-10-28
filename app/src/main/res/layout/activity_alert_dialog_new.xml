@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_red_50"
     android:orientation="vertical">
 
     <FrameLayout
@@ -9,16 +11,43 @@
         android:layout_width="1dp"
         android:layout_height="1dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Are you safe?"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Press count down time if you are safe" />
+        <!--<TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="After count down finish, we'll call POLICE automatically"/>-->
+    </LinearLayout>
     <RelativeLayout
+        android:id="@+id/layout_countdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp">
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
             android:layout_centerInParent="true"
             android:indeterminate="false"
             android:max="100"
@@ -27,13 +56,98 @@
             android:rotation="-90"
             android:secondaryProgress="0" />
 
-
         <TextView
             android:id="@+id/txtProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/progressBar"
             android:layout_centerInParent="true"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:text="10s"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/md_white_1000"
+            android:textSize="50sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:text="Call POLICE in "
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/md_white_1000" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_emergency_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <include layout="@layout/include_emergency_bar" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/layout_emergency_bar">
+
+    </android.support.v7.widget.RecyclerView>
+    <!--<LinearLayout
+        android:layout_above="@id/layout_emergency_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_contact_01"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="1dp"/>
+        <ImageView
+            android:id="@+id/iv_contact_no_photo_01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_contact_02"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="1dp"/>
+        <ImageView
+            android:id="@+id/iv_contact_no_photo_02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_contact_03"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="1dp"/>
+        <ImageView
+            android:id="@+id/iv_contact_no_photo_03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_contact_04"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="1dp"/>
+        <ImageView
+            android:id="@+id/iv_contact_no_photo_04"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </LinearLayout>-->
 </RelativeLayout>

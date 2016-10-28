@@ -1,5 +1,7 @@
 package com.congnt.emergencyassistance.view.activity;
 
+import android.appwidget.AppWidgetManager;
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.util.CountryUtil;
+import com.congnt.emergencyassistance.widget.ContactWidgetProvider;
 import com.sithagi.countrycodepicker.CountryPicker;
 import com.sithagi.countrycodepicker.CountryPickerListener;
 
@@ -73,5 +76,14 @@ public class ChangeCountryActivity extends AwesomeActivity implements CountryPic
         tv_ambulance.setText(country.ambulance);
         tv_note.setText(country.notes);
         tv_current_country.setText(getString(R.string.current_country) + " " + country.countryName);
+        updateWidget();
+    }
+
+    public void updateWidget() {
+        Intent intent = new Intent(this, ContactWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = {R.xml.widget_contact};
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
     }
 }

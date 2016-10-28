@@ -3,11 +3,14 @@ package com.congnt.emergencyassistance.view.fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_RmsdB;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.firebase.LocationForFirebase;
+import com.congnt.emergencyassistance.view.activity.DialogEmergencyActivity;
 import com.congnt.emergencyassistance.view.activity.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,9 +52,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private static final int DIALOG_FIRE = 2;
     public boolean isCancel;
     private RecognitionProgressView speechView;
-    private int number_police = 113;
-    private int number_fire = 114;
-    private int number_ambulance = 115;
     private FlatButtonWithIconTop btn_police;
     private FlatButtonWithIconTop btn_fire;
     private FlatButtonWithIconTop btn_ambulance;
@@ -63,6 +64,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private CountdownView cdvTimmer;
     //Firebase defination
     private FirebaseDatabase firebaseDatabase;
+    private LinearLayout layoutCountDown;
+    private Button btnCancel;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -82,7 +85,10 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         countrynumber = ((MainActivity) getActivity()).countrynumber;
         ibWalkMode = (ImageButton) rootView.findViewById(R.id.ib_walk_mode);
         ibTimmer = (ImageButton) rootView.findViewById(R.id.ib_timmer);
+        layoutCountDown = (LinearLayout) rootView.findViewById(R.id.layout_countdown);
         cdvTimmer = (CountdownView) rootView.findViewById(R.id.cdv_timmer);
+        btnCancel = (Button) rootView.findViewById(R.id.btn_cancel);
+
         //Init timmer
         initTimmer();
         //Init speech recognizer
@@ -115,11 +121,20 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     }
 
     private void initTimmer() {
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cdvTimmer.stop();
+                layoutCountDown.setVisibility(View.GONE);
+            }
+        });
         cdvTimmer.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
             @Override
             public void onEnd(CountdownView cv) {
                 cv.stop();
-                cv.setVisibility(View.GONE);
+                layoutCountDown.setVisibility(View.GONE);
+                //Start emergency dialog
+                startActivity(new Intent(getActivity(), DialogEmergencyActivity.class));
             }
         });
         ibTimmer.setOnClickListener(new View.OnClickListener() {
@@ -128,38 +143,35 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), TimePickerDialog.THEME_HOLO_DARK, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        if (!isCancel) {
-                            isCancel = false;
-                            long time = (hourOfDay * 60 + minute) * 60000;
-                            if (time > 0) {
-                                cdvTimmer.setVisibility(View.VISIBLE);
-                                cdvTimmer.start(time);
-                            } else {
-                                Toast.makeText(getActivity(), getString(R.string.timmer_cannot_be_0), Toast.LENGTH_SHORT).show();
-                            }
+//                        if (!isCancel) {
+                        long time = (hourOfDay * 60 + minute) * 60000;
+                        if (time > 0) {
+                            layoutCountDown.setVisibility(View.VISIBLE);
+                            cdvTimmer.start(time);
+                        } else {
+                            Toast.makeText(getActivity(), getString(R.string.timmer_cannot_be_0), Toast.LENGTH_SHORT).show();
                         }
+//                        }else{
+
+//                        }
                     }
                 }, 0, 0, true);
 
-                timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getContext().getText(android.R.string.cancel), new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        isCancel = true;
-                        dialog.dismiss();
-                    }
-                });
-                timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getContext().getText(android.R.string.ok), new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        isCancel = false;
-                        dialog.dismiss();
-                    }
-                });
+//                timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getContext().getText(android.R.string.cancel), new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        isCancel = true;
+//                    }
+//                });
+//                timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getContext().getText(android.R.string.ok), new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        isCancel = false;
+//                    }
+//                });
                 timePickerDialog.show();
-
-
             }
         });
     }
@@ -237,7 +249,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         }
     }
 
-    public void call(int dialogType){
+    public void call(int dialogType) {
         String title = "";
         String number = null;
         switch (dialogType) {
@@ -257,11 +269,11 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         final String finalNumber = number;
         DialogBuilder.confirmDialog(getActivity(), title, getActivity().getString(R.string.dialog_message_make_a_call) + " " + finalNumber
                 , R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                CommunicationUtil.dialTo(getActivity(), finalNumber);
-            }
-        }).create().show();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CommunicationUtil.dialTo(getActivity(), finalNumber);
+                    }
+                }).create().show();
     }
 
     @Override

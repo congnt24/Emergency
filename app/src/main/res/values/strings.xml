@@ -122,4 +122,34 @@
     <string name="require_google_app">Google App</string>
     <string name="require_google_app_message">Please download Google App for recognizing speech.</string>
     <string name="timmer_cannot_be_0">Timmer cannot set to 0</string>
+    <string name="alert_in_time">Alert in</string>
+    <string name="setting_countdown_time">CountDown Time</string>
+    <string name="setting_countdown_time_default">10</string>
+
+    <string-array name="commands_police">
+        <item>Help</item>
+        <item>Thieft</item>
+        <item>Help me</item>
+        <item>Can you help me</item>
+        <item>Go away</item>
+        <item>I\'ve bean</item>
+        <item>Murderous</item>
+        <item>Call a police</item>
+        <item>I\'m lost</item>
+    </string-array>
+    <string-array name="commands_fire">
+        <item>Fire</item>
+    </string-array>
+    <string-array name="commands_ambulance">
+        <item>Call an ambulance</item>
+        <item>I need a doctor</item>
+    </string-array>
+
+    <string-array name="templeteMsg">
+        <item>"I'm stuck,Help me."</item>
+        <item>Hi.Need your help reach this place.</item>
+        <item>In trouble, can you Help?</item>
+        <item>Follow me,i am in trouble.</item>
+        <item>Looking everything wired, Please come.</item>
+    </string-array>
 </resources>

@@ -1,12 +1,14 @@
 package com.congnt.emergencyassistance.view.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeActivity;
 import com.congnt.androidbasecomponent.Awesome.AwesomeLayout;
@@ -130,6 +132,8 @@ public class ProfileActivity extends AwesomeActivity {
             tvValueAddress.setText(user.getAddress());
             tvValuePhone.setText(user.getPhone());
         } else {
+            Toast.makeText(this, "You are not logged in", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
             tvValueName.setText("");
             tvValueDate.setText("");
             tvValueGender.setText("");

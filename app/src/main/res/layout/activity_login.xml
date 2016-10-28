@@ -22,7 +22,8 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -71,11 +72,19 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
-
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/btn_signinbygoogle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="Login using your google account"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/btn_signinbygoogle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
 </LinearLayout>

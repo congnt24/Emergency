@@ -57,10 +57,18 @@ public class SettingSpeechFragment extends PreferenceFragment {
         list = new ArrayList<>();
         if (MySharedPreferences.getInstance(getActivity()).emergency_command.load(null) == null) {
             //Add default command
-            list.add(new ItemSettingSpeech("Help Me", POLICE));
-            list.add(new ItemSettingSpeech("Help Me", POLICE));
-            list.add(new ItemSettingSpeech("Help Me", POLICE));
-            list.add(new ItemSettingSpeech("Help Me", POLICE));
+            String[] array = getResources().getStringArray(R.array.commands_fire);
+            for (int i = 0; i < array.length; i++) {
+                list.add(new ItemSettingSpeech(array[i], FIRE));
+            }
+            array = getResources().getStringArray(R.array.commands_ambulance);
+            for (int i = 0; i < array.length; i++) {
+                list.add(new ItemSettingSpeech(array[i], AMBULANCE));
+            }
+            array = getResources().getStringArray(R.array.commands_police);
+            for (int i = 0; i < array.length; i++) {
+                list.add(new ItemSettingSpeech(array[i], POLICE));
+            }
         } else {
             list = MySharedPreferences.getInstance(getActivity()).emergency_command.load(null);
         }

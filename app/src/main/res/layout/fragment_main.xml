@@ -11,35 +11,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop
-            android:id="@+id/btn_call_police"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            app:flat_icon="@drawable/police"
-            app:flat_text="113"
-            app:flat_text_top="POLICE" />
-
-        <com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop
-            android:id="@+id/btn_call_fire"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            app:flat_icon="@drawable/fire"
-            app:flat_text="114"
-            app:flat_text_top="FIRE" />
-
-        <com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop
-            android:id="@+id/btn_call_ambulance"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            app:flat_icon="@drawable/ambulance"
-            app:flat_text="115"
-            app:flat_text_top="AMBULANCE" />
+        <include layout="@layout/include_emergency_bar" />
     </LinearLayout>
 
     <FrameLayout
@@ -73,7 +45,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
         android:background="@color/colorPrimary"
-        android:src="@android:drawable/ic_menu_share" />
+        android:src="@drawable/ic_share" />
 
     <ImageButton
         android:id="@+id/ib_timmer"
@@ -92,27 +64,42 @@
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:text="Share Location:" />-->
-    <cn.iwgang.countdownview.CountdownView
-        android:id="@+id/cdv_timmer"
+    <LinearLayout
+        android:id="@+id/layout_countdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="80dp"
-        android:visibility="gone"
-        app:isHideTimeBackground="false"
-        app:isShowDay="false"
-        app:isShowHour="false"
-        app:isShowMillisecond="true"
-        app:isShowMinute="true"
-        app:isShowSecond="true"
-        app:suffixGravity="center"
-        app:suffixTextColor="#000000"
-        app:suffixTextSize="40sp"
-        app:timeBgDivisionLineSize="2dp"
-        app:timeBgRadius="6dp"
-        app:timeBgSize="80dp"
-        app:timeTextColor="#FFFFFF"
-        app:timeTextSize="40sp" />
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <cn.iwgang.countdownview.CountdownView
+            android:id="@+id/cdv_timmer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"
+            app:isHideTimeBackground="false"
+            app:isShowDay="false"
+            app:isShowHour="false"
+            app:isShowMillisecond="true"
+            app:isShowMinute="true"
+            app:isShowSecond="true"
+            app:suffixGravity="center"
+            app:suffixTextColor="#000000"
+            app:suffixTextSize="40sp"
+            app:timeBgDivisionLineSize="2dp"
+            app:timeBgRadius="6dp"
+            app:timeBgSize="80dp"
+            app:timeTextColor="#FFFFFF"
+            app:timeTextSize="40sp" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Cancel" />
+    </LinearLayout>
 
 </RelativeLayout>

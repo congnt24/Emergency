@@ -6,4 +6,10 @@
         android:orderInCategory="100"
         android:title=""
         app:showAsAction="always" />
+   <!-- <item
+    android:id="@+id/action_add_friend"
+    android:orderInCategory="100"
+    android:title="Add Friend"
+    android:icon="@drawable/ic_action_user"
+    app:showAsAction="always" />-->
 </menu>

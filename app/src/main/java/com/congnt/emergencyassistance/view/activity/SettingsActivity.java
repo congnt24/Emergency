@@ -86,7 +86,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || SettingSpeechFragment.class.getName().equals(fragmentName)
-                || SettingEmergencyFragment.class.getName().equals(fragmentName);
+                || SettingEmergencyFragment.class.getName().equals(fragmentName)
+                || SettingGeneralFragment.class.getName().equals(fragmentName);
     }
 
     @Override
@@ -108,6 +109,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     //INNER CLASS
 
+    public static class SettingGeneralFragment extends PreferenceFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_general);
+            bindPreferenceSwitchToValue(findPreference("setting_call_to"));
+        }
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                getActivity().finish();
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+    }
     public static class SettingEmergencyFragment extends PreferenceFragment {
 
         @Override
@@ -115,9 +135,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_emergency);
             bindPreferenceSwitchToValue(findPreference("setting_take_picture"));
-            bindPreferenceSwitchToValue(findPreference("setting_call_to"));
             bindPreferenceSwitchToValue(findPreference("setting_record_audio"));
             bindPreferenceSummaryToValue(findPreference("setting_countdown_time"));
+            bindPreferenceSummaryToValue(findPreference("setting_record_time"));
         }
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {

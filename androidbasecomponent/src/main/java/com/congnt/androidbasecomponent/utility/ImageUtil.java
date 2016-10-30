@@ -67,8 +67,8 @@ public class ImageUtil {
         context.sendBroadcast(mediaScanIntent);
     }
 
-    public static boolean createFileFromData(byte[] data) {
-        File pictureFile = getOutputMediaFile();
+    public static boolean createImageFromData(byte[] data, String folder) {
+        File pictureFile = FileUtil.getOutputMediaFile(folder, "IMG", "jpg");
         if (pictureFile == null) {
             return false;
         }
@@ -86,12 +86,11 @@ public class ImageUtil {
         return false;
     }
 
-
+/*
     private static File getOutputMediaFile() {
         File mediaStorageDir = new File(
                 Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "MyCameraApp");
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyCameraApp");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 Log.d("MyCameraApp", "failed to create directory");
@@ -106,7 +105,7 @@ public class ImageUtil {
                 + "IMG_" + timeStamp + ".jpg");
 
         return mediaFile;
-    }
+    }*/
 
     /**
      * Save bitmap to file

@@ -28,7 +28,12 @@ public class IntentUtil {
      * @param context
      */
     public static void requestNetwork(Context context) {
-        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        Intent intent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+        }else{
+            intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        }
         context.startActivity(intent);
     }
 

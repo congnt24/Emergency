@@ -3,7 +3,12 @@
     package="com.congnt.emergencyassistance">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" /><!-- @SystemApi Allows an application to call any phone number, including emergency
+         numbers, without going through the Dialer user interface for the user
+         to confirm the call being placed.
+         <p>Not for use by third-party applications. --><!--
+    <uses-permission android:name="android.permission.CALL_PRIVILEGED"
+        android:protectionLevel="signature|privileged" />-->
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -21,6 +26,17 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_home" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
+
 
         <activity
             android:name=".view.activity.MainActivity"
@@ -35,7 +51,9 @@
 
         <service
             android:name=".services.SpeechRecognitionService"
-            android:label="Speech Recognition" />
+            android:label="Speech Recognition"
+            android:process=":ServiceProcess"
+            android:permission="android.permission.RECORD_AUDIO"/>
 
         <receiver android:name=".receiver.DetectBySpeechRecervier">
             <intent-filter>
@@ -101,6 +119,11 @@
                 android:value=".view.activity.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".view.activity.CallActivity"
+            android:label="@string/title_activity_emergency_contact">
+        </activity>
+
 
         <receiver
             android:name=".widget.ContactWidgetProvider"
@@ -114,6 +137,20 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_contact" />
         </receiver>
+        <!--Service-->
+        <service
+            android:name=".services.PushNotificationService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".services.PushNotificationGetInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

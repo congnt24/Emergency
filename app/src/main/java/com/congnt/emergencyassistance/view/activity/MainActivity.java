@@ -1,8 +1,14 @@
 package com.congnt.emergencyassistance.view.activity;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -25,7 +31,9 @@ import com.congnt.androidbasecomponent.adapter.ViewPagerAdapter;
 import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
+import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
+import com.congnt.androidbasecomponent.utility.NetworkUtil;
 import com.congnt.androidbasecomponent.utility.PackageUtil;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
@@ -34,6 +42,7 @@ import com.congnt.emergencyassistance.MainActionBar;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
+import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
 import com.congnt.emergencyassistance.entity.firebase.User;
 import com.congnt.emergencyassistance.services.SpeechRecognitionService;
 import com.congnt.emergencyassistance.util.CountryUtil;
@@ -42,10 +51,15 @@ import com.congnt.emergencyassistance.view.fragment.MainFragment;
 import com.congnt.emergencyassistance.view.fragment.NearByFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.congnt.emergencyassistance.EmergencyType.AMBULANCE;
+import static com.congnt.emergencyassistance.EmergencyType.FIRE;
+import static com.congnt.emergencyassistance.EmergencyType.POLICE;
 
 
 @Activity(transitionAnim = Activity.AnimationType.ANIM_LEFT_TO_RIGHT
@@ -58,8 +72,10 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     private static final int REQUEST_LOGIN = 2;
     private static final int REQUEST_LOGIN_FOR_SHARE_LOCATION = 3;
     public ItemCountryEmergencyNumber countrynumber;
-    private String[] permission = new String[]{Manifest.permission.ACCESS_FINE_LOCATION
+    private String[] permission = new String[]{
+            Manifest.permission.CALL_PHONE
             , Manifest.permission.ACCESS_COARSE_LOCATION
+            , Manifest.permission.ACCESS_FINE_LOCATION
             , Manifest.permission.READ_CONTACTS
             , Manifest.permission.RECORD_AUDIO
             , Manifest.permission.CAMERA
@@ -71,6 +87,48 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     private SwitchCompat switchCompat;
     private boolean isLoadUserProfile = true;
     private boolean isLogged;
+    private Messenger mServiceMessenger;
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mServiceMessenger = new Messenger(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mServiceMessenger = null;
+        }
+    };
+    private Intent service;
+
+    public void unbindService() {
+//        unbindService(mServiceConnection);
+    }
+
+    public void stopService() {
+        stopService(service);
+    }
+
+    public void sendRequestStartListening() {
+        Message msg = new Message();
+        msg.what = SpeechRecognitionService.START_LISTENING;
+        try {
+            mServiceMessenger.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendRequestStopListening() {
+        Message msg = new Message();
+        msg.what = SpeechRecognitionService.STOP_LISTENING;
+
+        try {
+            mServiceMessenger.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected int getLayoutId() {
@@ -84,12 +142,22 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 
     @Override
     protected void initialize(View mainView) {
+        service = new Intent(this, SpeechRecognitionService.class);
         //REQUEST PERMISSION
         if (!PermissionUtil.getInstance(this).checkMultiPermission(permission)) {
             PermissionUtil.getInstance(this).requestPermissions(permission);
         }
         //Requite network
         //TODO: Require network
+        if (!NetworkUtil.isNetworkConnected(this)) {
+            DialogBuilder.confirmDialog(this, getString(R.string.require_network), getString(R.string.require_network_message)
+                    , R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            IntentUtil.requestNetwork(MainActivity.this);
+                        }
+                    }).create().show();
+        }
         //Require gps, speech2text
         if (!PackageUtil.isInstalled(this, PackageUtil.GOOGLE_APP)) {
             DialogBuilder.confirmDialog(this, getString(R.string.require_google_app), getString(R.string.require_google_app_message)
@@ -111,12 +179,31 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                         }
                     }).create().show();
         }
+        //init default command
+        if (MySharedPreferences.getInstance(this).emergency_command.load(null) == null) {
+            //Add default command
+            String[] array = getResources().getStringArray(R.array.commands_fire);
+            List<ItemSettingSpeech> list = new ArrayList<>();
+            for (int i = 0; i < array.length; i++) {
+                list.add(new ItemSettingSpeech(array[i], FIRE));
+            }
+            array = getResources().getStringArray(R.array.commands_ambulance);
+            for (int i = 0; i < array.length; i++) {
+                list.add(new ItemSettingSpeech(array[i], AMBULANCE));
+            }
+            array = getResources().getStringArray(R.array.commands_police);
+            for (int i = 0; i < array.length; i++) {
+                list.add(new ItemSettingSpeech(array[i], POLICE));
+            }
+            MySharedPreferences.getInstance(this).emergency_command.save(list);
+
+        }
         //Init Service
         if (!AndroidUtil.isServiceRunning(this, SpeechRecognitionService.class)) {
             MySharedPreferences.getInstance(this).isListening.save(false);
+            startService(service);
         }
-        Intent service = new Intent(this, SpeechRecognitionService.class);
-        startService(service);
+        if (mServiceConnection == null) bindService(service, mServiceConnection, BIND_AUTO_CREATE);
         //setup country
         setupCountry();
         //init nav
@@ -124,6 +211,12 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         setupNavigationView();
         //init viewpager
         setupViewPager(mainView);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService();
     }
 
     private void setupCountry() {
@@ -219,6 +312,26 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         });
         switchCompat.setChecked(MySharedPreferences.getInstance(this).shareLocationState.load(false));
         return true;
+    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()){
+//            case R.id.action_add_friend:
+//
+//                break;
+//        }
+//        return true;
+//    }
+
+    public void createSlidingMenu(){
+//        SlidingF
     }
 
     @Override

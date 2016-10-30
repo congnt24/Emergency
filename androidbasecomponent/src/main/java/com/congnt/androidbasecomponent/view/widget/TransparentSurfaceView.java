@@ -74,7 +74,7 @@ public class TransparentSurfaceView extends SurfaceView implements SurfaceHolder
         if (surfaceHolder.getSurface() == null) {
             return;
         }
-        try {
+        try {https://youtu.be/Y2GC6P5hPeA
             camera.stopPreview();
         } catch (Exception e) {
 
@@ -96,9 +96,11 @@ public class TransparentSurfaceView extends SurfaceView implements SurfaceHolder
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        this.camera.stopPreview();
-        this.camera.release();
-        getHolder().removeCallback(this);
+        try {
+            getHolder().removeCallback(this);
+            this.camera.stopPreview();
+            this.camera.release();
+        } catch (Exception e){}
     }
 
 }

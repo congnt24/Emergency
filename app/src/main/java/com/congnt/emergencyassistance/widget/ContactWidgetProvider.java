@@ -16,6 +16,7 @@ import android.widget.RemoteViews;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
+import com.congnt.emergencyassistance.view.activity.CallActivity;
 
 /**
  * Created by congnt24 on 26/10/2016.
@@ -64,12 +65,20 @@ public class ContactWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         if ("police".equalsIgnoreCase(intent.getAction())) {
-            Log.d("AAAAa", "AAAAAAA " + POLICE);
-            dialTo(context, POLICE);
+            Intent i = new Intent(context, CallActivity.class);
+            i.putExtra("type", intent.getAction());
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
         } else if ("fire".equalsIgnoreCase(intent.getAction())) {
-            dialTo(context, FIRE);
+            Intent i = new Intent(context, CallActivity.class);
+            i.putExtra("type", intent.getAction());
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
         } else if ("ambulance".equalsIgnoreCase(intent.getAction())) {
-            dialTo(context, AMBULANCE);
+            Intent i = new Intent(context, CallActivity.class);
+            i.putExtra("type", intent.getAction());
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
         }
     }
 

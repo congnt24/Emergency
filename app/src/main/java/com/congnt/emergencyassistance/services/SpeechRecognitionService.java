@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -25,10 +27,13 @@ import com.congnt.emergencyassistance.view.activity.MainActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class SpeechRecognitionService extends Service implements RecognitionListener {
 
+    public static final int START_LISTENING = 1;
+    public static final int STOP_LISTENING = 2;
     private static final String TAG = "SpeechRecognition: ";
     private static final int FOREGROUND_FLAGS = 101;
     protected AudioManager mAudioManager;
@@ -38,6 +43,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     private boolean mIsStreamSolo;
     private boolean mMute = true;
     private Notification notification;
+    private Messenger mServerMessenger = new Messenger(new IncomingHandler(this));
 
     public SpeechRecognizer getSpeechRecognizer() {
         if (mSpeechRecognizer == null) {
@@ -59,7 +65,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     @Override
     public void onCreate() {
         super.onCreate();
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 //        setStreamMute(true);
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
@@ -170,7 +176,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     }
 
 
-    @Override
+   /* @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d("AAA", "AAAA ON DESTROY");
@@ -180,7 +186,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
             mSpeechRecognizer.destroy();
         }
     }
-
+*/
 
     public void sendBroadcastToReceiver(Bundle b) {
         Intent i = new Intent("com.congnt.emergencyasistance.ACCIDENT_RECEIVER");
@@ -197,7 +203,10 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+
+        Log.d(TAG, "onBind");  //$NON-NLS-1$
+
+        return mServerMessenger.getBinder();
     }
 
     @Override
@@ -290,5 +299,57 @@ public class SpeechRecognitionService extends Service implements RecognitionList
                 break;
         }
         return message;
+    }
+
+
+    public class IncomingHandler extends Handler
+    {
+        private WeakReference<SpeechRecognitionService> mtarget;
+
+        IncomingHandler(SpeechRecognitionService target)
+        {
+            mtarget = new WeakReference<SpeechRecognitionService>(target);
+        }
+
+
+        @Override
+        public void handleMessage(Message msg)
+        {
+            final SpeechRecognitionService target = mtarget.get();
+
+            switch (msg.what)
+            {
+                case START_LISTENING:
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                    {
+                        // turn off beep sound
+//                        if (!mIsStreamSolo)
+//                        {
+//                            mAudioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, true);
+//                            mIsStreamSolo = true;
+//                        }
+                    }
+                    startListening();
+                    startForeground(101,
+                            notification);
+
+                    break;
+
+                case STOP_LISTENING:
+//                    if (mIsStreamSolo)
+//                    {
+//                        mAudioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
+//                        mIsStreamSolo = false;
+//                    }
+                    stopListening();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        stopForeground(STOP_FOREGROUND_DETACH);
+                    } else {
+                        stopForeground(true);
+                    }
+                    break;
+            }
+        }
     }
 }

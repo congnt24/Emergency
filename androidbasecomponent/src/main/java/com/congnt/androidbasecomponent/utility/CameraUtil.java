@@ -64,7 +64,7 @@ public class CameraUtil {
         return camera;
     }
 
-    public static int findFrontCamera1() {
+    public static int findFrontFacingCamera() {
         int cameraId = -1;
         // Search for the front facing camera
         int numberOfCameras = Camera.getNumberOfCameras();

@@ -19,7 +19,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
+import com.congnt.androidbasecomponent.utility.CameraUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
+import com.congnt.androidbasecomponent.utility.FileUtil;
 import com.congnt.androidbasecomponent.utility.ImageUtil;
 import com.congnt.androidbasecomponent.utility.SoundUtil;
 import com.congnt.androidbasecomponent.utility.VibratorUtil;
@@ -30,7 +32,9 @@ import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.adapter.ContactAdapter;
 import com.congnt.emergencyassistance.entity.ItemContact;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
+import com.congnt.emergencyassistance.util.AudioRecorder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,10 +95,18 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
 //                    finish();
 //                }
 //            }).setCancelable(false).create().show();
+        }else{
+            delayRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    CommunicationUtil.callTo(DialogEmergencyActivity.this, countrynumber.police);
+                }
+            };
+            handler.postDelayed(delayRunnable, countDownTime);
         }
     }
-
     private void initViews() {
+        previewHolder = (FrameLayout) findViewById(R.id.surfaceView);
         txtProgress = (TextView) findViewById(R.id.txtProgress);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         findViewById(R.id.layout_countdown).setOnClickListener(new View.OnClickListener() {
@@ -140,19 +152,64 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
         //Vibrator
         //TODO: vibrator
         // Take picture
-        previewHolder = (FrameLayout) findViewById(R.id.surfaceView);
+        initPicture();
+        //Count down timmer
+        countDown(countDownTime);
+        initAudioRecoder();
+    }
+
+    private void initPicture() {
         if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_take_picture", false)) {
             final TransparentSurfaceView cameraView = new TransparentSurfaceView(this, Camera.open());
             previewHolder.addView(cameraView);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    cameraView.getCamera().takePicture(null, null, DialogEmergencyActivity.this);
+                    cameraView.getCamera().takePicture(null, null, new Camera.PictureCallback() {
+                        @Override
+                        public void onPictureTaken(byte[] data, Camera camera) {
+                            ImageUtil.createImageFromData(data, "EmergencyAssistance");
+                            Camera cam = cameraView.getCamera();
+                            cam.stopPreview();
+                            cam.release();
+                            cam = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+                            try {
+                                cam.setPreviewDisplay(cameraView.getHolder());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            cam.startPreview();
+                            final Camera finalCamera = cam;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finalCamera.takePicture(null, null, DialogEmergencyActivity.this);
+                                }
+                            }, 500);
+                        }
+                    });
                 }
             }, 1000);
         }
-        //Count down timmer
-        countDown(countDownTime);
+    }
+
+
+    private void initAudioRecoder() {
+        if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_record_audio", false)){
+            long duration = Long.parseLong(MySharedPreferences.getInstance(this).pref.getString("setting_record_time", "5"))*1000;
+            final AudioRecorder audioRecorder = new AudioRecorder("/EmergencyAssistance/" + FileUtil.createUniqueName("AUDIO", "3gp"));
+            try {
+                audioRecorder.start();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        audioRecorder.stop();
+                    }
+                }, duration);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void countDown(final long duration) {
@@ -189,7 +246,7 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
-        ImageUtil.createFileFromData(data);
+        ImageUtil.createImageFromData(data, "EmergencyAssistance");
     }
 
     public void twinkleBackground(final View layout, int ms, final int... colors) {

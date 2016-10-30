@@ -1,8 +1,15 @@
 package com.congnt.androidbasecomponent.utility;
 
+import android.os.Environment;
+import android.util.Log;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,6 +17,51 @@ import java.util.List;
  */
 
 public class FileUtil {
+
+
+    public static boolean createFileFromData(byte[] data, String folder, String prefix, String postfix) {
+        File pictureFile = getOutputMediaFile(folder, prefix, postfix);
+        if (pictureFile == null) {
+            return false;
+        }
+        FileOutputStream outStream = null;
+        try {
+            outStream = new FileOutputStream(pictureFile);//String.format("/sdcard/%d.jpg", System.currentTimeMillis())
+            outStream.write(data);
+            outStream.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public static File getOutputMediaFile(String folder, String prefix, String postfix) {
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStorageDirectory(), folder);
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return null;
+            }
+        }
+        // Create a media file name
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + createUniqueName(prefix, postfix));
+
+        return mediaFile;
+    }
+
+    /**
+     * Create unique name by date time
+     * @return
+     */
+    public static String createUniqueName(String prefix, String postfix){
+        return prefix+"_"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())+"."+postfix;
+    }
 
     /**
      * Creates the specified directory, along with all parent paths if necessary

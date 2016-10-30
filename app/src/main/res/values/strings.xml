@@ -118,13 +118,17 @@
     <string name="pref_header_speech">Speech commands</string>
     <string name="pref_header_emergency">Emergency Action</string>
     <string name="enable_gps">Enable GPS</string>
-    <string name="enable_gps_message">Would you want to enable GPS for better performent.</string>
+    <string name="enable_gps_message">Would you want to enable GPS for better performance.</string>
     <string name="require_google_app">Google App</string>
     <string name="require_google_app_message">Please download Google App for recognizing speech.</string>
     <string name="timmer_cannot_be_0">Timmer cannot set to 0</string>
     <string name="alert_in_time">Alert in</string>
     <string name="setting_countdown_time">CountDown Time</string>
     <string name="setting_countdown_time_default">10</string>
+    <string name="require_network">Enable Network</string>
+    <string name="require_network_message">Would you want to enable Network for better performance.</string>
+    <string name="setting_record_time_default">5</string>
+    <string name="setting_record_time">Audio Record Time</string>
 
     <string-array name="commands_police">
         <item>Help</item>

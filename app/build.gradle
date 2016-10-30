@@ -14,7 +14,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -29,14 +30,16 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:support-vector-drawable:24.2.1'
     compile 'info.hoang8f:android-segmented:1.0.6'
+    compile 'com.google.firebase:firebase-core:9.6.1'
     compile 'com.google.firebase:firebase-auth:9.6.1'
     compile 'com.google.firebase:firebase-database:9.6.1'
-
+    compile 'com.google.firebase:firebase-messaging:9.6.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'com.github.iwgang:countdownview:2.1.2'
     testCompile 'junit:junit:4.12'
     compile project(':CountryCodePicker')
+    compile project(':slidingmenu')
 }
 
 

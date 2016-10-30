@@ -13,14 +13,4 @@
         android:key="setting_take_picture"
         android:summary="@string/enable_take_picture_desc"
         android:title="@string/enable_take_picture" />
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="setting_record_audio"
-        android:summary="@string/enable_record_desc"
-        android:title="@string/enable_record" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="setting_call_to"
-        android:summary="@string/enable_call_to_desc"
-        android:title="@string/enable_call_to" />
 </PreferenceScreen>

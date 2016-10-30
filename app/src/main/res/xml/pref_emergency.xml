@@ -14,13 +14,16 @@
         android:summary="@string/enable_take_picture_desc"
         android:title="@string/enable_take_picture" />
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="setting_record_audio"
         android:summary="@string/enable_record_desc"
         android:title="@string/enable_record" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="setting_call_to"
-        android:summary="@string/enable_call_to_desc"
-        android:title="@string/enable_call_to" />
+    <EditTextPreference
+        android:defaultValue="@string/setting_record_time_default"
+        android:inputType="number"
+        android:key="setting_record_time"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/setting_record_time" />
 </PreferenceScreen>

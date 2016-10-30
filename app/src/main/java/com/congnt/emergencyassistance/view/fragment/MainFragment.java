@@ -27,6 +27,7 @@ import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_RmsdB;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.firebase.LocationForFirebase;
+import com.congnt.emergencyassistance.services.SpeechRecognitionService;
 import com.congnt.emergencyassistance.view.activity.DialogEmergencyActivity;
 import com.congnt.emergencyassistance.view.activity.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,6 +67,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private FirebaseDatabase firebaseDatabase;
     private LinearLayout layoutCountDown;
     private Button btnCancel;
+    private MainActivity mainActivity;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -78,6 +80,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
     @Override
     protected void initAll(View rootView) {
+        mainActivity = (MainActivity) getActivity();
         EventBus.getDefault().register(this);
         //init firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -134,7 +137,9 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 cv.stop();
                 layoutCountDown.setVisibility(View.GONE);
                 //Start emergency dialog
-                startActivity(new Intent(getActivity(), DialogEmergencyActivity.class));
+                Intent intent = new Intent(getActivity(), DialogEmergencyActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
         ibTimmer.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +148,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), TimePickerDialog.THEME_HOLO_DARK, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                        if (!isCancel) {
                         long time = (hourOfDay * 60 + minute) * 60000;
                         if (time > 0) {
                             layoutCountDown.setVisibility(View.VISIBLE);
@@ -151,9 +155,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                         } else {
                             Toast.makeText(getActivity(), getString(R.string.timmer_cannot_be_0), Toast.LENGTH_SHORT).show();
                         }
-//                        }else{
-
-//                        }
                     }
                 }, 0, 0, true);
 
@@ -230,10 +231,10 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             case R.id.switch_start_service:
                 SwitchCompat switchCompat = (SwitchCompat) v;
                 if (!switchCompat.isChecked()) {
-                    EventBus.getDefault().post(new EBE_StartStopService(false));
+                    mainActivity.sendRequestStopListening();
                     speechView.stop();
                 } else {
-                    EventBus.getDefault().post(new EBE_StartStopService(true));
+                    mainActivity.sendRequestStartListening();
                     speechView.play();
                 }
                 break;
@@ -271,7 +272,11 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 , R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        CommunicationUtil.dialTo(getActivity(), finalNumber);
+                        if (MySharedPreferences.getInstance(getActivity()).pref.getBoolean("setting_call_to", false)){
+                            CommunicationUtil.callTo(getActivity(), finalNumber);
+                        }else {
+                            CommunicationUtil.dialTo(getActivity(), finalNumber);
+                        }
                     }
                 }).create().show();
     }
@@ -289,7 +294,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 LocationForFirebase fLocation = new LocationForFirebase(location.getLatitude(), location.getLongitude());
                 firebaseDatabase.getReference().child("users").child(firebaseUser.getEmail().replace(".", "")).child("location").setValue(fLocation);
             }
-
         }
 
     }
@@ -300,8 +304,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     }
 
     //Eventbus subscriber
-
-
+/*
     @Subscribe
     public void onResult(EBE_Result result) {
 
@@ -334,6 +337,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         }
 
     }
+*/
 
     /**
      * Update emergency number while country is changed

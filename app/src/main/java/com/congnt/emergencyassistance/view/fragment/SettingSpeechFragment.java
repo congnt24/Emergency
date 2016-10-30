@@ -55,21 +55,7 @@ public class SettingSpeechFragment extends PreferenceFragment {
         RecyclerView recyclerview = (RecyclerView) rootView.findViewById(R.id.setting_speech_recyclerview);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         list = new ArrayList<>();
-        if (MySharedPreferences.getInstance(getActivity()).emergency_command.load(null) == null) {
-            //Add default command
-            String[] array = getResources().getStringArray(R.array.commands_fire);
-            for (int i = 0; i < array.length; i++) {
-                list.add(new ItemSettingSpeech(array[i], FIRE));
-            }
-            array = getResources().getStringArray(R.array.commands_ambulance);
-            for (int i = 0; i < array.length; i++) {
-                list.add(new ItemSettingSpeech(array[i], AMBULANCE));
-            }
-            array = getResources().getStringArray(R.array.commands_police);
-            for (int i = 0; i < array.length; i++) {
-                list.add(new ItemSettingSpeech(array[i], POLICE));
-            }
-        } else {
+        if (MySharedPreferences.getInstance(getActivity()).emergency_command.load(null) != null) {
             list = MySharedPreferences.getInstance(getActivity()).emergency_command.load(null);
         }
         adapter = new SettingSpeechAdapter(getActivity(), list, new AwesomeRecyclerAdapter.OnClickListener<ItemSettingSpeech>() {

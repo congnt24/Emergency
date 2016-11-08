@@ -1,6 +1,7 @@
 package com.congnt.emergencyassistance.view.fragment;
 
 import android.location.Location;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,6 +23,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
@@ -34,7 +37,7 @@ import retrofit2.Retrofit;
  * Created by congnt24 on 25/09/2016.
  */
 
-public class NearByFragment extends AwesomeFragment implements View.OnClickListener {
+public class NearByFragment extends AwesomeFragment implements View.OnClickListener, MapFragmentWithFusedLocation.OnMapListener {
     private static final int PROXIMITY_RADIUS = 10000;
     private static final long DURATION = 1000;
     private MapFragmentWithFusedLocation mapFragment;
@@ -63,22 +66,13 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
         //Init Function
         retrofit = RetrofitBuilder.getRetrofit(AppConfig.GOOGLE_PLACE_URL_BASE, null, 0, 0);
         mapFragment = (MapFragmentWithFusedLocation) getChildFragmentManager().findFragmentById(R.id.map_fragment2);
+//        mapFragment.setUpdatable(true);
         mapFragment.setScrollGesturesEnabled(true);
-        mapFragment.setOnMapListener(new MapFragmentWithFusedLocation.OnMapListener() {
-            @Override
-            public void onLocationChange(Location location) {
-                segmentedgroup_nearby.check(R.id.rb_nearby_police);
-                mapFragment.animateCamera(location, 13);
-            }
-
-            @Override
-            public void onConnected() {
-            }
-        });
+        mapFragment.setOnMapListener(this);
         segmentedgroup_nearby.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.rb_nearby_police:
                         nearbyName = "police";
                         break;
@@ -91,14 +85,14 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
                 }
                 try {
                     getNearByLocation(nearbyName);
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
         });
     }
 
-    public void setupRecyclerView(View rootView){
+    public void setupRecyclerView(View rootView) {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new NearByAdapter(getActivity(), listNearBy, new AwesomeRecyclerAdapter.OnClickListener<Result>() {
@@ -116,7 +110,7 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
         }
     }
 
@@ -138,23 +132,28 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
                     listNearBy.addAll(response.body().getResults());
                     mMap.clear();
                     // This loop will go through all the results and add marker on each location.
-                    for (int i = 0; i < response.body().getResults().size(); i++) {
+                    for (int i = 0; i < listNearBy.size(); i++) {
 //                        getDetailPlace(i);
-                        Double lat = response.body().getResults().get(i).getGeometry().getLocation().getLat();
-                        Double lng = response.body().getResults().get(i).getGeometry().getLocation().getLng();
-                        Location location = new Location("Point "+i);
+                        Double lat = listNearBy.get(i).getGeometry().getLocation().getLat();
+                        Double lng = listNearBy.get(i).getGeometry().getLocation().getLng();
+                        Location location = new Location("Point " + i);
                         location.setLatitude(lat);
                         location.setLongitude(lng);
 
-                        response.body().getResults().get(i).setDistance(currentLocation.distanceTo(location));
-                        String placeName = response.body().getResults().get(i).getName();
-                        String vicinity = response.body().getResults().get(i).getVicinity();
+                        listNearBy.get(i).setDistance(currentLocation.distanceTo(location));
+                        String placeName = listNearBy.get(i).getName();
+                        String vicinity = listNearBy.get(i).getVicinity();
                         //Marker
                         mapFragment.addMarker(placeName + " : " + vicinity, location);
                     }
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+                    Collections.sort(listNearBy, new Comparator<Result>() {
+                        @Override
+                        public int compare(Result o1, Result o2) {
+                            return o1.getDistance() < o2.getDistance() ? -1 : 1;
+                        }
+                    });
                     adapter.notifyDataSetChanged();
-//                    Toast.makeText(getActivity(), "Adapter Size(): " + listNearBy.size() + " : ", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -167,7 +166,7 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
         });
     }
 
-    private void getDetailPlace(final int index){
+    private void getDetailPlace(final int index) {
         RetrofitPlace service = retrofit.create(RetrofitPlace.class);
         Call<PlaceDetailEntity> call = service.getDetailPlace(listNearBy.get(index).getPlaceId());
         call.enqueue(new Callback<PlaceDetailEntity>() {
@@ -180,9 +179,24 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
 
             @Override
             public void onFailure(Call<PlaceDetailEntity> call, Throwable t) {
-                Log.d("onFailure", " get details place "+t.toString());
+                Log.d("onFailure", " get details place " + t.toString());
             }
         });
+    }
+
+    @Override
+    public void onLocationChange(final Location location) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                segmentedgroup_nearby.check(R.id.rb_nearby_police);
+                mapFragment.animateCamera(location, 13);
+            }
+        }, 1000);
+    }
+
+    @Override
+    public void onConnected() {
     }
 //
 //    private void makeMarker(GoogleMap mMap,String title, Location location){

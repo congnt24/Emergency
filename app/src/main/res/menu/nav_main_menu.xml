@@ -17,29 +17,42 @@
             android:title="Tools" />
     </group>-->
 
-    <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_action_user"
-        android:title="@string/profile" />
-    <item
-        android:id="@+id/nav_emergency_contact"
-        android:icon="@drawable/ic_contacts"
-        android:title="@string/title_activity_emergency_contact" />
-    <item
-        android:id="@+id/nav_defense_yourself"
-        android:icon="@drawable/ic_shield"
-        android:title="@string/defense_yourself" />
-    <item
-        android:id="@+id/nav_change_country"
-        android:icon="@drawable/ic_language"
-        android:title="@string/change_country" />
-    <item
-        android:id="@+id/nav_setting"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/setting" />
-    <item
-        android:id="@+id/nav_more"
-        android:icon="@drawable/ic_more_vert"
-        android:title="@string/more" />
-
+    <group android:id="@+id/nav_group_main">
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_action_user"
+            android:title="@string/profile" />
+        <item
+            android:id="@+id/nav_emergency_contact"
+            android:icon="@drawable/ic_contacts"
+            android:title="@string/title_activity_emergency_contact" />
+        <item
+            android:id="@+id/nav_defense_yourself"
+            android:icon="@drawable/ic_shield"
+            android:title="@string/defense_yourself" />
+        <item
+            android:id="@+id/nav_change_country"
+            android:icon="@drawable/ic_language"
+            android:title="@string/change_country" />
+    </group>
+    <group android:id="@+id/nav_group_communication">
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share_black"
+            android:title="@string/share" />
+        <item
+            android:id="@+id/nav_tutorial"
+            android:icon="@drawable/ic_help"
+            android:title="@string/tutorial" />
+    </group>
+    <group android:id="@+id/nav_group_setting">
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/setting" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logout" />
+    </group>
 </menu>

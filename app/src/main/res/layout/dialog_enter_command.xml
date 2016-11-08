@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/dialog_et_command"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="help me"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="10dp"
+        android:textColor="@color/colorAccent" />
 
     <RadioGroup
         android:id="@+id/dialog_rg_emergency_type"
@@ -17,21 +18,24 @@
         android:orientation="horizontal">
         <RadioButton
             android:id="@+id/dialog_rb_police"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="POLICE"/>
+            android:layout_weight="1"
+            android:text="POLICE"
+            android:textColor="@color/colorAccent" />
         <RadioButton
             android:id="@+id/dialog_rb_fire"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FIRE" />
+            android:layout_weight="1"
+            android:text="FIRE"
+            android:textColor="@color/colorAccent" />
         <RadioButton
             android:id="@+id/dialog_rb_ambulance"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AMBULANCE" />
+            android:layout_weight="1"
+            android:text="AMBULANCE"
+            android:textColor="@color/colorAccent" />
     </RadioGroup>
 </LinearLayout>

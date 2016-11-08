@@ -54,7 +54,7 @@ public class TransparentSurfaceView extends SurfaceView implements SurfaceHolder
                 }
             });
             for (Camera.Size size : sizes) {
-                if (size.width >= 300) {
+                if (size.width >= 1000) {
                     mSize = size;
                     break;
                 }

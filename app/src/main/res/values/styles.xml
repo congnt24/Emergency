@@ -15,12 +15,24 @@
 
     <style name="AppTheme2.AlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <!-- Used for the buttons -->
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccent">@color/md_blue_A700</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- Used for the title and text -->
+        <!--<item name="android:textColorPrimary">#111111</item>-->
+        <!--<item name="android:background">@color/md_white_1000</item>-->
+        <!--<item name="android:windowTitleStyle">@style/DialogTitleTextStyle</item>-->
+    </style>
+
+    <!--//EditText-->
+    <style name="AppTheme2.EditText" parent="Widget.AppCompat.EditText">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/md_blue_A700</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!-- Used for the title and text -->
         <item name="android:textColorPrimary">#111111</item>
-        <item name="android:background">@color/md_grey_300</item>
+        <item name="android:background">@drawable/bg_edittext_rounded</item>
         <!--<item name="android:windowTitleStyle">@style/DialogTitleTextStyle</item>-->
     </style>
 

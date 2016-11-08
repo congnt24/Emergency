@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeActivity;
 import com.congnt.androidbasecomponent.Awesome.AwesomeLayout;
@@ -11,8 +12,10 @@ import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
 import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigateUp;
 import com.congnt.androidbasecomponent.network.RetrofitBuilder;
+import com.congnt.androidbasecomponent.utility.NetworkUtil;
 import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MainActionBar;
+import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.adapter.SelfDefenseAdapter;
 import com.congnt.emergencyassistance.entity.SelfDefense;
@@ -60,31 +63,42 @@ public class DefenseYourselfActivity extends AwesomeActivity {
             }
         });
         recyclerView.setAdapter(adapter);
-        retrofit = RetrofitBuilder.getRetrofit(AppConfig.API_URL_BASE, null, 0, 0);
-
-        RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
-        final Call<ResponseBody> seflDefenseApi = retrofitApi.getSelfDefense();
-        seflDefenseApi.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        SelfDefense selfDefense = new Gson().fromJson(response.body().string(), SelfDefense.class);
-                        list.clear();
-                        list.addAll(selfDefense.data);
-                        adapter.notifyDataSetChanged();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+        if (NetworkUtil.isNetworkConnected(this)) {
+            retrofit = RetrofitBuilder.getRetrofit(AppConfig.API_URL_BASE, null, 0, 0);
+            RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
+            final Call<ResponseBody> seflDefenseApi = retrofitApi.getSelfDefense();
+            seflDefenseApi.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            SelfDefense selfDefense = new Gson().fromJson(response.body().string(), SelfDefense.class);
+                            MySharedPreferences.getInstance(DefenseYourselfActivity.this).selfDefense.save(selfDefense);
+                            list.clear();
+                            list.addAll(selfDefense.data);
+                            adapter.notifyDataSetChanged();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.d("AAAAa", "" + response.raw().toString());
                     }
-                } else {
-                    Log.d("AAAAa", "" + response.raw().toString());
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+                }
+            });
+        } else {
+            SelfDefense selfDefense = MySharedPreferences.getInstance(DefenseYourselfActivity.this).selfDefense.load(null);
+            if (selfDefense == null) {
+                Toast.makeText(this, getString(R.string.cannot_load_data), Toast.LENGTH_SHORT).show();
+            } else {
+                list.clear();
+                list.addAll(selfDefense.data);
+                adapter.notifyDataSetChanged();
             }
-        });
+        }
     }
 }

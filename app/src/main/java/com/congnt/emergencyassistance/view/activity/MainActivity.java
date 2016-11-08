@@ -31,6 +31,7 @@ import com.congnt.androidbasecomponent.adapter.ViewPagerAdapter;
 import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
+import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.NetworkUtil;
@@ -41,18 +42,20 @@ import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
 import com.congnt.emergencyassistance.MainActionBar;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartDetectingAccident;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
 import com.congnt.emergencyassistance.entity.firebase.User;
+import com.congnt.emergencyassistance.services.DetectingAccidentService;
 import com.congnt.emergencyassistance.services.SpeechRecognitionService;
-import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.fragment.EmergencySoundFragment;
 import com.congnt.emergencyassistance.view.fragment.MainFragment;
 import com.congnt.emergencyassistance.view.fragment.NearByFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +105,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     private Intent service;
 
     public void unbindService() {
-//        unbindService(mServiceConnection);
+        unbindService(mServiceConnection);
     }
 
     public void stopService() {
@@ -142,6 +145,11 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 
     @Override
     protected void initialize(View mainView) {
+        //Show tutorial at the first time
+        if (MySharedPreferences.getInstance(this).isFirstTime.load(true)) {
+            startActivity(new Intent(this, TutorialActivity.class));
+        }
+
         service = new Intent(this, SpeechRecognitionService.class);
         //REQUEST PERMISSION
         if (!PermissionUtil.getInstance(this).checkMultiPermission(permission)) {
@@ -198,14 +206,23 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             MySharedPreferences.getInstance(this).emergency_command.save(list);
 
         }
+
+
+        //update locale
+        ItemCountryEmergencyNumber countryEmergencyNumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
+        if (countryEmergencyNumber != null) {
+            AndroidUtil.updateLocaleByCountry(this, countryEmergencyNumber.countryCode);
+        }
+
         //Init Service
         if (!AndroidUtil.isServiceRunning(this, SpeechRecognitionService.class)) {
             MySharedPreferences.getInstance(this).isListening.save(false);
             startService(service);
         }
-        if (mServiceConnection == null) bindService(service, mServiceConnection, BIND_AUTO_CREATE);
-        //setup country
-        setupCountry();
+        if (mServiceMessenger == null) bindService(service, mServiceConnection, BIND_AUTO_CREATE);
+        //Detect service
+        startService(new Intent(MainActivity.this, DetectingAccidentService.class));
+
         //init nav
         // Find our drawer view
         setupNavigationView();
@@ -219,14 +236,6 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         unbindService();
     }
 
-    private void setupCountry() {
-        countrynumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
-        if (countrynumber == null) {
-            String countryCode = AndroidUtil.getCountryCode();
-            countrynumber = CountryUtil.getInstance(this).getItemCountryByCode(countryCode);
-            MySharedPreferences.getInstance(this).countryNumber.save(countrynumber);
-        }
-    }
 
     public void setupNavigationView() {
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -270,6 +279,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        mDrawer.closeDrawer(Gravity.LEFT);
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 startActivityForResult(new Intent(this, ProfileActivity.class), REQUEST_PROFILE);
@@ -283,12 +293,19 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             case R.id.nav_change_country:
                 startActivity(new Intent(this, ChangeCountryActivity.class));
                 break;
+            case R.id.nav_share:
+                CommunicationUtil.shareAll(this, "Share", getString(R.string.share_app_content));
+                break;
+            case R.id.nav_tutorial:
+                startActivity(new Intent(this, TutorialActivity.class));
+                break;
             case R.id.nav_setting:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
-        }
+            case R.id.nav_logout:
 
-        mDrawer.closeDrawer(Gravity.LEFT);
+                break;
+        }
         return true;
     }
 
@@ -301,13 +318,15 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {//Require login
-                if (isLogged) {
-                    MySharedPreferences.getInstance(MainActivity.this).shareLocationState.save(isChecked);
-                } else {
-                    //Start login activity for result
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivityForResult(intent, REQUEST_LOGIN_FOR_SHARE_LOCATION);
-                }
+//                if (isLogged) {
+//                    MySharedPreferences.getInstance(MainActivity.this).shareLocationState.save(isChecked);
+//                } else {
+//                    //Start login activity for result
+//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                    startActivityForResult(intent, REQUEST_LOGIN_FOR_SHARE_LOCATION);
+//                }
+                //Start listening detect service
+                EventBus.getDefault().post(new EBE_StartDetectingAccident(isChecked));
             }
         });
         switchCompat.setChecked(MySharedPreferences.getInstance(this).shareLocationState.load(false));
@@ -330,7 +349,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 //        return true;
 //    }
 
-    public void createSlidingMenu(){
+    public void createSlidingMenu() {
 //        SlidingF
     }
 

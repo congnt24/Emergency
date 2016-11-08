@@ -129,6 +129,23 @@
     <string name="require_network_message">Would you want to enable Network for better performance.</string>
     <string name="setting_record_time_default">5</string>
     <string name="setting_record_time">Audio Record Time</string>
+    <string name="template">Template</string>
+    <string name="include_location">Include current location</string>
+    <string name="select_contact">Select contacts</string>
+    <string name="location_not_avaiable">Your location is temporary not available</string>
+    <string name="cannot_load_data">Can\'t load data</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="share">Share</string>
+    <string name="continue_to_app">Continue to app</string>
+    <string name="next">Next \></string>
+    <string name="tutorial_title_1">Send your location to contacts</string>
+    <string name="tutorial_title_2">Highly reduces rescue time</string>
+    <string name="tutorial_title_3">Emergency assistance is smart</string>
+    <string name="tutorial_desc_1">Your emergency contacts will receive a message with a link to the location of the accident, allowing them to call emergency services on your behalf and get help for you.</string>
+    <string name="tutorial_desc_2">Emergency services will dispatch help you in record time thanks to your contacts call, highly reducing rescue time and saveing lives.</string>
+    <string name="tutorial_desc_3">It work on the background and only when you are in a moving vehicle. No nead to open app every time you get on your car</string>
+    <string name="share_app_content">This app can save your life in case of emergency. Download Emergency Assistance at https://www.dropbox.com/s/vfe03r1ll3swp7b/app-debug.apk?dl=1</string>
+    <string name="logout">Log Out</string>
 
     <string-array name="commands_police">
         <item>Help</item>
@@ -149,7 +166,7 @@
         <item>I need a doctor</item>
     </string-array>
 
-    <string-array name="templeteMsg">
+    <string-array name="templateMsg">
         <item>"I'm stuck,Help me."</item>
         <item>Hi.Need your help reach this place.</item>
         <item>In trouble, can you Help?</item>

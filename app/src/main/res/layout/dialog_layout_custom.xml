@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/small"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingRight="@dimen/medium"
+            android:text="@string/template"
+            android:textColor="@color/colorTextPrimary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_rect_white"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/medium"
+            android:paddingRight="@dimen/medium">
+
+            <Spinner
+                android:id="@+id/sp_template"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|fill_horizontal|center_vertical"></Spinner>
+        </LinearLayout>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_content"
+        style="@style/AppTheme2.EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:minLines="5" />
+
+    <CheckBox
+        android:id="@+id/cb_include_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/include_location" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_contact" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

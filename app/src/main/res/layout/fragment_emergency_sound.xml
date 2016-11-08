@@ -22,8 +22,8 @@
                 android:id="@+id/btn_helpme_male"
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
-                android:background="@drawable/circle_background"
-                android:src="@android:drawable/ic_dialog_alert" />
+                android:background="@drawable/bg_toggle_circle_selector"
+                android:src="@drawable/ic_record_voice_over" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -41,8 +41,8 @@
                 android:id="@+id/btn_helpme_female"
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
-                android:background="@drawable/circle_background"
-                android:src="@android:drawable/ic_dialog_alert" />
+                android:background="@drawable/bg_toggle_circle_selector"
+                android:src="@drawable/ic_record_voice_over" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -57,7 +57,7 @@
         android:layout_width="190dp"
         android:layout_height="190dp"
         android:layout_gravity="center"
-        android:background="@drawable/circle_background"
+        android:background="@drawable/bg_toggle_circle_selector"
         android:src="@drawable/siren" />
 
     <TextView

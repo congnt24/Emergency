@@ -92,6 +92,7 @@ public class SettingSpeechFragment extends PreferenceFragment {
         builder.setView(dialogView);
         radioGroup.check(getIdFromType(list.get(position).getEmergencyType()));
         input.setText(list.get(position).getCommand());
+        input.setSelection(input.getText().length());
         return builder.create();
     }
 

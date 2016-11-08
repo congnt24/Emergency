@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/layout_emergency_number2"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop

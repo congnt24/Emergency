@@ -14,4 +14,5 @@ public class MainApplication extends Application {
         super.onCreate();
         PermissionUtil.getInstance(this);
     }
+
 }

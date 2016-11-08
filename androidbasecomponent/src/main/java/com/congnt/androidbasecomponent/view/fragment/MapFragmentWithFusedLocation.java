@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
 import com.congnt.androidbasecomponent.R;
+import com.congnt.androidbasecomponent.utility.GoogleApiUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
 import com.google.android.gms.common.ConnectionResult;
@@ -101,18 +102,9 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
         mMap = googleMap;
         if (PermissionUtil.getInstance(context).checkMultiPermission(locationPermission)) {
             mMap.getUiSettings().setScrollGesturesEnabled(enableGestures);
-            buildGoogleApiClient();
+            mGoogleApiClient = GoogleApiUtil.getInstance().getGoogleApiClient(context, this, this);
             mMap.setMyLocationEnabled(true);
         }
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
     }
 
     public void movingCamera(Location location, int zoom) {
@@ -145,7 +137,7 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
                     tv_address.setText("Waiting for location");
                 } else {
                     tv_address.setText(LocationUtil.getAddress(addresses, 4));
-                    movingCamera(location, 13);
+//                    movingCamera(location, 13);
                 }
             }
         }.execute();

@@ -2,6 +2,7 @@ package com.congnt.androidbasecomponent.utility;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -30,7 +31,7 @@ public class IntentUtil {
     public static void requestNetwork(Context context) {
         Intent intent = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
         }else{
             intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
         }
@@ -51,6 +52,18 @@ public class IntentUtil {
      */
     public static Intent getCameraIntent() {
         return new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    }
+
+    public static Intent getIntentDialTo(String phoneNumber) {
+        Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        return callIntent;
+    }
+
+    public static Intent getIntentCallTo(String phoneNumber) {
+        Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        return callIntent;
     }
 
 //    public static boolean isIntentAvaiable(Context context, String action){

@@ -1,6 +1,7 @@
 package com.congnt.emergencyassistance.view.fragment;
 
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
 import com.congnt.androidbasecomponent.utility.SoundUtil;
@@ -9,6 +10,7 @@ import com.congnt.emergencyassistance.R;
 public class EmergencySoundFragment extends AwesomeFragment implements View.OnClickListener {
     private boolean isHelpmePlay = false;
     private boolean isSirenPlay = false;
+    private ImageButton male, female, siren;
 
     public static AwesomeFragment newInstance() {
         return new EmergencySoundFragment();
@@ -21,9 +23,12 @@ public class EmergencySoundFragment extends AwesomeFragment implements View.OnCl
 
     @Override
     protected void initAll(View rootView) {
-        rootView.findViewById(R.id.btn_helpme_male).setOnClickListener(this);
-        rootView.findViewById(R.id.btn_helpme_female).setOnClickListener(this);
-        rootView.findViewById(R.id.btn_siren).setOnClickListener(this);
+        male = (ImageButton) rootView.findViewById(R.id.btn_helpme_male);
+        female = (ImageButton) rootView.findViewById(R.id.btn_helpme_female);
+        siren = (ImageButton) rootView.findViewById(R.id.btn_siren);
+        male.setOnClickListener(this);
+        female.setOnClickListener(this);
+        siren.setOnClickListener(this);
     }
 
     @Override
@@ -31,6 +36,9 @@ public class EmergencySoundFragment extends AwesomeFragment implements View.OnCl
         SoundUtil.getInstance().stop();
         switch (v.getId()) {
             case R.id.btn_helpme_male:
+                v.setSelected(!v.isSelected());
+                female.setSelected(false);
+                siren.setSelected(false);
                 if (!isHelpmePlay) {
                     isHelpmePlay = true;
                     SoundUtil.getInstance().playSoundRepeat(getActivity(), R.raw.help_male);
@@ -40,6 +48,9 @@ public class EmergencySoundFragment extends AwesomeFragment implements View.OnCl
                 }
                 break;
             case R.id.btn_helpme_female:
+                v.setSelected(!v.isSelected());
+                male.setSelected(false);
+                siren.setSelected(false);
                 if (!isHelpmePlay) {
                     isHelpmePlay = true;
                     SoundUtil.getInstance().playSoundRepeat(getActivity(), R.raw.help_female);
@@ -49,6 +60,9 @@ public class EmergencySoundFragment extends AwesomeFragment implements View.OnCl
                 }
                 break;
             case R.id.btn_siren:
+                v.setSelected(!v.isSelected());
+                female.setSelected(false);
+                male.setSelected(false);
                 if (!isSirenPlay) {
                     isSirenPlay = true;
                     SoundUtil.getInstance().playSoundRepeat(getActivity(), R.raw.police_siren);

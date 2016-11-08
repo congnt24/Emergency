@@ -49,23 +49,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".services.SpeechRecognitionService"
-            android:label="Speech Recognition"
-            android:process=":ServiceProcess"
-            android:permission="android.permission.RECORD_AUDIO"/>
-
-        <receiver android:name=".receiver.DetectBySpeechRecervier">
-            <intent-filter>
-                <action android:name="com.congnt.emergencyasistance.ACCIDENT_RECEIVER" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".receiver.DetectByVolumeReceiver">
-            <intent-filter>
-                <action android:name="android.media.VOLUME_CHANGED_ACTION" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".view.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -118,13 +101,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".view.activity.TutorialActivity"
+            android:label="@string/tutorial"
+            android:parentActivityName=".view.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.MainActivity" />
+        </activity>
 
         <activity
             android:name=".view.activity.CallActivity"
             android:label="@string/title_activity_emergency_contact">
         </activity>
 
-
+        <!--Receiver-->
         <receiver
             android:name=".widget.ContactWidgetProvider"
             android:icon="@drawable/police"
@@ -137,7 +128,30 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_contact" />
         </receiver>
+
+        <receiver android:name=".receiver.DetectBySpeechRecervier">
+            <intent-filter>
+                <action android:name="com.congnt.emergencyasistance.ACCIDENT_RECEIVER" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.DetectByVolumeReceiver">
+            <intent-filter>
+                <action android:name="android.media.VOLUME_CHANGED_ACTION" />
+            </intent-filter>
+        </receiver>
+
         <!--Service-->
+        <service
+            android:name=".services.RecordAudioService"
+            android:label="Record Audio"
+            android:permission="android.permission.RECORD_AUDIO" />
+        <service
+            android:name=".services.DetectingAccidentService"
+            android:label="Detecting Accident" />
+        <service
+            android:name=".services.SpeechRecognitionService"
+            android:label="Speech Recognition"
+            android:permission="android.permission.RECORD_AUDIO" />
         <service
             android:name=".services.PushNotificationService">
             <intent-filter>

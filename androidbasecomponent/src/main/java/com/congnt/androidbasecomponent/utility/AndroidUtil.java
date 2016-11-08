@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,9 +25,50 @@ import java.util.Locale;
  */
 
 public class AndroidUtil {
-
+    private static final String TAG = "AndroidUtil";
     //The Wake lock.
     private static PowerManager.WakeLock wakeLock;
+
+
+    public static void updateLocaleByCountry(Context context, String countryCode) {
+        if (!Locale.getDefault().getCountry().equalsIgnoreCase(countryCode)) {
+            updateLocale(context, getLocaleByCountry(countryCode));
+        }
+    }
+
+    /**
+     * change Locale
+     *
+     * @param languageToLoad "en", "vi"
+     */
+    public static void updateLocaleByLanguage(Context context, String languageToLoad) {
+        if (!Locale.getDefault().getLanguage().equalsIgnoreCase(languageToLoad)) {
+            Locale locale = new Locale(languageToLoad);
+            updateLocale(context, locale);
+        }
+    }
+
+    private static Locale getLocaleByCountry(String countryCode) {
+        Locale[] availableLocales = Locale.getAvailableLocales();
+        for (int i = 0; i < availableLocales.length; i++) {
+            if (availableLocales[i].getCountry().equalsIgnoreCase(countryCode)) {
+                Log.d(TAG, "updateLocaleByCountry: " + countryCode + " : " + availableLocales[i].getCountry());
+                return availableLocales[i];
+            }
+        }
+        return Locale.getDefault();
+    }
+
+    private static void updateLocale(Context context, Locale locale) {
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            config.setLocale(locale);
+        } else {
+            config.locale = locale;
+        }
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+    }
 
     //Google Play Service
 

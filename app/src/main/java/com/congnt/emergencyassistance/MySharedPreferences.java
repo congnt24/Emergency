@@ -6,6 +6,7 @@ import com.congnt.androidbasecomponent.Awesome.AwesomeSharedPreferences;
 import com.congnt.emergencyassistance.entity.ItemContact;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
+import com.congnt.emergencyassistance.entity.SelfDefense;
 import com.congnt.emergencyassistance.entity.firebase.User;
 import com.google.gson.reflect.TypeToken;
 
@@ -113,6 +114,25 @@ public class MySharedPreferences extends AwesomeSharedPreferences {
         protected Type getType() {
             return new TypeToken<User>() {
             }.getType();
+        }
+    };
+
+    public SingleSharedPreferences<SelfDefense> selfDefense = new SingleSharedPreferences<SelfDefense>() {
+        @Override
+        protected String ID() {
+            return "self_defense";
+        }
+
+        @Override
+        protected Type getType() {
+            return new TypeToken<SelfDefense>() {
+            }.getType();
+        }
+    };
+    public SingleSharedPreferences<Boolean> isFirstTime = new SingleSharedPreferences<Boolean>() {
+        @Override
+        protected String ID() {
+            return "first_time";
         }
     };
 

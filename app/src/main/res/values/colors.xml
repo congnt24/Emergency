@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/md_purple_700</color>
-    <color name="colorPrimaryDark">@color/md_purple_900</color>
+    <color name="colorPrimary">@color/md_deep_purple_500</color>
+    <color name="colorPrimaryDark">@color/md_blue_500</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorTabLayout">@color/colorPrimary</color>
     <color name="tab_icon_select">@color/md_white_1000</color>
     <color name="tab_icon_default">@color/colorPrimaryDark</color>
     <color name="colorTransparent">#787b1fa2</color>
+    <color name="colorGreenTransparent">#601B5E20</color>
+    <color name="colorTextPrimary">#111111</color>
 </resources>

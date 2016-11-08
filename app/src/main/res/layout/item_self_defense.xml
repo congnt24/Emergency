@@ -26,8 +26,9 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:minHeight="180dp"
-            android:scaleType="fitXY"
+            android:scaleType="fitStart"
             android:src="@drawable/noimage" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

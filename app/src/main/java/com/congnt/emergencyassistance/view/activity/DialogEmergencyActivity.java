@@ -1,7 +1,7 @@
 package com.congnt.emergencyassistance.view.activity;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,20 +19,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
-import com.congnt.androidbasecomponent.utility.CameraUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
-import com.congnt.androidbasecomponent.utility.FileUtil;
 import com.congnt.androidbasecomponent.utility.ImageUtil;
 import com.congnt.androidbasecomponent.utility.SoundUtil;
 import com.congnt.androidbasecomponent.utility.VibratorUtil;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
 import com.congnt.androidbasecomponent.view.widget.TransparentSurfaceView;
+import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.adapter.ContactAdapter;
 import com.congnt.emergencyassistance.entity.ItemContact;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
-import com.congnt.emergencyassistance.util.AudioRecorder;
+import com.congnt.emergencyassistance.services.RecordAudioService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,44 +66,41 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
         countrynumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
         initViews();
         initEvent();
-        VibratorUtil.vibrate(this, 2000);
+        VibratorUtil.vibrate(this, 2000);   //TODO: VIBRATOR NOT WORK
 
         //Show dialog
         if (getIntent().getExtras() != null) {
             Bundle b = getIntent().getExtras();
+            //If is detecting accident
+
+
+
             String type = b.getString("type", "POLICE");
             final String number = b.getString("number", "113");
             delayRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    CommunicationUtil.callTo(DialogEmergencyActivity.this, number);
+                    finishCountdown();
                 }
             };
             handler.postDelayed(delayRunnable, countDownTime);
-//            DialogBuilder.yesNoDialog(this, "WARNING", "Would you want to call " + type, R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    CommunicationUtil.dialTo(DialogEmergencyActivity.this, number);
-//                    dialog.dismiss();
-//                    finish();
-//                }
-//            }, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();
-//                    finish();
-//                }
-//            }).setCancelable(false).create().show();
-        }else{
+        } else {
             delayRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    CommunicationUtil.callTo(DialogEmergencyActivity.this, countrynumber.police);
+                    finishCountdown();
                 }
             };
             handler.postDelayed(delayRunnable, countDownTime);
         }
     }
+
+    private void finishCountdown() {
+        //Recorder
+        startService(new Intent(DialogEmergencyActivity.this, RecordAudioService.class));
+        CommunicationUtil.callTo(DialogEmergencyActivity.this, countrynumber.police);
+    }
+
     private void initViews() {
         previewHolder = (FrameLayout) findViewById(R.id.surfaceView);
         txtProgress = (TextView) findViewById(R.id.txtProgress);
@@ -119,10 +115,9 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
         //bind contact
         setupEmergencyNumber();
         setupContacts();
-
         //Twinkle background
         View layoutParent = findViewById(R.id.layout_parent);
-        twinkleBackground(layoutParent, 500, Color.RED, ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null), ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+        twinkleBackground(layoutParent, 600, ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null), ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
 
     }
 
@@ -155,7 +150,6 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
         initPicture();
         //Count down timmer
         countDown(countDownTime);
-        initAudioRecoder();
     }
 
     private void initPicture() {
@@ -168,7 +162,7 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
                     cameraView.getCamera().takePicture(null, null, new Camera.PictureCallback() {
                         @Override
                         public void onPictureTaken(byte[] data, Camera camera) {
-                            ImageUtil.createImageFromData(data, "EmergencyAssistance");
+                            ImageUtil.createImageFromData(data, AppConfig.FOLDER_MEDIA);
                             Camera cam = cameraView.getCamera();
                             cam.stopPreview();
                             cam.release();
@@ -193,25 +187,6 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
         }
     }
 
-
-    private void initAudioRecoder() {
-        if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_record_audio", false)){
-            long duration = Long.parseLong(MySharedPreferences.getInstance(this).pref.getString("setting_record_time", "5"))*1000;
-            final AudioRecorder audioRecorder = new AudioRecorder("/EmergencyAssistance/" + FileUtil.createUniqueName("AUDIO", "3gp"));
-            try {
-                audioRecorder.start();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        audioRecorder.stop();
-                    }
-                }, duration);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void countDown(final long duration) {
         progressBar.setMax((int) (duration / 1000));
         countdownTimer = new CountDownTimer(duration, 1000) {
@@ -230,9 +205,9 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
                 progressBar.setOnClickListener(null);
                 Drawable background;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    background = getDrawable(R.drawable.danger_progress_background);
+                    background = getDrawable(R.drawable.bg_danger_progress);
                 } else {
-                    background = getResources().getDrawable(R.drawable.danger_progress_background);
+                    background = getResources().getDrawable(R.drawable.bg_danger_progress);
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     progressBar.setBackground(background);

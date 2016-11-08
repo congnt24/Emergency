@@ -10,7 +10,6 @@
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-
         <include layout="@layout/include_emergency_bar" />
     </LinearLayout>
 
@@ -41,21 +40,20 @@
     </LinearLayout>
     <ImageButton
         android:id="@+id/ib_walk_mode"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/colorPrimary"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/bg_circle"
         android:src="@drawable/ic_share" />
 
     <ImageButton
         android:id="@+id/ib_timmer"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_below="@id/ib_walk_mode"
         android:layout_marginTop="4dp"
-        android:background="@color/colorPrimary"
-        android:src="@drawable/ic_directions_run"
-        android:tint="@color/md_white_1000" />
+        android:background="@drawable/bg_circle"
+        android:src="@drawable/ic_timer" />
     <!--<android.support.v7.widget.SwitchCompat
         android:id="@+id/sw_share_location"
         android:layout_width="wrap_content"
@@ -81,8 +79,7 @@
             android:visibility="visible"
             app:isHideTimeBackground="false"
             app:isShowDay="false"
-            app:isShowHour="false"
-            app:isShowMillisecond="true"
+            app:isShowHour="true"
             app:isShowMinute="true"
             app:isShowSecond="true"
             app:suffixGravity="center"
@@ -90,7 +87,7 @@
             app:suffixTextSize="40sp"
             app:timeBgDivisionLineSize="2dp"
             app:timeBgRadius="6dp"
-            app:timeBgSize="80dp"
+            app:timeBgSize="72dp"
             app:timeTextColor="#FFFFFF"
             app:timeTextSize="40sp" />
 
@@ -99,7 +96,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Cancel" />
+            android:background="@color/colorPrimary"
+            android:text="Cancel"
+            android:textColor="@color/colorAccent" />
     </LinearLayout>
 
 </RelativeLayout>

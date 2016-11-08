@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
+import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
 import com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation;
@@ -22,24 +24,21 @@ import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
-import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_Result;
-import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_RmsdB;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.firebase.LocationForFirebase;
-import com.congnt.emergencyassistance.services.SpeechRecognitionService;
+import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.activity.DialogEmergencyActivity;
 import com.congnt.emergencyassistance.view.activity.MainActivity;
+import com.congnt.emergencyassistance.view.dialog.DialogSendSMS;
+import com.congnt.reversegeocodecountry.GeocodeCountry;
+import com.congnt.reversegeocodecountry.ReverseGeocodeCountry;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import cn.iwgang.countdownview.CountdownView;
 
@@ -91,7 +90,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         layoutCountDown = (LinearLayout) rootView.findViewById(R.id.layout_countdown);
         cdvTimmer = (CountdownView) rootView.findViewById(R.id.cdv_timmer);
         btnCancel = (Button) rootView.findViewById(R.id.btn_cancel);
-
+        //Setup sms
+        setupSMS();
         //Init timmer
         initTimmer();
         //Init speech recognizer
@@ -104,7 +104,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         mapFragment.setScrollGesturesEnabled(true);
         mapFragment.setOnMapListener(this);
 
-        //Update friend location real time
+        /*//Update friend location real time
         firebaseDatabase.getReference().child("users").child("ntc0222@gmailcom").child("location").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -120,7 +120,11 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
+    }
+
+    private void setupSMS() {
+        ibWalkMode.setOnClickListener(this);
     }
 
     private void initTimmer() {
@@ -149,6 +153,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         long time = (hourOfDay * 60 + minute) * 60000;
+                        Toast.makeText(mainActivity, "Alert will be show in " + time / 1000 + " s", Toast.LENGTH_SHORT).show();
                         if (time > 0) {
                             layoutCountDown.setVisibility(View.VISIBLE);
                             cdvTimmer.start(time);
@@ -158,20 +163,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                     }
                 }, 0, 0, true);
 
-//                timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getContext().getText(android.R.string.cancel), new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        isCancel = true;
-//                    }
-//                });
-//                timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getContext().getText(android.R.string.ok), new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        isCancel = false;
-//                    }
-//                });
                 timePickerDialog.show();
             }
         });
@@ -183,7 +174,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     public void setupSpeechRecognitionService(View rootView) {
         Context context = getActivity();
         speechView = (RecognitionProgressView) rootView.findViewById(R.id.speechview);
-        speechView.setBars_count(7);
+        speechView.setBars_count(5);
         int[] colors = {
                 ContextCompat.getColor(context, R.color.color1),
                 ContextCompat.getColor(context, R.color.color2),
@@ -216,13 +207,18 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         btn_fire = (FlatButtonWithIconTop) rootView.findViewById(R.id.btn_call_fire);
         btn_ambulance = (FlatButtonWithIconTop) rootView.findViewById(R.id.btn_call_ambulance);
         //Set Value
-        btn_police.setText("" + countrynumber.police);
-        btn_fire.setText("" + countrynumber.fire);
-        btn_ambulance.setText("" + countrynumber.ambulance);
+        setupEmergencyText();
         //SetOnClick
         btn_police.setOnClickListener(this);
         btn_fire.setOnClickListener(this);
         btn_ambulance.setOnClickListener(this);
+    }
+
+    private void setupEmergencyText() {
+        if (countrynumber == null) return;
+        btn_police.setText("" + countrynumber.police);
+        btn_fire.setText("" + countrynumber.fire);
+        btn_ambulance.setText("" + countrynumber.ambulance);
     }
 
     @Override
@@ -231,10 +227,12 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             case R.id.switch_start_service:
                 SwitchCompat switchCompat = (SwitchCompat) v;
                 if (!switchCompat.isChecked()) {
-                    mainActivity.sendRequestStopListening();
+//                    mainActivity.sendRequestStopListening();
+                    EventBus.getDefault().post(new EBE_StartStopService(false));
                     speechView.stop();
                 } else {
-                    mainActivity.sendRequestStartListening();
+//                    mainActivity.sendRequestStartListening();
+                    EventBus.getDefault().post(new EBE_StartStopService(true));
                     speechView.play();
                 }
                 break;
@@ -246,6 +244,17 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 break;
             case R.id.btn_call_police:
                 call(DIALOG_POLICE);
+                break;
+            case R.id.ib_walk_mode:
+                DialogSendSMS dialogSendSMS = new DialogSendSMS();
+                if (mapFragment.getLastLocation() != null) {
+                    Bundle b = new Bundle();
+                    b.putString("location", mapFragment.getLastLocation().getLatitude() + "," + mapFragment.getLastLocation().getLongitude());
+                    dialogSendSMS.setArguments(b);
+                } else {
+                    Toast.makeText(mainActivity, getString(R.string.location_not_avaiable), Toast.LENGTH_SHORT).show();
+                }
+                dialogSendSMS.show(getChildFragmentManager(), "SMS");
                 break;
         }
     }
@@ -283,7 +292,9 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
     @Override
     public void onLocationChange(Location location) {
-//        mapFragment.animateCamera(location, 13);
+        mapFragment.animateCamera(location, 13);
+        //Check country by location
+        setupCountry(location);
         //update location to friend using firebase if option share location is enable
         if (MySharedPreferences.getInstance(getActivity()).shareLocationState.load(false)) {//is share location
             //Get firebase user
@@ -301,6 +312,22 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     @Override
     public void onConnected() {
 
+    }
+
+
+    private void setupCountry(Location location) {
+        countrynumber = MySharedPreferences.getInstance(mainActivity).countryNumber.load(null);
+        if (countrynumber == null) {
+            GeocodeCountry geocodeCountry = ReverseGeocodeCountry.getInstance(mainActivity).getCountryByLatLng(location.getLatitude(), location.getLongitude());
+            if (geocodeCountry != null) {
+                countrynumber = CountryUtil.getInstance(mainActivity).getItemCountryByName(geocodeCountry.getName());
+            } else {
+                String countryCode = AndroidUtil.getCountryCode();
+                countrynumber = CountryUtil.getInstance(mainActivity).getItemCountryByCode(countryCode);
+            }
+            setupEmergencyText();
+            MySharedPreferences.getInstance(mainActivity).countryNumber.save(countrynumber);
+        }
     }
 
     //Eventbus subscriber

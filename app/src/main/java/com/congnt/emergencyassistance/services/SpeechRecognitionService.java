@@ -16,6 +16,7 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -29,6 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Locale;
 
 public class SpeechRecognitionService extends Service implements RecognitionListener {
 
@@ -62,16 +64,19 @@ public class SpeechRecognitionService extends Service implements RecognitionList
         return START_STICKY;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate() {
         super.onCreate();
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 //        setStreamMute(true);
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         mSpeechRecognizer.setRecognitionListener(this);
         mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
+        Log.d(TAG, "onCreate: " + Locale.getDefault().toString() + Locale.getDefault().getCountry());
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2000); // value to wait
 //        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500);
@@ -320,34 +325,11 @@ public class SpeechRecognitionService extends Service implements RecognitionList
             switch (msg.what)
             {
                 case START_LISTENING:
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                    {
-                        // turn off beep sound
-//                        if (!mIsStreamSolo)
-//                        {
-//                            mAudioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, true);
-//                            mIsStreamSolo = true;
-//                        }
-                    }
-                    startListening();
-                    startForeground(101,
-                            notification);
-
+                    onEvent(new EBE_StartStopService(true));
                     break;
 
                 case STOP_LISTENING:
-//                    if (mIsStreamSolo)
-//                    {
-//                        mAudioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, false);
-//                        mIsStreamSolo = false;
-//                    }
-                    stopListening();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        stopForeground(STOP_FOREGROUND_DETACH);
-                    } else {
-                        stopForeground(true);
-                    }
+                    onEvent(new EBE_StartStopService(false));
                     break;
             }
         }

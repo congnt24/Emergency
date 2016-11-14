@@ -51,6 +51,7 @@ import com.congnt.emergencyassistance.entity.SettingSpeech;
 import com.congnt.emergencyassistance.entity.firebase.User;
 import com.congnt.emergencyassistance.services.DetectingAccidentService;
 import com.congnt.emergencyassistance.services.SpeechRecognitionService;
+import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.fragment.EmergencySoundFragment;
 import com.congnt.emergencyassistance.view.fragment.MainFragment;
 import com.congnt.emergencyassistance.view.fragment.NearByFragment;
@@ -227,14 +228,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         if (MySharedPreferences.getInstance(this).emergency_command.load(null) == null) {
             //get default command by country
             //init json
-            SettingSpeech setting = null;
-            SettingSpeech[] settingSpeechs = new Gson().fromJson(FileUtil.loadFileFromRaw(this, R.raw.json_speech_by_country), SettingSpeech[].class);
-            for (int i = 0; i < settingSpeechs.length; i++) {
-                if (countryCode.equalsIgnoreCase(settingSpeechs[i].countryCode)) {
-                    setting = settingSpeechs[i];
-                    break;
-                }
-            }
+            SettingSpeech setting = CountryUtil.getSettingSpeechByCountry(this, countryCode);
             if (setting != null) {
                 List<ItemSettingSpeech> list = new ArrayList<>();
                 Log.d(TAG, "initSpeechCommand: " + setting.fire.size() + " " + setting.ambulance.size());

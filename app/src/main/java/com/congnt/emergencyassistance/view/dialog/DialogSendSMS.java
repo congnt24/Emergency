@@ -25,6 +25,9 @@ import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.adapter.ContactSelectAdapter;
 import com.congnt.emergencyassistance.entity.ItemContact;
+import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
+import com.congnt.emergencyassistance.entity.SettingSpeech;
+import com.congnt.emergencyassistance.util.CountryUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,7 @@ public class DialogSendSMS extends DialogFragment {
     private ContactSelectAdapter adapter;
     private List<ItemContact> listContact;
     private String location = "";
+    private String[] templateMsg;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,7 +112,17 @@ public class DialogSendSMS extends DialogFragment {
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler_contact);
         cbIncludeLocation = (CheckBox) rootView.findViewById(R.id.cb_include_location);
         //Setup Spinner
-        final String[] templateMsg = getResources().getStringArray(R.array.templateMsg);
+        ItemCountryEmergencyNumber countryNumber = MySharedPreferences.getInstance(getActivity()).countryNumber.load(null);
+        SettingSpeech setting;
+        if (countryNumber != null) {
+            setting = CountryUtil.getSettingSpeechByCountry(getActivity(), countryNumber.countryCode);
+        } else {
+            setting = CountryUtil.getSettingSpeechByCountry(getActivity(), "us");
+        }
+        templateMsg = new String[setting.templateMessage.size()];
+        for (int i = 0; i < setting.templateMessage.size(); i++) {
+            templateMsg[i] = setting.templateMessage.get(i).mesage;
+        }
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, templateMsg);
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -6,6 +6,7 @@ import com.congnt.androidbasecomponent.utility.FileUtil;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumberWrapper;
+import com.congnt.emergencyassistance.entity.SettingSpeech;
 import com.google.gson.Gson;
 
 /**
@@ -46,6 +47,16 @@ public class CountryUtil {
                 listCountry.countries) {
             if (item.countryName.equalsIgnoreCase(countryName)) {
                 return item;
+            }
+        }
+        return null;
+    }
+
+    public static SettingSpeech getSettingSpeechByCountry(Context context, String countryCode){
+        SettingSpeech[] settingSpeechs = new Gson().fromJson(FileUtil.loadFileFromRaw(context, R.raw.json_speech_by_country), SettingSpeech[].class);
+        for (int i = 0; i < settingSpeechs.length; i++) {
+            if (countryCode.equalsIgnoreCase(settingSpeechs[i].countryCode)) {
+                return settingSpeechs[i];
             }
         }
         return null;

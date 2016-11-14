@@ -1,5 +1,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <ListPreference
+        android:key="setting_speed_unit"
+        android:summary="Km/h"
+        android:title="Speed Unit" />
 
     <SwitchPreference
         android:defaultValue="false"

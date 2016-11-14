@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
-import com.congnt.emergencyassistance.view.activity.DialogEmergencyActivity;
+import com.congnt.emergencyassistance.view.activity.EmergencyStateActivity;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class DetectBySpeechRecervier extends BroadcastReceiver {
                     String match = str.trim();
                     if (command.equalsIgnoreCase(match) || match.contains(command) || command.contains(match)) {
                         Intent i = new Intent();
-                        i.setClassName(context, DialogEmergencyActivity.class.getName());
+                        i.setClassName(context, EmergencyStateActivity.class.getName());
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         Bundle b = new Bundle();
                         b.putString("type", item.getEmergencyType().toString());

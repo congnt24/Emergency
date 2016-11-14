@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DialogEmergencyActivity extends Activity implements Camera.PictureCallback, View.OnClickListener {
+public class EmergencyStateActivity extends Activity implements Camera.PictureCallback, View.OnClickListener {
 
     private FrameLayout previewHolder;
     private Handler handler;
@@ -97,8 +97,14 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
 
     private void finishCountdown() {
         //Recorder
-        startService(new Intent(DialogEmergencyActivity.this, RecordAudioService.class));
-        CommunicationUtil.callTo(DialogEmergencyActivity.this, countrynumber.police);
+        startService(new Intent(EmergencyStateActivity.this, RecordAudioService.class));
+        List<ItemContact> listContact;
+        if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_contact_call", false)
+                && (listContact = MySharedPreferences.getInstance(this).listContact.load(null)) != null) {
+            CommunicationUtil.callTo(EmergencyStateActivity.this, listContact.get(0).getContactNumber());
+        } else {
+            CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.police);
+        }
     }
 
     private void initViews() {
@@ -134,7 +140,7 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
         adapter = new ContactAdapter(this, listContact, new AwesomeRecyclerAdapter.OnClickListener<ItemContact>() {
             @Override
             public void onClick(ItemContact item, int position) {
-                CommunicationUtil.callTo(DialogEmergencyActivity.this, item.getContactNumber());
+                CommunicationUtil.callTo(EmergencyStateActivity.this, item.getContactNumber());
                 finish();
             }
         });
@@ -177,7 +183,7 @@ public class DialogEmergencyActivity extends Activity implements Camera.PictureC
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    finalCamera.takePicture(null, null, DialogEmergencyActivity.this);
+                                    finalCamera.takePicture(null, null, EmergencyStateActivity.this);
                                 }
                             }, 500);
                         }

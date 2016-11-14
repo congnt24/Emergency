@@ -1,14 +1,12 @@
 package com.congnt.emergencyassistance.util;
 
 import android.content.Context;
-import android.content.res.Resources;
 
+import com.congnt.androidbasecomponent.utility.FileUtil;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumberWrapper;
 import com.google.gson.Gson;
-
-import java.io.InputStream;
 
 /**
  * Created by congnt24 on 19/10/2016.
@@ -30,7 +28,7 @@ public class CountryUtil {
     }
 
     public ItemCountryEmergencyNumberWrapper getListCountry(Context context) {
-        return new Gson().fromJson(loadFileFromRaw(context), ItemCountryEmergencyNumberWrapper.class);
+        return new Gson().fromJson(FileUtil.loadFileFromRaw(context, R.raw.emergency_numbey_by_country), ItemCountryEmergencyNumberWrapper.class);
     }
 
     public ItemCountryEmergencyNumber getItemCountryByCode(String countryCode) {
@@ -53,16 +51,4 @@ public class CountryUtil {
         return null;
     }
 
-    public String loadFileFromRaw(Context context) {
-        try {
-            Resources res = context.getResources();
-            InputStream in_s = res.openRawResource(R.raw.emergency_numbey_by_country);
-            byte[] b = new byte[in_s.available()];
-            in_s.read(b);
-            return new String(b);
-        } catch (Exception e) {
-            // e.printStackTrace();
-            return null;
-        }
-    }
 }

@@ -154,6 +154,13 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
                         }
                     });
                     adapter.notifyDataSetChanged();
+                    //select first response
+                    if (listNearBy.size() > 0) {
+                        Location location = new Location("");
+                        location.setLatitude(listNearBy.get(0).getGeometry().getLocation().getLat());
+                        location.setLongitude(listNearBy.get(0).getGeometry().getLocation().getLng());
+                        mapFragment.animateCamera(location, 16);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

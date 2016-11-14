@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.congnt.emergencyassistance.view.activity.DialogEmergencyActivity;
+import com.congnt.emergencyassistance.view.activity.EmergencyStateActivity;
 
 /**
  * Created by congnt24 on 13/10/2016.
@@ -29,7 +29,7 @@ public class DetectByVolumeReceiver extends BroadcastReceiver{
                 count=0;
                 lastTime = 0;
                 Intent i = new Intent();
-                i.setClassName(context, DialogEmergencyActivity.class.getName());
+                i.setClassName(context, EmergencyStateActivity.class.getName());
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 Bundle b = new Bundle();
                 b.putString("type", "POLICE");

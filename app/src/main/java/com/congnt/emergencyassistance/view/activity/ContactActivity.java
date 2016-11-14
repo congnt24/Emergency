@@ -16,6 +16,7 @@ import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
 import com.congnt.androidbasecomponent.adapter.TouchHelperCallback;
 import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigateUp;
+import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.utility.ContactUtil;
 import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.emergencyassistance.MainActionBar;
@@ -30,7 +31,7 @@ import java.util.List;
 @Activity(mainLayoutId = R.layout.activity_emergency_contact,
         actionbarType = Activity.ActionBarType.ACTIONBAR_CUSTOM)
 @NavigateUp
-public class EmergencyContactActivity extends AwesomeActivity {
+public class ContactActivity extends AwesomeActivity {
 
     private static final int REQUEST_CONTACT_CODE = 1;
     private RecyclerView recycler_contact;
@@ -56,6 +57,7 @@ public class EmergencyContactActivity extends AwesomeActivity {
         adapter = new ContactAdapter(this, listContact, new AwesomeRecyclerAdapter.OnClickListener<ItemContact>() {
             @Override
             public void onClick(ItemContact item, int position) {
+                CommunicationUtil.callTo(ContactActivity.this, item.getContactNumber());
             }
         });
         recycler_contact.setAdapter(adapter);

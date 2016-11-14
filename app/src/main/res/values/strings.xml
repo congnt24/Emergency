@@ -146,6 +146,14 @@
     <string name="tutorial_desc_3">It work on the background and only when you are in a moving vehicle. No nead to open app every time you get on your car</string>
     <string name="share_app_content">This app can save your life in case of emergency. Download Emergency Assistance at https://www.dropbox.com/s/vfe03r1ll3swp7b/app-debug.apk?dl=1</string>
     <string name="logout">Log Out</string>
+    <string name="accelerometer">Accelerometer: </string>
+    <string name="velocity">Velocity:</string>
+    <string name="speed">Speed:</string>
+    <string name="max_speed">Max Speed:</string>
+    <string name="distance">Distance:</string>
+    <string name="enable_contact_call">Enable contact call</string>
+    <string name="enable_contact_call_desc">While emergency is detected, it\'ll call to first contact in list contact instead of emergency number.</string>
+    <string name="history">History</string>
 
     <string-array name="commands_police">
         <item>Help</item>

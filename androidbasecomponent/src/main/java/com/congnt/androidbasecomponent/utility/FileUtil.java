@@ -1,12 +1,14 @@
 package com.congnt.androidbasecomponent.utility;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +20,34 @@ import java.util.List;
 
 public class FileUtil {
 
+    /**
+     * Load String data from a file in raw folder
+     *
+     * @param context
+     * @param rawId   R.raw.xxxx
+     * @return
+     */
+    public static String loadFileFromRaw(Context context, int rawId) {
+        try {
+            Resources res = context.getResources();
+            InputStream in_s = res.openRawResource(rawId);
+            byte[] b = new byte[in_s.available()];
+            in_s.read(b);
+            return new String(b);
+        } catch (Exception e) {
+            // e.printStackTrace();
+            return null;
+        }
+    }
 
+    /**
+     * Create file from a byte array
+     * @param data
+     * @param folder    Folder name in sdcard
+     * @param prefix    IMG_
+     * @param postfix   jpg
+     * @return
+     */
     public static boolean createFileFromData(byte[] data, String folder, String prefix, String postfix) {
         File pictureFile = getOutputMediaFile(folder, prefix, postfix);
         if (pictureFile == null) {

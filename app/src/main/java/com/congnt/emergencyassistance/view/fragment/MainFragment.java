@@ -7,28 +7,33 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
+import com.congnt.androidbasecomponent.utility.FormatUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
 import com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation;
 import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.firebase.LocationForFirebase;
 import com.congnt.emergencyassistance.util.CountryUtil;
-import com.congnt.emergencyassistance.view.activity.DialogEmergencyActivity;
+import com.congnt.emergencyassistance.view.activity.EmergencyStateActivity;
+import com.congnt.emergencyassistance.view.activity.LoginActivity;
 import com.congnt.emergencyassistance.view.activity.MainActivity;
 import com.congnt.emergencyassistance.view.dialog.DialogSendSMS;
 import com.congnt.reversegeocodecountry.GeocodeCountry;
@@ -51,11 +56,16 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private static final int DIALOG_AMBULANCE = 3;
     private static final int DIALOG_FIRE = 2;
     public boolean isCancel;
+    public CardView layout_detect_accident;
     private RecognitionProgressView speechView;
     private FlatButtonWithIconTop btn_police;
     private FlatButtonWithIconTop btn_fire;
     private FlatButtonWithIconTop btn_ambulance;
     private SwitchCompat btn_start_stop;
+    private TextView tvAcc;
+    private TextView tvSpeed;
+    private TextView tvMaxSpeed;
+    private TextView tvDistance;
     //Map fragment
     private MapFragmentWithFusedLocation mapFragment;
     private ItemCountryEmergencyNumber countrynumber;
@@ -67,6 +77,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private LinearLayout layoutCountDown;
     private Button btnCancel;
     private MainActivity mainActivity;
+    private ImageButton ibLocation;
+    private boolean isShareLocation;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -87,9 +99,17 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         countrynumber = ((MainActivity) getActivity()).countrynumber;
         ibWalkMode = (ImageButton) rootView.findViewById(R.id.ib_walk_mode);
         ibTimmer = (ImageButton) rootView.findViewById(R.id.ib_timmer);
+        ibLocation = (ImageButton) rootView.findViewById(R.id.ib_location);
         layoutCountDown = (LinearLayout) rootView.findViewById(R.id.layout_countdown);
         cdvTimmer = (CountdownView) rootView.findViewById(R.id.cdv_timmer);
         btnCancel = (Button) rootView.findViewById(R.id.btn_cancel);
+        layout_detect_accident = (CardView) rootView.findViewById(R.id.layout_detect_accident);
+        tvAcc = (TextView) rootView.findViewById(R.id.tv_acc);
+        tvSpeed = (TextView) rootView.findViewById(R.id.tv_speed);
+        tvMaxSpeed = (TextView) rootView.findViewById(R.id.tv_max_speed);
+        tvDistance = (TextView) rootView.findViewById(R.id.tv_distance);
+        //Setup location
+        setupLocation();
         //Setup sms
         setupSMS();
         //Init timmer
@@ -123,6 +143,10 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         });*/
     }
 
+    private void setupLocation() {
+        ibLocation.setOnClickListener(this);
+    }
+
     private void setupSMS() {
         ibWalkMode.setOnClickListener(this);
     }
@@ -141,7 +165,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 cv.stop();
                 layoutCountDown.setVisibility(View.GONE);
                 //Start emergency dialog
-                Intent intent = new Intent(getActivity(), DialogEmergencyActivity.class);
+                Intent intent = new Intent(getActivity(), EmergencyStateActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -256,6 +280,25 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 }
                 dialogSendSMS.show(getChildFragmentManager(), "SMS");
                 break;
+            case R.id.ib_location:
+                if (isShareLocation) {
+                    ibLocation.setImageResource(R.drawable.ic_location_off);
+                } else {
+                    ibLocation.setImageResource(R.drawable.ic_location_on);
+                }
+                isShareLocation = !isShareLocation;
+                shareLocation();
+                break;
+        }
+    }
+
+    private void shareLocation() {
+        if (mainActivity.isLogged) {
+            MySharedPreferences.getInstance(mainActivity).shareLocationState.save(isShareLocation);
+        } else {
+            //Start login activity for result
+            Intent intent = new Intent(mainActivity, LoginActivity.class);
+            startActivityForResult(intent, MainActivity.REQUEST_LOGIN_FOR_SHARE_LOCATION);
         }
     }
 
@@ -281,9 +324,9 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 , R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (MySharedPreferences.getInstance(getActivity()).pref.getBoolean("setting_call_to", false)){
+                        if (MySharedPreferences.getInstance(getActivity()).pref.getBoolean("setting_call_to", false)) {
                             CommunicationUtil.callTo(getActivity(), finalNumber);
-                        }else {
+                        } else {
                             CommunicationUtil.dialTo(getActivity(), finalNumber);
                         }
                     }
@@ -327,6 +370,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             }
             setupEmergencyText();
             MySharedPreferences.getInstance(mainActivity).countryNumber.save(countrynumber);
+            //update speech command by country
+            mainActivity.initSpeechCommand(countrynumber.countryCode);
         }
     }
 
@@ -376,5 +421,13 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         btn_police.setText("" + countrynumber.police);
         btn_fire.setText("" + countrynumber.fire);
         btn_ambulance.setText("" + countrynumber.ambulance);
+        MySharedPreferences.getInstance(mainActivity).emergency_command.save(null);
+        mainActivity.initSpeechCommand(countrynumber.countryCode);
+    }
+
+    @Subscribe
+    public void onUpdateAccelerometer(EBE_DetectAccident detectAccident) {
+        tvAcc.setText(getString(R.string.accelerometer) + " " + FormatUtil.formatDouble(detectAccident.getValue().accelerometer, 4));
+        tvSpeed.setText(getString(R.string.speed) + " " + FormatUtil.formatDouble(detectAccident.getValue().speed, 4));
     }
 }

@@ -116,6 +116,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             bindPreferenceSwitchToValue(findPreference("setting_call_to"));
+            bindPreferenceSummaryToValue(findPreference("setting_speed_unit"));
         }
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
@@ -136,6 +137,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_emergency);
             bindPreferenceSwitchToValue(findPreference("setting_take_picture"));
             bindPreferenceSwitchToValue(findPreference("setting_record_audio"));
+            bindPreferenceSwitchToValue(findPreference("setting_contact_call"));
             bindPreferenceSummaryToValue(findPreference("setting_countdown_time"));
             bindPreferenceSummaryToValue(findPreference("setting_record_time"));
         }

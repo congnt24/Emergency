@@ -16,6 +16,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
+import com.congnt.androidbasecomponent.utility.FileUtil;
 import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.NetworkUtil;
@@ -45,6 +47,7 @@ import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartDetectingAccident;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
+import com.congnt.emergencyassistance.entity.SettingSpeech;
 import com.congnt.emergencyassistance.entity.firebase.User;
 import com.congnt.emergencyassistance.services.DetectingAccidentService;
 import com.congnt.emergencyassistance.services.SpeechRecognitionService;
@@ -53,6 +56,7 @@ import com.congnt.emergencyassistance.view.fragment.MainFragment;
 import com.congnt.emergencyassistance.view.fragment.NearByFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -60,6 +64,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.congnt.emergencyassistance.EmergencyType.AMBULANCE;
 import static com.congnt.emergencyassistance.EmergencyType.FIRE;
 import static com.congnt.emergencyassistance.EmergencyType.POLICE;
@@ -71,10 +77,12 @@ import static com.congnt.emergencyassistance.EmergencyType.POLICE;
         , enableSearch = true)
 @NavigationDrawer
 public class MainActivity extends AwesomeActivity implements NavigationView.OnNavigationItemSelectedListener {
+    public static final int REQUEST_LOGIN_FOR_SHARE_LOCATION = 3;
+    private static final String TAG = "MainActivity";
     private static final int REQUEST_PROFILE = 1;
     private static final int REQUEST_LOGIN = 2;
-    private static final int REQUEST_LOGIN_FOR_SHARE_LOCATION = 3;
     public ItemCountryEmergencyNumber countrynumber;
+    public boolean isLogged;
     private String[] permission = new String[]{
             Manifest.permission.CALL_PHONE
             , Manifest.permission.ACCESS_COARSE_LOCATION
@@ -89,7 +97,6 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     private TextView mTvHeader;
     private SwitchCompat switchCompat;
     private boolean isLoadUserProfile = true;
-    private boolean isLogged;
     private Messenger mServiceMessenger;
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -103,6 +110,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         }
     };
     private Intent service;
+    private MainFragment mainFragment;
 
     public void unbindService() {
         unbindService(mServiceConnection);
@@ -151,10 +159,36 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         }
 
         service = new Intent(this, SpeechRecognitionService.class);
-        //REQUEST PERMISSION
+        //REQUEST PERMISSION AND REQUIRE
         if (!PermissionUtil.getInstance(this).checkMultiPermission(permission)) {
             PermissionUtil.getInstance(this).requestPermissions(permission);
         }
+
+        initRequire();
+
+        //update locale
+        ItemCountryEmergencyNumber countryEmergencyNumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
+        if (countryEmergencyNumber != null) {
+            AndroidUtil.updateLocaleByCountry(this, countryEmergencyNumber.countryCode);
+        }
+
+        //Init Service
+        if (!AndroidUtil.isServiceRunning(this, SpeechRecognitionService.class)) {
+            MySharedPreferences.getInstance(this).isListening.save(false);
+            startService(service);
+        }
+        if (mServiceMessenger == null) bindService(service, mServiceConnection, BIND_AUTO_CREATE);
+        //Detect service
+        startService(new Intent(MainActivity.this, DetectingAccidentService.class));
+
+        //init nav
+        // Find our drawer view
+        setupNavigationView();
+        //init viewpager
+        setupViewPager(mainView);
+    }
+
+    private void initRequire() {
         //Requite network
         //TODO: Require network
         if (!NetworkUtil.isNetworkConnected(this)) {
@@ -187,47 +221,36 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                         }
                     }).create().show();
         }
-        //init default command
+    }
+
+    public void initSpeechCommand(String countryCode) {
         if (MySharedPreferences.getInstance(this).emergency_command.load(null) == null) {
-            //Add default command
-            String[] array = getResources().getStringArray(R.array.commands_fire);
-            List<ItemSettingSpeech> list = new ArrayList<>();
-            for (int i = 0; i < array.length; i++) {
-                list.add(new ItemSettingSpeech(array[i], FIRE));
+            //get default command by country
+            //init json
+            SettingSpeech setting = null;
+            SettingSpeech[] settingSpeechs = new Gson().fromJson(FileUtil.loadFileFromRaw(this, R.raw.json_speech_by_country), SettingSpeech[].class);
+            for (int i = 0; i < settingSpeechs.length; i++) {
+                if (countryCode.equalsIgnoreCase(settingSpeechs[i].countryCode)) {
+                    setting = settingSpeechs[i];
+                    break;
+                }
             }
-            array = getResources().getStringArray(R.array.commands_ambulance);
-            for (int i = 0; i < array.length; i++) {
-                list.add(new ItemSettingSpeech(array[i], AMBULANCE));
+            if (setting != null) {
+                List<ItemSettingSpeech> list = new ArrayList<>();
+                Log.d(TAG, "initSpeechCommand: " + setting.fire.size() + " " + setting.ambulance.size());
+                for (int i = 0; i < setting.fire.size(); i++) {
+                    list.add(new ItemSettingSpeech(setting.fire.get(i).command, FIRE));
+                }
+                for (int i = 0; i < setting.ambulance.size(); i++) {
+                    list.add(new ItemSettingSpeech(setting.ambulance.get(i).command, AMBULANCE));
+                }
+                for (int i = 0; i < setting.police.size(); i++) {
+                    list.add(new ItemSettingSpeech(setting.police.get(i).command, POLICE));
+                }
+                MySharedPreferences.getInstance(this).emergency_command.save(list);
             }
-            array = getResources().getStringArray(R.array.commands_police);
-            for (int i = 0; i < array.length; i++) {
-                list.add(new ItemSettingSpeech(array[i], POLICE));
-            }
-            MySharedPreferences.getInstance(this).emergency_command.save(list);
 
         }
-
-
-        //update locale
-        ItemCountryEmergencyNumber countryEmergencyNumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
-        if (countryEmergencyNumber != null) {
-            AndroidUtil.updateLocaleByCountry(this, countryEmergencyNumber.countryCode);
-        }
-
-        //Init Service
-        if (!AndroidUtil.isServiceRunning(this, SpeechRecognitionService.class)) {
-            MySharedPreferences.getInstance(this).isListening.save(false);
-            startService(service);
-        }
-        if (mServiceMessenger == null) bindService(service, mServiceConnection, BIND_AUTO_CREATE);
-        //Detect service
-        startService(new Intent(MainActivity.this, DetectingAccidentService.class));
-
-        //init nav
-        // Find our drawer view
-        setupNavigationView();
-        //init viewpager
-        setupViewPager(mainView);
     }
 
     @Override
@@ -237,7 +260,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     }
 
 
-    public void setupNavigationView() {
+    private void setupNavigationView() {
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         View headerView = getNavigationView().inflateHeaderView(R.layout.nav_main_header);
         mImgHeader = (ImageView) headerView.findViewById(R.id.imageView);
@@ -254,10 +277,10 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         getNavigationView().setNavigationItemSelectedListener(this);
     }
 
-    public void setupViewPager(View root) {
+    private void setupViewPager(View root) {
         ViewPager viewPager = (ViewPager) root.findViewById(R.id.viewPager);
         List<AwesomeFragment> listFragment = new ArrayList<>();
-        listFragment.add(MainFragment.newInstance());
+        listFragment.add(mainFragment = (MainFragment) MainFragment.newInstance());
         listFragment.add(EmergencySoundFragment.newInstance());
         listFragment.add(NearByFragment.newInstance());
 //        listFragment.add(WalkingFragment.newInstance());
@@ -267,11 +290,11 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         setupTabLayout(root, viewPager);
     }
 
-    public void setupTabLayout(View root, ViewPager viewPager) {
+    private void setupTabLayout(View root, ViewPager viewPager) {
         TabLayout tabLayout = (TabLayout) root.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
         TabLayoutUtil.setCustomLayouts(tabLayout, R.layout.item_tab_tablayout);
-        TabLayoutUtil.setIcons(tabLayout, R.drawable.ic_home, R.drawable.ic_report_problem, R.drawable.ic_place, R.drawable.ic_directions_run);
+        TabLayoutUtil.setIcons(tabLayout, R.drawable.ic_home, R.drawable.ic_report_problem, R.drawable.ic_location_on, R.drawable.ic_directions_run);
 //        TabLayoutUtil.setTexts(tabLayout, "Home", "Setting", "Near By", "Walking");
         //Best Solution
         TabLayoutUtil.setColorSelectorIcons(tabLayout, R.color.tab_icon);
@@ -285,7 +308,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                 startActivityForResult(new Intent(this, ProfileActivity.class), REQUEST_PROFILE);
                 break;
             case R.id.nav_emergency_contact:
-                startActivity(new Intent(this, EmergencyContactActivity.class));
+                startActivity(new Intent(this, ContactActivity.class));
                 break;
             case R.id.nav_defense_yourself:
                 startActivity(new Intent(this, DefenseYourselfActivity.class));
@@ -327,9 +350,10 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 //                }
                 //Start listening detect service
                 EventBus.getDefault().post(new EBE_StartDetectingAccident(isChecked));
+                mainFragment.layout_detect_accident.setVisibility(isChecked ? VISIBLE : GONE);
             }
         });
-        switchCompat.setChecked(MySharedPreferences.getInstance(this).shareLocationState.load(false));
+//        switchCompat.setChecked(MySharedPreferences.getInstance(this).shareLocationState.load(false));
         return true;
     }
 //

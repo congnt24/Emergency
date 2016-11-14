@@ -5,6 +5,7 @@ import android.content.Context;
 import com.congnt.androidbasecomponent.Awesome.AwesomeSharedPreferences;
 import com.congnt.emergencyassistance.entity.ItemContact;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
+import com.congnt.emergencyassistance.entity.ItemHistory;
 import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
 import com.congnt.emergencyassistance.entity.SelfDefense;
 import com.congnt.emergencyassistance.entity.firebase.User;
@@ -36,6 +37,18 @@ public class MySharedPreferences extends AwesomeSharedPreferences {
         @Override
         protected Type getType() {
             return new TypeToken<List<ItemSettingSpeech>>() {}.getType();
+        }
+    };
+    public SingleSharedPreferences<List<ItemSettingSpeech>> emergency_command_custom = new SingleSharedPreferences<List<ItemSettingSpeech>>() {
+        @Override
+        protected String ID() {
+            return "emergency_command_custom";
+        }
+
+        @Override
+        protected Type getType() {
+            return new TypeToken<List<ItemSettingSpeech>>() {
+            }.getType();
         }
     };
     //Contain list contact
@@ -133,6 +146,21 @@ public class MySharedPreferences extends AwesomeSharedPreferences {
         @Override
         protected String ID() {
             return "first_time";
+        }
+    };
+    /**
+     * Save history
+     */
+    public SingleSharedPreferences<List<ItemHistory>> listHistoty = new SingleSharedPreferences<List<ItemHistory>>() {
+        @Override
+        protected String ID() {
+            return "emergency_history";
+        }
+
+        @Override
+        protected Type getType() {
+            return new TypeToken<List<ItemHistory>>() {
+            }.getType();
         }
     };
 

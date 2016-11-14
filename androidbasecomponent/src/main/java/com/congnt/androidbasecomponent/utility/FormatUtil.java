@@ -22,6 +22,11 @@ public class FormatUtil {
         return String.format(format, value);
     }
 
+    public static String formatDouble(double value, int numberAfterDot) {
+        String format = "%." + numberAfterDot + "f";
+        return String.format(format, value);
+    }
+
     /**
      * Convert 300,000,000,00,0,0,00,0, VND to 3000000000000
      *

@@ -34,6 +34,10 @@
             android:id="@+id/nav_change_country"
             android:icon="@drawable/ic_language"
             android:title="@string/change_country" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_language"
+            android:title="@string/history" />
     </group>
     <group android:id="@+id/nav_group_communication">
         <item

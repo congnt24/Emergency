@@ -22,11 +22,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by congnt24 on 04/10/2016.
  */
 
-public class ContactAdapter extends AwesomeRecyclerAdapter<ContactAdapter.ViewHolder, ItemContact> {
+public class HistoryAdapter extends AwesomeRecyclerAdapter<HistoryAdapter.ViewHolder, ItemContact> {
 
-    private boolean isEditMode;
 
-    public ContactAdapter(Context context, List<ItemContact> mList, OnClickListener<ItemContact> onClickListener) {
+    public HistoryAdapter(Context context, List<ItemContact> mList, OnClickListener<ItemContact> onClickListener) {
         super(context, mList, onClickListener);
     }
 
@@ -53,40 +52,21 @@ public class ContactAdapter extends AwesomeRecyclerAdapter<ContactAdapter.ViewHo
         return super.getItemCount();
     }
 
-    public void enableEditMode(boolean isEditMode) {
-        this.isEditMode = isEditMode;
-        notifyDataSetChanged();
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivRemove;
         ImageView ivContactPhotoNoImage;
         CircleImageView ivContactPhoto;
         TextView tvContactName;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ivRemove = (ImageView) itemView.findViewById(R.id.iv_contact_remove);
             ivContactPhoto = (CircleImageView) itemView.findViewById(R.id.iv_contact_photo);
             ivContactPhotoNoImage = (ImageView) itemView.findViewById(R.id.iv_contact_photo_no_image);
             tvContactName = (TextView) itemView.findViewById(R.id.tv_contact_name);
-            ivRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    mList.remove(position);
-                    notifyItemRemoved(position);
-                }
-            });
 
         }
 
         public void bindView(final ItemContact item) {
-            if (isEditMode) {
-                ivRemove.setVisibility(View.VISIBLE);
-            } else {
-                ivRemove.setVisibility(View.GONE);
-            }
             tvContactName.setText(item.getContactName());
             Bitmap contactPhoto = ContactUtil.retrieveContactPhoto(context, item.getUriContact());
             if (contactPhoto != null) {

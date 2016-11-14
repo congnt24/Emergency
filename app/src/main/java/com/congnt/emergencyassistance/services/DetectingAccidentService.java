@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.congnt.androidbasecomponent.utility.GoogleApiUtil;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
 import com.congnt.emergencyassistance.R;
+import com.congnt.emergencyassistance.entity.DetectAccident;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartDetectingAccident;
 import com.congnt.emergencyassistance.util.LocationUtils;
 import com.congnt.emergencyassistance.view.activity.MainActivity;
@@ -170,6 +172,7 @@ public class DetectingAccidentService extends Service implements SensorEventList
     //Implement method
 
     public boolean estimateAccident() {
+        EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech)));
         double accident = currentAcceleration / ACCELERATION_THRESHOLD;
         if (accident >= ACCIDENT_THRESHOLD && currentSpeech >= VELOCITY_THRESHOLD) {
             return true;
@@ -198,6 +201,7 @@ public class DetectingAccidentService extends Service implements SensorEventList
             if ((curTime - lastUpdate) > DURATION) {
                 lastUpdate = curTime;
                 currentAcceleration = calculateAcceleration(event.values);
+                estimateAccident();
             }
         }
     }
@@ -277,9 +281,9 @@ public class DetectingAccidentService extends Service implements SensorEventList
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setSmallestDisplacement(1000);
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setSmallestDisplacement(10);
+        mLocationRequest.setInterval(100);
+        mLocationRequest.setFastestInterval(100);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         requestLocationUpdate();
     }

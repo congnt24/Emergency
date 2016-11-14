@@ -1,0 +1,128 @@
+[
+  {
+    "countryCode": "US",
+    "countryName": "United States",
+    "police": [
+      {
+        "command": "Help"
+      },
+      {
+        "command": "Thieft"
+      },
+      {
+        "command": "Help me"
+      },
+      {
+        "command": "Murderous"
+      },
+      {
+        "command": "Robber"
+      },
+      {
+        "command": "Police"
+      },
+      {
+        "command": "I'm lost"
+      },
+      {
+        "command": "Can you help me"
+      }
+    ],
+    "fire": [
+      {
+        "command": "Fire"
+      },
+      {
+        "command": "Stop fire"
+      }
+    ],
+    "ambulance": [
+      {
+        "command": "Ambulance"
+      },
+      {
+        "command": "Doctor"
+      }
+    ],
+    "templateMessage": [
+      {
+        "message": "I'm stuck,Help me."
+      },
+      {
+        "message": "Hi.Need your help reach this place."
+      },
+      {
+        "message": "In trouble, can you Help?"
+      },
+      {
+        "message": "Follow me,i am in trouble."
+      },
+      {
+        "message": "Looking everything wired, Please come."
+      }
+    ]
+  },
+  {
+    "countryCode": "VN",
+    "countryName": "Vietnam",
+    "police": [
+      {
+        "command": "Cứu"
+      },
+      {
+        "command": "Trộm"
+      },
+      {
+        "command": "Cướp"
+      },
+      {
+        "command": "Giết người"
+      },
+      {
+        "command": "Cảnh sát"
+      },
+      {
+        "command": "Giúp tôi"
+      },
+      {
+        "command": "Ối giời ơi"
+      }
+    ],
+    "fire": [
+      {
+        "command": "Cháy"
+      },
+      {
+        "command": "Dập lửa"
+      },
+      {
+        "command": "Cháy rồi"
+      }
+    ],
+    "ambulance": [
+      {
+        "command": "Chết người rồi"
+      },
+      {
+        "command": "Bác sĩ ơi"
+      }
+    ],
+    "templateMessage": [
+      {
+        "message": "Tôi đang mắc kẹt, giúp tôi."
+      },
+      {
+        "message": "Tôi cần bạn đến đây gấp."
+      },
+      {
+        "message": "Tôi đang gặp rắc rồi, làm ơn giúp tôi với."
+      },
+      {
+        "message": "Theo tôi, tôi đang gặp rắc rối."
+      },
+      {
+        "message": "Mọi thứ xung quanh thật khác lạ, làm ơn đến đây với tôi."
+      }
+    ]
+  }
+]

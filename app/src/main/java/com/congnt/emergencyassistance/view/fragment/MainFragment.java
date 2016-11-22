@@ -25,22 +25,22 @@ import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
 import com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation;
 import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
+import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
-import com.congnt.emergencyassistance.entity.firebase.LocationForFirebase;
 import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.activity.EmergencyStateActivity;
 import com.congnt.emergencyassistance.view.activity.LoginActivity;
 import com.congnt.emergencyassistance.view.activity.MainActivity;
+import com.congnt.emergencyassistance.view.dialog.DialogFollow;
 import com.congnt.emergencyassistance.view.dialog.DialogSendSMS;
 import com.congnt.reversegeocodecountry.GeocodeCountry;
 import com.congnt.reversegeocodecountry.ReverseGeocodeCountry;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -72,12 +72,11 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private ImageButton ibWalkMode;
     private ImageButton ibTimmer;
     private CountdownView cdvTimmer;
-    //Firebase defination
-    private FirebaseDatabase firebaseDatabase;
     private LinearLayout layoutCountDown;
     private Button btnCancel;
     private MainActivity mainActivity;
-    private ImageButton ibLocation;
+    //    private ImageButton ibLocation;
+    private ImageButton ibFollow;
     private boolean isShareLocation;
 
     public static AwesomeFragment newInstance() {
@@ -94,12 +93,12 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         mainActivity = (MainActivity) getActivity();
         EventBus.getDefault().register(this);
         //init firebase
-        firebaseDatabase = FirebaseDatabase.getInstance();
         //get views
         countrynumber = ((MainActivity) getActivity()).countrynumber;
         ibWalkMode = (ImageButton) rootView.findViewById(R.id.ib_walk_mode);
         ibTimmer = (ImageButton) rootView.findViewById(R.id.ib_timmer);
-        ibLocation = (ImageButton) rootView.findViewById(R.id.ib_location);
+//        ibLocation = (ImageButton) rootView.findViewById(R.id.ib_location);
+        ibFollow = (ImageButton) rootView.findViewById(R.id.ib_follow);
         layoutCountDown = (LinearLayout) rootView.findViewById(R.id.layout_countdown);
         cdvTimmer = (CountdownView) rootView.findViewById(R.id.cdv_timmer);
         btnCancel = (Button) rootView.findViewById(R.id.btn_cancel);
@@ -108,16 +107,11 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         tvSpeed = (TextView) rootView.findViewById(R.id.tv_speed);
         tvMaxSpeed = (TextView) rootView.findViewById(R.id.tv_max_speed);
         tvDistance = (TextView) rootView.findViewById(R.id.tv_distance);
-        //Setup location
-        setupLocation();
-        //Setup sms
-        setupSMS();
         //Init timmer
         initTimmer();
         //Init speech recognizer
         setupSpeechRecognitionService(rootView);
         setupEmergencyNumber(rootView);
-
         //Bind Map Fragment
         mapFragment = (MapFragmentWithFusedLocation) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         mapFragment.setUpdatable(true);
@@ -141,14 +135,16 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
             }
         });*/
+        initListener();
     }
 
-    private void setupLocation() {
-        ibLocation.setOnClickListener(this);
-    }
-
-    private void setupSMS() {
+    private void initListener() {
+        ibFollow.setOnClickListener(this);
         ibWalkMode.setOnClickListener(this);
+        btn_start_stop.setOnClickListener(this);
+        btn_police.setOnClickListener(this);
+        btn_fire.setOnClickListener(this);
+        btn_ambulance.setOnClickListener(this);
     }
 
     private void initTimmer() {
@@ -216,7 +212,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         speechView.setColors(colors);
         speechView.setBarMaxHeightsInDp(heights);
         btn_start_stop = (SwitchCompat) rootView.findViewById(R.id.switch_start_service);
-        btn_start_stop.setOnClickListener(this);
         //If service is running, change start of btn to starty
         btn_start_stop.setChecked(MySharedPreferences.getInstance(getActivity()).isListening.load(false));
     }
@@ -232,10 +227,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         btn_ambulance = (FlatButtonWithIconTop) rootView.findViewById(R.id.btn_call_ambulance);
         //Set Value
         setupEmergencyText();
-        //SetOnClick
-        btn_police.setOnClickListener(this);
-        btn_fire.setOnClickListener(this);
-        btn_ambulance.setOnClickListener(this);
     }
 
     private void setupEmergencyText() {
@@ -280,7 +271,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 }
                 dialogSendSMS.show(getChildFragmentManager(), "SMS");
                 break;
-            case R.id.ib_location:
+            /*case R.id.ib_location:
                 if (isShareLocation) {
                     ibLocation.setImageResource(R.drawable.ic_location_off);
                 } else {
@@ -288,6 +279,10 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 }
                 isShareLocation = !isShareLocation;
                 shareLocation();
+                break;*/
+            case R.id.ib_follow:
+                DialogFollow dialogFollow = new DialogFollow();
+                dialogFollow.show(getChildFragmentManager(), "Follow");
                 break;
         }
     }
@@ -335,6 +330,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
     @Override
     public void onLocationChange(Location location) {
+        ((MainApplication) getActivity().getApplication()).lastLocation = location;
         mapFragment.animateCamera(location, 13);
         //Check country by location
         setupCountry(location);
@@ -345,8 +341,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             if (firebaseUser == null) {//Not login, require login before share location
                 //TODO: Nothing while user not login
             } else {//if User islogged, change data on database
-                LocationForFirebase fLocation = new LocationForFirebase(location.getLatitude(), location.getLongitude());
-                firebaseDatabase.getReference().child("users").child(firebaseUser.getEmail().replace(".", "")).child("location").setValue(fLocation);
+
             }
         }
 

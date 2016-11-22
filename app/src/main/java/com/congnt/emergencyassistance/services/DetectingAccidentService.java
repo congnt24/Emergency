@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.utility.GoogleApiUtil;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
+import com.congnt.emergencyassistance.AppConfig;
+import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_DetectAccident;
@@ -51,7 +53,7 @@ public class DetectingAccidentService extends Service implements SensorEventList
     private static final String TAG = "DetectingAccident";
     private static final int FOREGROUND_FLAGS = 102;
     private static final double VELOCITY_THRESHOLD = 24;
-    private static final double ACCELERATION_THRESHOLD = 4 * 9.8;
+    private static final double ACCELERATION_THRESHOLD = 3 * 9.8;
     private static final double ACCIDENT_THRESHOLD = 1;
     private static final double ACCIDENT_LOW_SPEED_THRESHOLD = 2;
     protected AudioManager mAudioManager;
@@ -88,7 +90,6 @@ public class DetectingAccidentService extends Service implements SensorEventList
         //Location manager
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         mGoogleApiClient = GoogleApiUtil.getInstance().getGoogleApiClient(this, this, this);
-
         // Create intent that will bring our app to the front, as if it was tapped in the app
         // launcher
         Intent showTaskIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -174,7 +175,7 @@ public class DetectingAccidentService extends Service implements SensorEventList
     public boolean estimateAccident() {
         EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech)));
         double accident = currentAcceleration / ACCELERATION_THRESHOLD;
-        if (accident >= ACCIDENT_THRESHOLD && currentSpeech >= VELOCITY_THRESHOLD) {
+        if (accident >= ACCIDENT_THRESHOLD/* && currentSpeech >= VELOCITY_THRESHOLD*/) {
             return true;
         }
         if (currentSpeech >= VELOCITY_THRESHOLD && counter < 30 && accident >= ACCIDENT_THRESHOLD) {
@@ -201,7 +202,7 @@ public class DetectingAccidentService extends Service implements SensorEventList
             if ((curTime - lastUpdate) > DURATION) {
                 lastUpdate = curTime;
                 currentAcceleration = calculateAcceleration(event.values);
-                estimateAccident();
+                sendBroadcastForAccident(estimateAccident());
             }
         }
     }
@@ -221,6 +222,7 @@ public class DetectingAccidentService extends Service implements SensorEventList
 
     @Override
     public void onLocationChanged(Location location) {
+        ((MainApplication) getApplication()).lastLocation = location;
         double lat = (location.getLatitude());
         double lng = (location.getLongitude());
         DecimalFormat df = new DecimalFormat("#.##");
@@ -253,13 +255,23 @@ public class DetectingAccidentService extends Service implements SensorEventList
 
                 }
             }
-            estimateAccident();
+            sendBroadcastForAccident(estimateAccident());
             previousLocation = location;
         }
         String speedMphFormatted = df.format(currentSpeech);
         Log.d(TAG, "onLocationChanged: lat: " + lat + " Lng: " + lng);
         Log.d(TAG, "onLocationChanged: has speed: " + location.hasSpeed() + " Speed calculate: " + String.valueOf(speedMphFormatted) + " - getSpeed(): " + location.getSpeed());
         Toast.makeText(this, "getSpeed(): " + location.getSpeed(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void sendBroadcastForAccident(boolean isAccident) {
+        if (isAccident) {
+            Intent i = new Intent("com.congnt.emergencyasistance.ACCIDENT_RECEIVER");
+            Bundle b = new Bundle();
+            b.putString("type", AppConfig.DETECT_ACCIDENT);
+            i.putExtras(b);
+            sendBroadcast(i);
+        }
     }
 
     public double calculateSSD(Double... arrays) {   //Độ lệch chuẩn
@@ -281,11 +293,11 @@ public class DetectingAccidentService extends Service implements SensorEventList
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setSmallestDisplacement(10);
-        mLocationRequest.setInterval(100);
-        mLocationRequest.setFastestInterval(100);
+        mLocationRequest.setSmallestDisplacement(0);
+        mLocationRequest.setInterval(0);
+        mLocationRequest.setFastestInterval(0);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        requestLocationUpdate();
+//        requestLocationUpdate();
     }
 
     @Override

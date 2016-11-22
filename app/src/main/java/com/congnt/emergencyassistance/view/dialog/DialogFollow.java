@@ -10,18 +10,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
-import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.adapter.ContactSelectAdapter;
@@ -37,13 +34,12 @@ import java.util.List;
  * Created by congnt24 on 31/10/2016.
  */
 
-public class DialogSendSMS extends DialogFragment {
-    private static final String TAG = "DialogSendSMS";
+public class DialogFollow extends DialogFragment {
+    private static final String TAG = "DialogFollow";
     private View rootView;
     private EditText etContent;
     private Spinner spTemplate;
     private RecyclerView recycler;
-    private CheckBox cbIncludeLocation;
     private ContactSelectAdapter adapter;
     private List<ItemContact> listContact;
     private String location = "";
@@ -102,11 +98,6 @@ public class DialogSendSMS extends DialogFragment {
     }
 
     private void sendSMS() {
-        String location = "";
-        if (cbIncludeLocation.isChecked()) {
-            if (!TextUtils.isEmpty(this.location))
-                location = AppConfig.TEMPLATE_GOOGLEMAP_PLACE + this.location;
-        }
         String number = "";
         for (int i = 0; i < adapter.listSelected.size(); i++) {
             number += adapter.listSelected.get(i);
@@ -123,7 +114,6 @@ public class DialogSendSMS extends DialogFragment {
         etContent = (EditText) rootView.findViewById(R.id.et_content);
         spTemplate = (Spinner) rootView.findViewById(R.id.sp_template);
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler_contact);
-        cbIncludeLocation = (CheckBox) rootView.findViewById(R.id.cb_include_location);
         //Setup Spinner
         SettingSpeech setting = null;
         setting = getSettingSpeech(getActivity());

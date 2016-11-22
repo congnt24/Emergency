@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -26,12 +27,14 @@ import com.congnt.androidbasecomponent.utility.VibratorUtil;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
 import com.congnt.androidbasecomponent.view.widget.TransparentSurfaceView;
 import com.congnt.emergencyassistance.AppConfig;
+import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.adapter.ContactAdapter;
 import com.congnt.emergencyassistance.entity.ItemContact;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.services.RecordAudioService;
+import com.congnt.emergencyassistance.view.dialog.DialogSendSMS;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,25 +75,20 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
         if (getIntent().getExtras() != null) {
             Bundle b = getIntent().getExtras();
             //If is detecting accident
-
-
-
             String type = b.getString("type", "POLICE");
-            final String number = b.getString("number", "113");
             delayRunnable = new Runnable() {
                 @Override
                 public void run() {
                     finishCountdown();
                 }
             };
-            handler.postDelayed(delayRunnable, countDownTime);
+
+            if (type == AppConfig.DETECT_ACCIDENT) {
+                handler.postDelayed(delayRunnable, 30 * 1000);
+            } else {
+                handler.postDelayed(delayRunnable, countDownTime);
+            }
         } else {
-            delayRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    finishCountdown();
-                }
-            };
             handler.postDelayed(delayRunnable, countDownTime);
         }
     }
@@ -98,13 +96,26 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
     private void finishCountdown() {
         //Recorder
         startService(new Intent(EmergencyStateActivity.this, RecordAudioService.class));
-        List<ItemContact> listContact;
-        if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_contact_call", false)
-                && (listContact = MySharedPreferences.getInstance(this).listContact.load(null)) != null) {
-            CommunicationUtil.callTo(EmergencyStateActivity.this, listContact.get(0).getContactNumber());
-        } else {
-            CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.police);
+        List<ItemContact> listContact = MySharedPreferences.getInstance(this).listContact.load(null);
+        if (listContact != null) {
+            //SMS
+            if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_contact_sms", false)) {
+                if (listContact.size() > 0) {
+                    Location location = ((MainApplication) getApplication()).lastLocation;
+                    for (int i = 0; i < listContact.size() && i < 3; i++) {
+                        CommunicationUtil.sendSmsAuto(listContact.get(i).getContactNumber(), DialogSendSMS.getSettingSpeech(this).templateMessage.get(0).message + "\n" +
+                                AppConfig.TEMPLATE_GOOGLEMAP_PLACE + location.getLatitude() + "," + location.getLongitude());
+                    }
+                }
+            }
+            //Call
+            if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_contact_call", false)) {
+                CommunicationUtil.callTo(EmergencyStateActivity.this, listContact.get(0).getContactNumber());
+            } else {
+                CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.police);
+            }
         }
+        finish();
     }
 
     private void initViews() {

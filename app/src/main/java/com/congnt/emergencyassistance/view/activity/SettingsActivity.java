@@ -138,6 +138,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSwitchToValue(findPreference("setting_take_picture"));
             bindPreferenceSwitchToValue(findPreference("setting_record_audio"));
             bindPreferenceSwitchToValue(findPreference("setting_contact_call"));
+            bindPreferenceSwitchToValue(findPreference("setting_contact_sms"));
             bindPreferenceSummaryToValue(findPreference("setting_countdown_time"));
             bindPreferenceSummaryToValue(findPreference("setting_record_time"));
         }

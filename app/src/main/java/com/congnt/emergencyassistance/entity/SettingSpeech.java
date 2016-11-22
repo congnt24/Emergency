@@ -14,12 +14,23 @@ public class SettingSpeech {
     public List<Command> ambulance;
     public List<TemplateMessage> templateMessage;
 
+    @Override
+    public String toString() {
+        return "SettingSpeech{" +
+                "countryCode='" + countryCode + '\'' +
+                ", countryName='" + countryName + '\'' +
+                ", police=" + police +
+                ", fire=" + fire +
+                ", ambulance=" + ambulance +
+                ", templateMessage=" + templateMessage +
+                '}';
+    }
+
     public class Command {
         public String command;
     }
 
     public class TemplateMessage {
-        public String mesage;
+        public String message;
     }
-
 }

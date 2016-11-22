@@ -152,8 +152,10 @@
     <string name="max_speed">Max Speed:</string>
     <string name="distance">Distance:</string>
     <string name="enable_contact_call">Enable contact call</string>
-    <string name="enable_contact_call_desc">While emergency is detected, it\'ll call to first contact in list contact instead of emergency number.</string>
+    <string name="enable_contact_call_desc">While emergency is detected, it\'ll call to first person in list contact instead of emergency number.</string>
     <string name="history">History</string>
+    <string name="enable_contact_sms">Enable Contact SMS</string>
+    <string name="enable_contact_sms_desc">While emergency is detected, it\'ll sms to first 3 persons in list contact instead of emergency number.</string>
 
     <string-array name="commands_police">
         <item>Help</item>

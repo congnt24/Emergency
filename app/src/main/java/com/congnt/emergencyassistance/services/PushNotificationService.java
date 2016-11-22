@@ -1,3 +1,4 @@
+/*
 package com.congnt.emergencyassistance.services;
 
 import android.app.NotificationManager;
@@ -11,9 +12,11 @@ import com.congnt.emergencyassistance.view.activity.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+*/
 /**
  * Created by congnt24 on 30/10/2016.
- */
+ *//*
+
 public class PushNotificationService extends FirebaseMessagingService {
     private static final String TAG = "PushNotificationService";
 
@@ -49,3 +52,4 @@ public class PushNotificationService extends FirebaseMessagingService {
         manager.notify(1, builder.build());
     }
 }
+*/

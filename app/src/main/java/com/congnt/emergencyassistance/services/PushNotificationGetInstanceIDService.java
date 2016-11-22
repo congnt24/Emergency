@@ -1,3 +1,4 @@
+/*
 package com.congnt.emergencyassistance.services;
 
 import android.util.Log;
@@ -8,9 +9,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+*/
 /**
  * Created by congnt24 on 30/10/2016.
- */
+ *//*
+
 public class PushNotificationGetInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = "PushNotificationGetInst";
     @Override
@@ -34,3 +37,4 @@ public class PushNotificationGetInstanceIDService extends FirebaseInstanceIdServ
         }
     }
 }
+*/

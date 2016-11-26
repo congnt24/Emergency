@@ -1,6 +1,7 @@
 package com.congnt.emergencyassistance.view.activity;
 
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,12 @@ import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.adapter.HistoryAdapter;
 import com.congnt.emergencyassistance.entity.ItemHistory;
+import com.congnt.emergencyassistance.entity.firebase.User;
+import com.congnt.emergencyassistance.entity.parse.ParseFollow;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +31,9 @@ import java.util.List;
         actionbarType = Activity.ActionBarType.ACTIONBAR_CUSTOM)
 @NavigateUp
 public class HistoryActivity extends AwesomeActivity {
-
-    private static final int REQUEST_CONTACT_CODE = 1;
-    private boolean toggleBoolean = true;
     private RecyclerView recycler;
     private HistoryAdapter adapter;
-    private List<ItemHistory> listHistory;
+    private List<ItemHistory> listHistory = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -43,33 +47,28 @@ public class HistoryActivity extends AwesomeActivity {
 
     @Override
     protected void initialize(View mainView) {
-        listHistory = MySharedPreferences.getInstance(this).listHistoty.load(new ArrayList<ItemHistory>());
+//        listHistory = MySharedPreferences.getInstance(this).listHistoty.load(new ArrayList<ItemHistory>());
+        getFollowFromParse();
         recycler = (RecyclerView) mainView.findViewById(R.id.recycler_contact);
-        recycler.setLayoutManager(new GridLayoutManager(this, 3));
-        adapter = new HistoryAdapter(this, null, null);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new HistoryAdapter(this, listHistory, null);
         recycler.setAdapter(adapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_contact, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.action_add_contact:
-                startActivityForResult(IntentUtil.getContactIntent(), REQUEST_CONTACT_CODE);
-                break;
-            case R.id.action_remove_contact:
-                toggleBoolean = !toggleBoolean;
-                break;
-        }
-        return true;
+    public void getFollowFromParse(){
+        listHistory.clear();
+        User user = MySharedPreferences.getInstance(this).userProfile.load(null);
+        ParseQuery<ParseFollow> query = ParseQuery.getQuery(ParseFollow.class);
+        query.whereEqualTo("user", user.getEmail());
+        query.findInBackground(new FindCallback<ParseFollow>() {
+            @Override
+            public void done(List<ParseFollow> objects, ParseException e) {
+                for (int i = 0; i < objects.size(); i++) {
+                    listHistory.add(new ItemHistory(objects.get(i).getCreatedAt().toString(), "location", "type"));
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

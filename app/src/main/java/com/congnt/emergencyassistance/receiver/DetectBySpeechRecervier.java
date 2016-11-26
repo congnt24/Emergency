@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.congnt.emergencyassistance.AppConfig;
@@ -25,7 +26,7 @@ public class DetectBySpeechRecervier extends BroadcastReceiver {
         // Vibrate the mobile phone
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            if (extras.getString("type").equalsIgnoreCase(AppConfig.DETECT_ACCIDENT)) {
+            if (!TextUtils.isEmpty(extras.getString("type")) && extras.getString("type").equalsIgnoreCase(AppConfig.DETECT_ACCIDENT)) {
                 Intent i = new Intent();
                 i.setClassName(context, EmergencyStateActivity.class.getName());
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

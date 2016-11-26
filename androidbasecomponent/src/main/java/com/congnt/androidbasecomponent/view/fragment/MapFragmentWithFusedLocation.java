@@ -2,6 +2,7 @@ package com.congnt.androidbasecomponent.view.fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationManager;
@@ -31,6 +32,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
 
@@ -46,7 +49,7 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
     private boolean updatable;
     private Location mLastLocation;
     private Marker mCurrLocationMarker;
-    private LocationRequest mLocationRequest;
+    private LocationRequest mLocationRequest = new LocationRequest();
     private LocationManager locationManager;
     private TextView tv_address;
     private SupportMapFragment mapFragment;
@@ -95,16 +98,18 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
 //            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 //            startActivity(intent);
 //        }
+        setLocationRequest(1000, 1000);
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        if (PermissionUtil.getInstance(context).checkMultiPermission(locationPermission)) {
-            mMap.getUiSettings().setScrollGesturesEnabled(enableGestures);
-            mGoogleApiClient = GoogleApiUtil.getInstance().getGoogleApiClient(context, this, this);
-            mMap.setMyLocationEnabled(true);
-        }
+    public void setLocationRequest(int displacement, int duration) {
+        mLocationRequest.setSmallestDisplacement(displacement);
+        mLocationRequest.setInterval(duration);
+        mLocationRequest.setFastestInterval(duration);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+    }
+
+    public void setUpdatable(boolean updatable) {
+        this.updatable = updatable;
     }
 
     public void movingCamera(Location location, int zoom) {
@@ -143,6 +148,49 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
         }.execute();
     }
 
+    //Marker
+
+    /**
+     * Add marker to the map
+     * @param title title of marker
+     * @param location  location of marker
+     */
+    public void addMarker(String title, Location location) {
+        addMarker(title, location.getLatitude(), location.getLongitude());
+    }
+    public void addMarker(String title, String lat, String lng) {
+        addMarker(title, Double.parseDouble(lat), Double.parseDouble(lng));
+    }
+    public void addMarker(String title, double lat, double lng) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        LatLng latLng = new LatLng(lat, lng);
+        // Position of Marker on Map
+        markerOptions.position(latLng);
+        // Adding Title to the Marker
+        markerOptions.title(title);
+        // Adding Marker to the Camera.
+        Marker m = getMap().addMarker(markerOptions);
+        // Adding colour to the marker
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+    }
+    //Polyline
+
+    public void addPolyline(Iterable<LatLng> list){
+        PolylineOptions options = new PolylineOptions()
+                .addAll(list)
+                .color(Color.BLUE);
+        getMap().addPolyline(options);
+    }
+
+    public void addPolyline(LatLng... list){
+        PolylineOptions options = new PolylineOptions()
+                .add(list)
+                .color(Color.BLUE);
+        getMap().addPolyline(options);
+    }
+
+
+
     public void requestLocationUpdate() {
         if (mGoogleApiClient != null && PermissionUtil.getInstance(getActivity())
                 .checkMultiPermission(locationPermission)) {
@@ -154,6 +202,16 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
         if (mGoogleApiClient != null && PermissionUtil.getInstance(getActivity())
                 .checkMultiPermission(locationPermission)) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (PermissionUtil.getInstance(context).checkMultiPermission(locationPermission)) {
+            mMap.getUiSettings().setScrollGesturesEnabled(enableGestures);
+            mGoogleApiClient = GoogleApiUtil.getInstance().getGoogleApiClient(context, this, this);
+            mMap.setMyLocationEnabled(true);
         }
     }
 
@@ -184,20 +242,10 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
             removeLocationUpdate();
         }
     }
-
-    public void setUpdatable(boolean updatable) {
-        this.updatable = updatable;
-    }
-
     //Methods were generated by implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setSmallestDisplacement(1000);
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         requestLocationUpdate();
         if (onMapListener != null) {
             onMapListener.onConnected();
@@ -213,20 +261,6 @@ public class MapFragmentWithFusedLocation extends AwesomeFragment implements OnM
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
-    public void addMarker(String title, Location location) {
-        MarkerOptions markerOptions = new MarkerOptions();
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        // Position of Marker on Map
-        markerOptions.position(latLng);
-        // Adding Title to the Marker
-        markerOptions.title(title);
-        // Adding Marker to the Camera.
-        Marker m = getMap().addMarker(markerOptions);
-        // Adding colour to the marker
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-    }
-
 
 
     public interface OnMapListener {

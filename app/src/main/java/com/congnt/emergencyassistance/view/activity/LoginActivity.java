@@ -25,7 +25,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -34,7 +33,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //Firebase defination
 
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    //    private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -44,19 +43,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setupActionBar();
         //Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
+//        mAuthListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user != null) {
+//                    // User is signed in
+//                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+//                } else {
+//                    // User is signed out
+//                    Log.d(TAG, "onAuthStateChanged:signed_out");
+//                }
+//            }
+//        };
         mGoogleApiClient = FireBaseUtil.buildGoogleApiClient(this, this);
 
         //Sign in with google
@@ -72,15 +71,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+//        mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+//        if (mAuthListener != null) {
+//            mAuth.removeAuthStateListener(mAuthListener);
+//        }
     }
 
     @Override
@@ -116,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 });
     }
 
-    private void signOut() {
+    public void signOut() {
         // Firebase sign out
         mAuth.signOut();
         // Google sign out

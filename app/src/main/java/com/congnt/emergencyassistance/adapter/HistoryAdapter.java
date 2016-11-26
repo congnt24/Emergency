@@ -12,7 +12,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
 import com.congnt.androidbasecomponent.utility.ContactUtil;
 import com.congnt.emergencyassistance.R;
-import com.congnt.emergencyassistance.entity.ItemContact;
+import com.congnt.emergencyassistance.entity.ItemHistory;
 
 import java.util.List;
 
@@ -22,16 +22,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by congnt24 on 04/10/2016.
  */
 
-public class HistoryAdapter extends AwesomeRecyclerAdapter<HistoryAdapter.ViewHolder, ItemContact> {
+public class HistoryAdapter extends AwesomeRecyclerAdapter<HistoryAdapter.ViewHolder, ItemHistory> {
 
 
-    public HistoryAdapter(Context context, List<ItemContact> mList, OnClickListener<ItemContact> onClickListener) {
+    public HistoryAdapter(Context context, List<ItemHistory> mList, OnClickListener<ItemHistory> onClickListener) {
         super(context, mList, onClickListener);
     }
 
     @Override
     protected int getItemLayoutId() {
-        return R.layout.item_emergency_contacts;
+        return R.layout.item_history;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class HistoryAdapter extends AwesomeRecyclerAdapter<HistoryAdapter.ViewHo
 
     @Override
     protected void bindHolder(ViewHolder holder, int position) {
-        ItemContact item = mList.get(holder.getAdapterPosition());
+        ItemHistory item = mList.get(holder.getAdapterPosition());
         if (item != null) {
             holder.bindView(item);
         }
@@ -54,32 +54,17 @@ public class HistoryAdapter extends AwesomeRecyclerAdapter<HistoryAdapter.ViewHo
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivContactPhotoNoImage;
-        CircleImageView ivContactPhoto;
-        TextView tvContactName;
-
+        public TextView item_history_location;
+        public TextView item_history_time;
         public ViewHolder(View itemView) {
             super(itemView);
-            ivContactPhoto = (CircleImageView) itemView.findViewById(R.id.iv_contact_photo);
-            ivContactPhotoNoImage = (ImageView) itemView.findViewById(R.id.iv_contact_photo_no_image);
-            tvContactName = (TextView) itemView.findViewById(R.id.tv_contact_name);
-
+            item_history_location = (TextView) itemView.findViewById(R.id.item_history_location);
+            item_history_time = (TextView) itemView.findViewById(R.id.item_history_time);
         }
 
-        public void bindView(final ItemContact item) {
-            tvContactName.setText(item.getContactName());
-            Bitmap contactPhoto = ContactUtil.retrieveContactPhoto(context, item.getUriContact());
-            if (contactPhoto != null) {
-                ivContactPhotoNoImage.setVisibility(View.GONE);
-                ivContactPhoto.setVisibility(View.VISIBLE);
-                ivContactPhoto.setImageBitmap(contactPhoto);
-            } else {
-                ivContactPhotoNoImage.setVisibility(View.VISIBLE);
-                ivContactPhoto.setVisibility(View.GONE);
-                TextDrawable drawable = TextDrawable.builder()
-                        .buildRound(item.getContactName().toUpperCase().charAt(0) + "", Color.RED);
-                ivContactPhotoNoImage.setImageDrawable(drawable);
-            }
+        public void bindView(final ItemHistory item) {
+            item_history_location.setText(item.getLocation());
+            item_history_time.setText(item.getTime());
         }
     }
 

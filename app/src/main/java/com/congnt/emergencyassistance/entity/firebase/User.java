@@ -5,6 +5,15 @@ package com.congnt.emergencyassistance.entity.firebase;
  */
 
 public class User {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String email;
     public String name;
     public String date;
     public String address;

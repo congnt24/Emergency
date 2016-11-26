@@ -20,6 +20,7 @@ import android.widget.Spinner;
 
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.emergencyassistance.MySharedPreferences;
+import com.congnt.emergencyassistance.OnEventListener;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.adapter.ContactSelectAdapter;
 import com.congnt.emergencyassistance.entity.ItemContact;
@@ -44,6 +45,11 @@ public class DialogFollow extends DialogFragment {
     private List<ItemContact> listContact;
     private String location = "";
     private String[] templateMsg;
+    private OnEventListener<Void> listener;
+
+    public void setOnEventListener(OnEventListener<Void> listener) {
+        this.listener = listener;
+    }
 
     public static SettingSpeech getSettingSpeech(Context context) {
         SettingSpeech setting = null;
@@ -76,7 +82,7 @@ public class DialogFollow extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
-        rootView = inflater.inflate(R.layout.dialog_layout_sms, null);
+        rootView = inflater.inflate(R.layout.dialog_layout_follow, null);
         initView();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(rootView);
@@ -84,6 +90,7 @@ public class DialogFollow extends DialogFragment {
                 .setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (listener != null) listener.onSuccess(null);
                         sendSMS();
                         dialog.dismiss();
                     }
@@ -91,6 +98,7 @@ public class DialogFollow extends DialogFragment {
                 .setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (listener != null) listener.onError(null);
                         dialog.dismiss();
                     }
                 });

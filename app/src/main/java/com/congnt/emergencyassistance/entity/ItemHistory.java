@@ -17,10 +17,41 @@ public class ItemHistory {
     public ItemHistory() {
     }
 
-
     public ItemHistory(String time, String location, String type) {
         this.time = time;
         this.location = location;
         this.type = type;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getCommunication() {
+        return communication;
+    }
+
+    public String getFrontCamImagePath() {
+        return frontCamImagePath;
+    }
+
+    public String getRearCamImagePath() {
+        return rearCamImagePath;
+    }
+
+    public String getAudio() {
+        return audio;
     }
 }

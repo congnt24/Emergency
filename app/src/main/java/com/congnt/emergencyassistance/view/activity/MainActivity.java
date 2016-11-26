@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeActivity;
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
@@ -33,7 +34,7 @@ import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
-import com.congnt.androidbasecomponent.utility.FileUtil;
+import com.congnt.androidbasecomponent.utility.GoogleApiUtil;
 import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.NetworkUtil;
@@ -55,9 +56,11 @@ import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.fragment.EmergencySoundFragment;
 import com.congnt.emergencyassistance.view.fragment.MainFragment;
 import com.congnt.emergencyassistance.view.fragment.NearByFragment;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -310,6 +313,12 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             case R.id.nav_change_country:
                 startActivity(new Intent(this, ChangeCountryActivity.class));
                 break;
+            case R.id.nav_history:
+                startActivity(new Intent(this, HistoryActivity.class));
+                break;
+            case R.id.nav_follow:
+                startActivity(new Intent(this, FollowActivity.class));
+                break;
             case R.id.nav_share:
                 CommunicationUtil.shareAll(this, "Share", getString(R.string.share_app_content));
                 break;
@@ -320,7 +329,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.nav_logout:
-
+                userLogout();
                 break;
         }
         return true;
@@ -377,13 +386,13 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_PROFILE:
-                    bindUserData();
+                    bindUserDataLogin();
                     break;
                 case REQUEST_LOGIN:
-                    bindUserData();
+                    bindUserDataLogin();
                     break;
                 case REQUEST_LOGIN_FOR_SHARE_LOCATION:
-                    bindUserData();
+                    bindUserDataLogin();
                     if (isLogged) {
                         switchCompat.setChecked(MySharedPreferences.getInstance(this).shareLocationState.load(false));
                     }
@@ -394,14 +403,14 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 
     @Override
     protected void onResume() {
-        bindUserData();
+        bindUserDataLogin();
         super.onResume();
     }
 
     /**
      * Update user profile when user was login or update profile
      */
-    public void bindUserData() {
+    public void bindUserDataLogin() {
         //Bind user
         FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
         User user = MySharedPreferences.getInstance(this).userProfile.load(null);
@@ -410,6 +419,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                 user = new User();
             }
             isLogged = true;
+            user.setEmail(fuser.getEmail());
             user.setName(fuser.getDisplayName());
             user.setPhotoUrl(fuser.getPhotoUrl().toString());
             MySharedPreferences.getInstance(this).userProfile.save(user);
@@ -420,6 +430,15 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             if (fuser != null) {
                 mTvHeader.setText(fuser.getDisplayName());
             }
+        }
+    }
+
+    private void userLogout() {
+        FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
+        MySharedPreferences.getInstance(this).userProfile.save(null);
+        if (fuser!=null){
+            isLogged = false;
+            FirebaseAuth.getInstance().signOut();
         }
     }
 

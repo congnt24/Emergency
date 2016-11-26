@@ -122,6 +122,10 @@
             android:name=".view.activity.CallActivity"
             android:label="@string/title_activity_emergency_contact">
         </activity>
+        <activity
+            android:name=".view.activity.FollowActivity"
+            android:label="@string/title_activity_follow">
+        </activity>
 
         <!--Receiver-->
         <receiver
@@ -160,7 +164,7 @@
             android:name=".services.SpeechRecognitionService"
             android:label="Speech Recognition"
             android:permission="android.permission.RECORD_AUDIO" />
-        <service
+    <!--    <service
             android:name=".services.PushNotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
@@ -171,7 +175,7 @@
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
-        </service>
+        </service>-->
 
     </application>
 

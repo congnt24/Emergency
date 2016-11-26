@@ -18,13 +18,13 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        PermissionUtil.getInstance(this);
         ParseObject.registerSubclass(ParseFollow.class);
         Parse.initialize(new Parse.Configuration.Builder(this)
-                .server(AppConfig.PARSE_SERVER)
-                .clientKey(AppConfig.PARSE_CLIENT_KEY)
                 .applicationId(AppConfig.PARSE_APP_ID)
+                .clientKey(AppConfig.PARSE_CLIENT_KEY)
+                .server(AppConfig.PARSE_SERVER)
                 .build());
+        PermissionUtil.getInstance(this);
     }
 
 }

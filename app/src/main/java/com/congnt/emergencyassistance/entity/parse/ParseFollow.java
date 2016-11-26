@@ -1,22 +1,26 @@
 package com.congnt.emergencyassistance.entity.parse;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by congnt24 on 22/11/2016.
  */
-
+@ParseClassName("Follow")
 public class ParseFollow extends ParseObject {
     public ParseFollow() {
     }
 
-    public ParseFollow(String user, String acc, String speed, List<LocationFollow> list) {
+    public ParseFollow(String user, String acc, String speed, List<String> list) {
         put("user", user);
         put("accelerometer", acc);
         put("speed", speed);
-        addAll("", list);
+        addAll("locations", list);
     }
 
     public ParseFollow(String theClassName) {
@@ -35,17 +39,22 @@ public class ParseFollow extends ParseObject {
         return getString("speed");
     }
 
-    public List<LocationFollow> getList() {
+    public List<String> getList() {
         return getList("locations");
     }
 
-    public class LocationFollow {
-        public String lat;
-        public String lng;
-
-        public LocationFollow(String lat, String lng) {
-            this.lat = lat;
-            this.lng = lng;
+    public List<LatLng> getListLatLng() {
+        List<String> list = getList();
+        List<LatLng> listLatLng = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            LocationFollow lf = getLocationFollow(list.get(i));
+            listLatLng.add(new LatLng(Double.parseDouble(lf.lat), Double.parseDouble(lf.lng)));
         }
+        return listLatLng;
     }
+
+    public static LocationFollow getLocationFollow(String s) {
+        return new Gson().fromJson(s, LocationFollow.class);
+    }
+
 }

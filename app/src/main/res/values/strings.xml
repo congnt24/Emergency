@@ -156,6 +156,7 @@
     <string name="history">History</string>
     <string name="enable_contact_sms">Enable Contact SMS</string>
     <string name="enable_contact_sms_desc">While emergency is detected, it\'ll sms to first 3 persons in list contact instead of emergency number.</string>
+    <string name="title_activity_follow">Follow</string>
 
     <string-array name="commands_police">
         <item>Help</item>

@@ -22,11 +22,15 @@ public class GoogleApiUtil {
 
     public synchronized GoogleApiClient getGoogleApiClient(Context context, GoogleApiClient.ConnectionCallbacks connectionCallbacks, GoogleApiClient.OnConnectionFailedListener failedListener) {
 //        if (mGoogleApiClient == null) {
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks(connectionCallbacks)
-                .addOnConnectionFailedListener(failedListener)
-                .addApi(LocationServices.API)
-                .build();
+        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(context)
+                .addApi(LocationServices.API);
+        if (connectionCallbacks != null) {
+            builder.addConnectionCallbacks(connectionCallbacks);
+        }
+        if (failedListener != null) {
+            builder.addOnConnectionFailedListener(failedListener);
+        }
+        mGoogleApiClient = builder.build();
         mGoogleApiClient.connect();
 //        }
         return mGoogleApiClient;

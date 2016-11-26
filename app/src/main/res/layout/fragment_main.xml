@@ -105,6 +105,7 @@
         android:src="@drawable/ic_timer" />
 
     <ImageButton
+        android:visibility="gone"
         android:id="@+id/ib_follow"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -112,14 +113,15 @@
         android:layout_marginTop="4dp"
         android:background="@drawable/bg_circle"
         android:src="@drawable/ic_directions_run" />
-    <!--    <ImageButton
-            android:id="@+id/ib_location"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/ib_timmer"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/bg_circle"
-            android:src="@drawable/ic_location_off" />-->
+
+    <ImageButton
+        android:id="@+id/ib_location"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/ib_follow"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_circle"
+        android:src="@drawable/ic_location_off" />
     <!--<android.support.v7.widget.SwitchCompat
         android:id="@+id/sw_share_location"
         android:layout_width="wrap_content"

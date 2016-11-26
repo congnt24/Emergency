@@ -6,9 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -25,12 +28,17 @@ import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
 import com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation;
 import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
+import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.MySharedPreferences;
+import com.congnt.emergencyassistance.OnEventListener;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
+import com.congnt.emergencyassistance.entity.firebase.User;
+import com.congnt.emergencyassistance.entity.parse.LocationFollow;
+import com.congnt.emergencyassistance.entity.parse.ParseFollow;
 import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.activity.EmergencyStateActivity;
 import com.congnt.emergencyassistance.view.activity.LoginActivity;
@@ -39,11 +47,16 @@ import com.congnt.emergencyassistance.view.dialog.DialogFollow;
 import com.congnt.emergencyassistance.view.dialog.DialogSendSMS;
 import com.congnt.reversegeocodecountry.GeocodeCountry;
 import com.congnt.reversegeocodecountry.ReverseGeocodeCountry;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.iwgang.countdownview.CountdownView;
 
@@ -52,6 +65,7 @@ import cn.iwgang.countdownview.CountdownView;
  */
 
 public class MainFragment extends AwesomeFragment implements View.OnClickListener, MapFragmentWithFusedLocation.OnMapListener {
+    private static final String TAG = "MainFragment";
     private static final int DIALOG_POLICE = 1;
     private static final int DIALOG_AMBULANCE = 3;
     private static final int DIALOG_FIRE = 2;
@@ -75,9 +89,11 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private LinearLayout layoutCountDown;
     private Button btnCancel;
     private MainActivity mainActivity;
-    //    private ImageButton ibLocation;
-    private ImageButton ibFollow;
+    private ImageButton ibLocation;
+//    private ImageButton ibFollow;
     private boolean isShareLocation;
+    private Handler handler = new Handler();
+    private String currentParseId;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -97,8 +113,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         countrynumber = ((MainActivity) getActivity()).countrynumber;
         ibWalkMode = (ImageButton) rootView.findViewById(R.id.ib_walk_mode);
         ibTimmer = (ImageButton) rootView.findViewById(R.id.ib_timmer);
-//        ibLocation = (ImageButton) rootView.findViewById(R.id.ib_location);
-        ibFollow = (ImageButton) rootView.findViewById(R.id.ib_follow);
+        ibLocation = (ImageButton) rootView.findViewById(R.id.ib_location);
+//        ibFollow = (ImageButton) rootView.findViewById(R.id.ib_follow);
         layoutCountDown = (LinearLayout) rootView.findViewById(R.id.layout_countdown);
         cdvTimmer = (CountdownView) rootView.findViewById(R.id.cdv_timmer);
         btnCancel = (Button) rootView.findViewById(R.id.btn_cancel);
@@ -114,7 +130,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         setupEmergencyNumber(rootView);
         //Bind Map Fragment
         mapFragment = (MapFragmentWithFusedLocation) getChildFragmentManager().findFragmentById(R.id.map_fragment);
-        mapFragment.setUpdatable(true);
+        mapFragment.setUpdatable(false);
         mapFragment.setScrollGesturesEnabled(true);
         mapFragment.setOnMapListener(this);
 
@@ -139,7 +155,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     }
 
     private void initListener() {
-        ibFollow.setOnClickListener(this);
+        ibLocation.setOnClickListener(this);
+//        ibFollow.setOnClickListener(this);
         ibWalkMode.setOnClickListener(this);
         btn_start_stop.setOnClickListener(this);
         btn_police.setOnClickListener(this);
@@ -271,15 +288,29 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 }
                 dialogSendSMS.show(getChildFragmentManager(), "SMS");
                 break;
-            /*case R.id.ib_location:
-                if (isShareLocation) {
+            case R.id.ib_location:
+                if (!isShareLocation) {  //enable
+                    DialogFollow dialogFollow = new DialogFollow();
+                    dialogFollow.setOnEventListener(new OnEventListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            ibLocation.setImageResource(R.drawable.ic_location_on);
+                            isShareLocation = true;
+                            shareLocation();
+                        }
+
+                        @Override
+                        public void onError(Void aVoid) {
+
+                        }
+                    });
+                    dialogFollow.show(getChildFragmentManager(), "Follow");
+                } else {    //diable
                     ibLocation.setImageResource(R.drawable.ic_location_off);
-                } else {
-                    ibLocation.setImageResource(R.drawable.ic_location_on);
+                    isShareLocation = false;
+                    stopUpdateLocationToParseSErver();
                 }
-                isShareLocation = !isShareLocation;
-                shareLocation();
-                break;*/
+                break;
             case R.id.ib_follow:
                 DialogFollow dialogFollow = new DialogFollow();
                 dialogFollow.show(getChildFragmentManager(), "Follow");
@@ -289,12 +320,62 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
     private void shareLocation() {
         if (mainActivity.isLogged) {
+//            MySharedPreferences.getInstance(mainActivity).
             MySharedPreferences.getInstance(mainActivity).shareLocationState.save(isShareLocation);
+            if (isShareLocation) {
+                updateLocationToParseServer();
+            }
         } else {
             //Start login activity for result
             Intent intent = new Intent(mainActivity, LoginActivity.class);
             startActivityForResult(intent, MainActivity.REQUEST_LOGIN_FOR_SHARE_LOCATION);
         }
+    }
+
+    List<String> listLocation = new ArrayList<>();
+
+    private void updateLocationToParseServer() {
+        mapFragment.setUpdatable(true);
+        mapFragment.setLocationRequest(AppConfig.PARSE_UPDATE_LOCATION_DISPLACEMENT, AppConfig.PARSE_UPDATE_LOCATION_DURATION);
+        mapFragment.requestLocationUpdate();
+        final User user = MySharedPreferences.getInstance(mainActivity).userProfile.load(null);
+        listLocation.clear();
+        currentParseId = "";
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MainApplication application = (MainApplication) getActivity().getApplication();
+                listLocation.add(new LocationFollow(application.lastLocation).toJson());
+                if (TextUtils.isEmpty(currentParseId)) {
+                    final ParseFollow parseFollow = new ParseFollow(user.getEmail(), "0", "0", listLocation);
+                    parseFollow.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                currentParseId = parseFollow.getObjectId();
+                            }
+                        }
+                    });
+                }else{
+                    ParseQuery<ParseFollow> query = ParseQuery.getQuery(ParseFollow.class);
+                    query.getInBackground(currentParseId, new GetCallback<ParseFollow>() {
+                        public void done(ParseFollow follow, ParseException e) {
+                            if (e == null) {
+                                follow.put("locations", listLocation);
+                                follow.saveInBackground();
+                            }
+                        }
+                    });
+                }
+                handler.postDelayed(this, AppConfig.PARSE_DELAY_DURATION);
+            }
+        }, AppConfig.PARSE_DELAY_DURATION);
+    }
+
+    private void stopUpdateLocationToParseSErver() {
+        mapFragment.removeLocationUpdate();
+        mapFragment.setLocationRequest(1000, 1000);
+        handler.removeCallbacksAndMessages(null);
     }
 
     public void call(int dialogType) {
@@ -335,7 +416,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         //Check country by location
         setupCountry(location);
         //update location to friend using firebase if option share location is enable
-        if (MySharedPreferences.getInstance(getActivity()).shareLocationState.load(false)) {//is share location
+        /*if (MySharedPreferences.getInstance(getActivity()).shareLocationState.load(false)) {//is share location
             //Get firebase user
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             if (firebaseUser == null) {//Not login, require login before share location
@@ -343,7 +424,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             } else {//if User islogged, change data on database
 
             }
-        }
+        }*/
 
     }
 

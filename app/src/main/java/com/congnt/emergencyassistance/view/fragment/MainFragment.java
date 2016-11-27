@@ -37,6 +37,8 @@ import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationFol
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationService;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
+import com.congnt.emergencyassistance.entity.firebase.User;
+import com.congnt.emergencyassistance.entity.parse.ParseFollow;
 import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.activity.EmergencyStateActivity;
 import com.congnt.emergencyassistance.view.activity.LoginActivity;
@@ -45,6 +47,8 @@ import com.congnt.emergencyassistance.view.dialog.DialogFollow;
 import com.congnt.emergencyassistance.view.dialog.DialogSendSMS;
 import com.congnt.reversegeocodecountry.GeocodeCountry;
 import com.congnt.reversegeocodecountry.ReverseGeocodeCountry;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -314,7 +318,17 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             MySharedPreferences.getInstance(mainActivity).shareLocationState.save(isShareLocation);
             if (isShareLocation) {
                 //run follow service
-                EventBus.getDefault().post(new EBE_StartLocationFollowService(true));
+                User user = MySharedPreferences.getInstance(mainActivity).userProfile.load(null);
+                final ParseFollow parseFollow = new ParseFollow(user.getEmail(), "0", "0", new ArrayList<String>());
+                parseFollow.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            currentParseId = parseFollow.getObjectId();
+                        }
+                    }
+                });
+                EventBus.getDefault().post(new EBE_StartLocationFollowService(true, currentParseId));
 //                updateLocationToParseServer();
             }
         } else {
@@ -323,8 +337,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             startActivityForResult(intent, MainActivity.REQUEST_LOGIN_FOR_SHARE_LOCATION);
         }
     }
-
-    List<String> listLocation = new ArrayList<>();
 
     public void call(int dialogType) {
         String title = "";

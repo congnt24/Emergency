@@ -8,10 +8,10 @@ public class EBE_StartLocationFollowService extends EBE_StartBase<Boolean> {
     public EBE_StartLocationFollowService(Boolean aBoolean) {
         super(aBoolean);
     }
-    public Boolean isForeground = false;
+    public String objectId;
 
-    public EBE_StartLocationFollowService(Boolean value, Boolean isForeground) {
+    public EBE_StartLocationFollowService(Boolean value, String objectId) {
         super(value);
-        this.isForeground = isForeground;
+        this.objectId = objectId;
     }
 }

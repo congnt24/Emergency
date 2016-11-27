@@ -6,17 +6,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.congnt.androidbasecomponent.utility.GoogleApiUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
 import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MainApplication;
-import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationFollowService;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationService;
-import com.congnt.emergencyassistance.entity.firebase.User;
 import com.congnt.emergencyassistance.entity.parse.LocationFollow;
 import com.congnt.emergencyassistance.entity.parse.ParseFollow;
 import com.google.android.gms.common.ConnectionResult;
@@ -27,7 +24,6 @@ import com.google.android.gms.location.LocationServices;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,7 +43,6 @@ public class LocationService extends BaseForegroundService implements LocationLi
     private String currentParseId;
     private boolean isFollow;
     private MainApplication application;
-    private User user;
     private long cache_displacement;
     private long cache_duration;
 
@@ -93,7 +88,7 @@ public class LocationService extends BaseForegroundService implements LocationLi
     public void onEvent(EBE_StartLocationFollowService item) {
         stopListening();
         if (item.getValue()) {
-            user = MySharedPreferences.getInstance(this).userProfile.load(null);
+            currentParseId = "" + item.objectId;
             updateLocationToParseServer();
         } else {
             stopUpdateLocationToParseSErver();
@@ -139,27 +134,15 @@ public class LocationService extends BaseForegroundService implements LocationLi
         EventBus.getDefault().post(location);
         if (isFollow) {
             listLocation.add(new LocationFollow(application.lastLocation).toJson());
-            if (TextUtils.isEmpty(currentParseId)) {
-                final ParseFollow parseFollow = new ParseFollow(user.getEmail(), "0", "0", listLocation);
-                parseFollow.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            currentParseId = parseFollow.getObjectId();
-                        }
+            ParseQuery<ParseFollow> query = ParseQuery.getQuery(ParseFollow.class);
+            query.getInBackground(currentParseId, new GetCallback<ParseFollow>() {
+                public void done(ParseFollow follow, ParseException e) {
+                    if (e == null) {
+                        follow.put("locations", listLocation);
+                        follow.saveInBackground();
                     }
-                });
-            } else {
-                ParseQuery<ParseFollow> query = ParseQuery.getQuery(ParseFollow.class);
-                query.getInBackground(currentParseId, new GetCallback<ParseFollow>() {
-                    public void done(ParseFollow follow, ParseException e) {
-                        if (e == null) {
-                            follow.put("locations", listLocation);
-                            follow.saveInBackground();
-                        }
-                    }
-                });
-            }
+                }
+            });
         }
     }
 
@@ -182,10 +165,9 @@ public class LocationService extends BaseForegroundService implements LocationLi
         //change duration and displacement
         cache_displacement = application.getRequest_displacement();
         cache_duration = application.getRequest_duration();
-        application.setRequest_displacement(0);
-        application.setRequest_duration(2000);
+        application.setRequest_displacement(AppConfig.PARSE_UPDATE_LOCATION_DISPLACEMENT);
+        application.setRequest_duration(AppConfig.PARSE_DELAY_DURATION);
         listLocation.clear();
-        currentParseId = "";
 
     }
 

@@ -6,6 +6,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 
+import com.google.android.gms.location.LocationRequest;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -60,5 +62,12 @@ public class LocationUtil {
             if (i < levelDetail - 1) str += ", ";
         }
         return str;
+    }
+
+    public static void setLocationRequest(LocationRequest mLocationRequest, long displacement, long duration) {
+        mLocationRequest.setSmallestDisplacement(displacement);
+        mLocationRequest.setInterval(duration);
+        mLocationRequest.setFastestInterval(duration);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 }

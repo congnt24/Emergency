@@ -20,6 +20,7 @@ import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.entity.DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartDetectingAccident;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationService;
 import com.congnt.emergencyassistance.util.LocationUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Timer;
 
 @TargetApi(Build.VERSION_CODES.KITKAT)
-public class DetectingAccidentServiceNew extends BaseForegroundService<EBE_StartDetectingAccident> implements SensorEventListener2 {
+public class DetectingAccidentServiceNew extends BaseForegroundService implements SensorEventListener2 {
     private static final String TAG = "DetectingAccident";
     private static final int DETECTING_ACCIDENT_FLAGS = 102;
     private static final double VELOCITY_THRESHOLD = 24;
@@ -56,16 +57,25 @@ public class DetectingAccidentServiceNew extends BaseForegroundService<EBE_Start
     private Timer timer;
 
     @Override
-    protected void initCreate() {
+    protected void initOnCreate() {
         ticker = "Listening for detecting accident while traveling in the car";
         title = " Detecting accident service";
         text = " Listening for your accident";
-
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        EventBus.getDefault().register(this);
+//        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         //Init sensor manager
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
+    }
+
+    @Subscribe
+    public void onEvent(EBE_StartDetectingAccident item) {
+        if (item.getValue()) {
+            startListening();
+        } else {
+            stopListening();
+        }
     }
 
     @Override
@@ -83,6 +93,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService<EBE_Start
     protected int getFlagForeground() {
         return DETECTING_ACCIDENT_FLAGS;
     }
+
     @Override
     public void onFlushCompleted(Sensor sensor) {
 
@@ -107,7 +118,9 @@ public class DetectingAccidentServiceNew extends BaseForegroundService<EBE_Start
     public boolean estimateAccident() {
         EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech)));
         double accident = currentAcceleration / ACCELERATION_THRESHOLD;
-        if (accident >= ACCIDENT_THRESHOLD/* && currentSpeech >= VELOCITY_THRESHOLD*/) {
+        if (accident >= ACCIDENT_THRESHOLD
+/* && currentSpeech >= VELOCITY_THRESHOLD*/
+                ) {
             return true;
         }
         if (currentSpeech >= VELOCITY_THRESHOLD && counter < 30 && accident >= ACCIDENT_THRESHOLD) {
@@ -124,6 +137,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService<EBE_Start
     public double calculateAcceleration(float[] values) {
         int sum = 0;
         for (int i = 0; i < values.length; i++) {
+//            Log.d(TAG, "calculateAcceleration: "+values[i]);
             sum += values[i] * values[i];
         }
         return Math.sqrt(sum);
@@ -136,6 +150,9 @@ public class DetectingAccidentServiceNew extends BaseForegroundService<EBE_Start
 
     @Subscribe
     public void onLocationChanged(Location location) {
+        if (!isListening) {
+            return;
+        }
         ((MainApplication) getApplication()).lastLocation = location;
         double lat = (location.getLatitude());
         double lng = (location.getLongitude());
@@ -175,7 +192,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService<EBE_Start
         String speedMphFormatted = df.format(currentSpeech);
         Log.d(TAG, "onLocationChanged: lat: " + lat + " Lng: " + lng);
         Log.d(TAG, "onLocationChanged: has speed: " + location.hasSpeed() + " Speed calculate: " + String.valueOf(speedMphFormatted) + " - getSpeed(): " + location.getSpeed());
-        Toast.makeText(this, "getSpeed(): " + location.getSpeed(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "getSpeed(): " + location.getSpeed(), Toast.LENGTH_SHORT).show();
     }
 
     private void sendBroadcastForAccident(boolean isAccident) {

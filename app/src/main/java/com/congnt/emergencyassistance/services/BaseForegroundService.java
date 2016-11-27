@@ -10,7 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
 import com.congnt.emergencyassistance.R;
-import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_Base;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartBase;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationService;
 import com.congnt.emergencyassistance.view.activity.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,17 +21,17 @@ import org.greenrobot.eventbus.Subscribe;
  * Created by congnt24 on 26/11/2016.
  */
 
-public abstract class BaseForegroundService<T extends EBE_Base<Boolean>> extends Service {
+public abstract class BaseForegroundService extends Service {
     protected static final String TAG = "BaseForegroundService";
-    private static final int FOREGROUND_FLAGS = 101;
     protected Notification notification;
     protected String ticker, title, text;
+    protected boolean isForeground = true;
+    protected boolean isListening;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        EventBus.getDefault().register(this);
-        initCreate();
+        initOnCreate();
         // Create intent that will bring our app to the front, as if it was tapped in the app
         // launcher
         Intent showTaskIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -57,31 +58,27 @@ public abstract class BaseForegroundService<T extends EBE_Base<Boolean>> extends
         return null;
     }
 
-
-    @Subscribe
-    public void onEvent(T item) {
-        if (item.getValue()) {
-            startListening();
-        } else {
-            stopListening();
-        }
-    }
-
     protected void startListening() {
-        startForeground(getFlagForeground(), notification);
+        isListening = true;
+        if (isForeground) {
+            startForeground(getFlagForeground(), notification);
+        }
         initStart();
     }
 
     protected void stopListening() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(STOP_FOREGROUND_DETACH);
-        } else {
-            stopForeground(true);
+        isListening= false;
+        if (isForeground) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                stopForeground(STOP_FOREGROUND_DETACH);
+            } else {
+                stopForeground(true);
+            }
         }
         initStop();
     }
 
-    protected abstract void initCreate();
+    protected abstract void initOnCreate();
 
     protected abstract void initStart();
 

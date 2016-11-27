@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -24,7 +25,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeActivity;
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
@@ -34,7 +34,6 @@ import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
-import com.congnt.androidbasecomponent.utility.GoogleApiUtil;
 import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.NetworkUtil;
@@ -43,6 +42,7 @@ import com.congnt.androidbasecomponent.utility.PermissionUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
 import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
 import com.congnt.emergencyassistance.MainActionBar;
+import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartDetectingAccident;
@@ -50,15 +50,13 @@ import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.entity.ItemSettingSpeech;
 import com.congnt.emergencyassistance.entity.SettingSpeech;
 import com.congnt.emergencyassistance.entity.firebase.User;
-import com.congnt.emergencyassistance.services.DetectingAccidentService;
+import com.congnt.emergencyassistance.services.DetectingAccidentServiceNew;
+import com.congnt.emergencyassistance.services.LocationService;
 import com.congnt.emergencyassistance.services.SpeechRecognitionService;
 import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.fragment.EmergencySoundFragment;
 import com.congnt.emergencyassistance.view.fragment.MainFragment;
 import com.congnt.emergencyassistance.view.fragment.NearByFragment;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -96,6 +94,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             , Manifest.permission.CAMERA
             , Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    public MainApplication mainApplication;
     private DrawerLayout mDrawer;
     private ImageView mImgHeader;
     private TextView mTvHeader;
@@ -115,6 +114,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     };
     private Intent service;
     private MainFragment mainFragment;
+    private Intent detectingAccidentService;
 
     public void unbindService() {
         unbindService(mServiceConnection);
@@ -157,6 +157,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 
     @Override
     protected void initialize(View mainView) {
+        mainApplication = (MainApplication) getApplication();
         //Show tutorial at the first time
         if (MySharedPreferences.getInstance(this).isFirstTime.load(true)) {
             startActivity(new Intent(this, TutorialActivity.class));
@@ -183,7 +184,9 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         }
         if (mServiceMessenger == null) bindService(service, mServiceConnection, BIND_AUTO_CREATE);
         //Detect service
-        startService(new Intent(MainActivity.this, DetectingAccidentService.class));
+        startService(new Intent(MainActivity.this, LocationService.class));
+        detectingAccidentService = new Intent(MainActivity.this, DetectingAccidentServiceNew.class);
+//        startService(new Intent(MainActivity.this, DetectingAccidentService.class));
 
         //init nav
         // Find our drawer view
@@ -277,7 +280,8 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     private void setupViewPager(View root) {
         ViewPager viewPager = (ViewPager) root.findViewById(R.id.viewPager);
         List<AwesomeFragment> listFragment = new ArrayList<>();
-        listFragment.add(mainFragment = (MainFragment) MainFragment.newInstance());
+        mainFragment = (MainFragment) MainFragment.newInstance();
+        listFragment.add(mainFragment);
         listFragment.add(EmergencySoundFragment.newInstance());
         listFragment.add(NearByFragment.newInstance());
 //        listFragment.add(WalkingFragment.newInstance());
@@ -352,8 +356,20 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 //                    startActivityForResult(intent, REQUEST_LOGIN_FOR_SHARE_LOCATION);
 //                }
                 //Start listening detect service
-                EventBus.getDefault().post(new EBE_StartDetectingAccident(isChecked));
-                mainFragment.layout_detect_accident.setVisibility(isChecked ? VISIBLE : GONE);
+                if (isChecked) {
+                    startService(detectingAccidentService);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            EventBus.getDefault().post(new EBE_StartDetectingAccident(true));
+                        }
+                    }, 500);
+                    mainFragment.layout_detect_accident.setVisibility(VISIBLE);
+                } else {
+                    EventBus.getDefault().post(new EBE_StartDetectingAccident(false));
+                    stopService(detectingAccidentService);
+                    mainFragment.layout_detect_accident.setVisibility(GONE);
+                }
             }
         });
 //        switchCompat.setChecked(MySharedPreferences.getInstance(this).shareLocationState.load(false));
@@ -436,7 +452,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     private void userLogout() {
         FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
         MySharedPreferences.getInstance(this).userProfile.save(null);
-        if (fuser!=null){
+        if (fuser != null) {
             isLogged = false;
             FirebaseAuth.getInstance().signOut();
         }

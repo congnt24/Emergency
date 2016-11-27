@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/map_fragment2"
-        class="com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation"
+        class="com.congnt.emergencyassistance.view.fragment.MapFragmentWithFusedLocationLite"
         android:layout_width="match_parent"
         android:layout_height="180dp" />
 

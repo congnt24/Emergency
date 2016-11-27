@@ -15,6 +15,42 @@ import com.parse.ParseObject;
 public class MainApplication extends Application {
     public Location lastLocation;
 
+    public String getLastAddress() {
+        return lastAddress;
+    }
+
+    public void setLastAddress(String lastAddress) {
+        this.lastAddress = lastAddress;
+    }
+
+    private String lastAddress;
+    private long request_displacement = 0;
+    private long request_duration = 0;
+
+    public Location getLastLocation() {
+        return lastLocation;
+    }
+
+    public void setLastLocation(Location lastLocation) {
+        this.lastLocation = lastLocation;
+    }
+
+    public long getRequest_displacement() {
+        return request_displacement;
+    }
+
+    public void setRequest_displacement(long request_displacement) {
+        this.request_displacement = request_displacement;
+    }
+
+    public long getRequest_duration() {
+        return request_duration;
+    }
+
+    public void setRequest_duration(long request_duration) {
+        this.request_duration = request_duration;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

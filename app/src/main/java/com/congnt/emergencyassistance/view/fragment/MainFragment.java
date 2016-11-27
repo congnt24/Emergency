@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,11 +33,10 @@ import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.OnEventListener;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_DetectAccident;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationFollowService;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationService;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
-import com.congnt.emergencyassistance.entity.firebase.User;
-import com.congnt.emergencyassistance.entity.parse.LocationFollow;
-import com.congnt.emergencyassistance.entity.parse.ParseFollow;
 import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.activity.EmergencyStateActivity;
 import com.congnt.emergencyassistance.view.activity.LoginActivity;
@@ -47,10 +45,6 @@ import com.congnt.emergencyassistance.view.dialog.DialogFollow;
 import com.congnt.emergencyassistance.view.dialog.DialogSendSMS;
 import com.congnt.reversegeocodecountry.GeocodeCountry;
 import com.congnt.reversegeocodecountry.ReverseGeocodeCountry;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -81,7 +75,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private TextView tvMaxSpeed;
     private TextView tvDistance;
     //Map fragment
-    private MapFragmentWithFusedLocation mapFragment;
+    private MapFragmentWithFusedLocationLite mapFragment;
     private ItemCountryEmergencyNumber countrynumber;
     private ImageButton ibWalkMode;
     private ImageButton ibTimmer;
@@ -128,30 +122,23 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         //Init speech recognizer
         setupSpeechRecognitionService(rootView);
         setupEmergencyNumber(rootView);
+        initMapFragment();
+        initListener();
+    }
+
+    private void initMapFragment() {
         //Bind Map Fragment
-        mapFragment = (MapFragmentWithFusedLocation) getChildFragmentManager().findFragmentById(R.id.map_fragment);
+        mapFragment = (MapFragmentWithFusedLocationLite) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         mapFragment.setUpdatable(false);
         mapFragment.setScrollGesturesEnabled(true);
-        mapFragment.setOnMapListener(this);
-
-        /*//Update friend location real time
-        firebaseDatabase.getReference().child("users").child("ntc0222@gmailcom").child("location").addValueEventListener(new ValueEventListener() {
+        mainActivity.mainApplication.setRequest_duration(2000);
+        mainActivity.mainApplication.setRequest_displacement(0);
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                LocationForFirebase friendLocation = dataSnapshot.getValue(LocationForFirebase.class);
-                Location location = new Location("");
-                location.setLatitude(friendLocation.getLat());
-                location.setLongitude(friendLocation.getLng());
-//              move marker
-                mapFragment.addMarker("ntc0222@gmail.com", location);
+            public void run() {
+                EventBus.getDefault().post(new EBE_StartLocationService(true, false));
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-        initListener();
+        }, 1000);
     }
 
     private void initListener() {
@@ -279,9 +266,10 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 break;
             case R.id.ib_walk_mode:
                 DialogSendSMS dialogSendSMS = new DialogSendSMS();
-                if (mapFragment.getLastLocation() != null) {
+                Location location = ((MainApplication) getActivity().getApplication()).getLastLocation();
+                if (location != null) {
                     Bundle b = new Bundle();
-                    b.putString("location", mapFragment.getLastLocation().getLatitude() + "," + mapFragment.getLastLocation().getLongitude());
+                    b.putString("location", location.getLatitude() + "," + location.getLongitude());
                     dialogSendSMS.setArguments(b);
                 } else {
                     Toast.makeText(mainActivity, getString(R.string.location_not_avaiable), Toast.LENGTH_SHORT).show();
@@ -308,7 +296,9 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 } else {    //diable
                     ibLocation.setImageResource(R.drawable.ic_location_off);
                     isShareLocation = false;
-                    stopUpdateLocationToParseSErver();
+                    //stop follow service
+                    EventBus.getDefault().post(new EBE_StartLocationFollowService(true));
+//                    stopUpdateLocationToParseSErver();
                 }
                 break;
             case R.id.ib_follow:
@@ -323,7 +313,9 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 //            MySharedPreferences.getInstance(mainActivity).
             MySharedPreferences.getInstance(mainActivity).shareLocationState.save(isShareLocation);
             if (isShareLocation) {
-                updateLocationToParseServer();
+                //run follow service
+                EventBus.getDefault().post(new EBE_StartLocationFollowService(true));
+//                updateLocationToParseServer();
             }
         } else {
             //Start login activity for result
@@ -333,50 +325,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     }
 
     List<String> listLocation = new ArrayList<>();
-
-    private void updateLocationToParseServer() {
-        mapFragment.setUpdatable(true);
-        mapFragment.setLocationRequest(AppConfig.PARSE_UPDATE_LOCATION_DISPLACEMENT, AppConfig.PARSE_UPDATE_LOCATION_DURATION);
-        mapFragment.requestLocationUpdate();
-        final User user = MySharedPreferences.getInstance(mainActivity).userProfile.load(null);
-        listLocation.clear();
-        currentParseId = "";
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                MainApplication application = (MainApplication) getActivity().getApplication();
-                listLocation.add(new LocationFollow(application.lastLocation).toJson());
-                if (TextUtils.isEmpty(currentParseId)) {
-                    final ParseFollow parseFollow = new ParseFollow(user.getEmail(), "0", "0", listLocation);
-                    parseFollow.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                currentParseId = parseFollow.getObjectId();
-                            }
-                        }
-                    });
-                }else{
-                    ParseQuery<ParseFollow> query = ParseQuery.getQuery(ParseFollow.class);
-                    query.getInBackground(currentParseId, new GetCallback<ParseFollow>() {
-                        public void done(ParseFollow follow, ParseException e) {
-                            if (e == null) {
-                                follow.put("locations", listLocation);
-                                follow.saveInBackground();
-                            }
-                        }
-                    });
-                }
-                handler.postDelayed(this, AppConfig.PARSE_DELAY_DURATION);
-            }
-        }, AppConfig.PARSE_DELAY_DURATION);
-    }
-
-    private void stopUpdateLocationToParseSErver() {
-        mapFragment.removeLocationUpdate();
-        mapFragment.setLocationRequest(1000, 1000);
-        handler.removeCallbacksAndMessages(null);
-    }
 
     public void call(int dialogType) {
         String title = "";
@@ -411,21 +359,10 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
     @Override
     public void onLocationChange(Location location) {
-        ((MainApplication) getActivity().getApplication()).lastLocation = location;
-        mapFragment.animateCamera(location, 13);
+        ((MainApplication) getActivity().getApplication()).setLastLocation(location);
+        mapFragment.animateCamera(location, AppConfig.ZOOM_LEVEL);
         //Check country by location
         setupCountry(location);
-        //update location to friend using firebase if option share location is enable
-        /*if (MySharedPreferences.getInstance(getActivity()).shareLocationState.load(false)) {//is share location
-            //Get firebase user
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (firebaseUser == null) {//Not login, require login before share location
-                //TODO: Nothing while user not login
-            } else {//if User islogged, change data on database
-
-            }
-        }*/
-
     }
 
     @Override
@@ -505,5 +442,12 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     public void onUpdateAccelerometer(EBE_DetectAccident detectAccident) {
         tvAcc.setText(getString(R.string.accelerometer) + " " + FormatUtil.formatDouble(detectAccident.getValue().accelerometer, 4));
         tvSpeed.setText(getString(R.string.speed) + " " + FormatUtil.formatDouble(detectAccident.getValue().speed, 4));
+    }
+
+    @Subscribe
+    public void onLocationChanged(Location location) {
+        Log.d(TAG, "onLocationChanged: "+location.getLongitude());
+        mapFragment.animateCamera(location, AppConfig.ZOOM_LEVEL);
+        mapFragment.updateLocation(location);
     }
 }

@@ -1,3 +1,4 @@
+/*
 package com.congnt.emergencyassistance.services;
 
 import android.Manifest;
@@ -175,7 +176,9 @@ public class DetectingAccidentService extends Service implements SensorEventList
     public boolean estimateAccident() {
         EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech)));
         double accident = currentAcceleration / ACCELERATION_THRESHOLD;
-        if (accident >= ACCIDENT_THRESHOLD/* && currentSpeech >= VELOCITY_THRESHOLD*/) {
+        if (accident >= ACCIDENT_THRESHOLD*/
+/* && currentSpeech >= VELOCITY_THRESHOLD*//*
+) {
             return true;
         }
         if (currentSpeech >= VELOCITY_THRESHOLD && counter < 30 && accident >= ACCIDENT_THRESHOLD) {
@@ -309,4 +312,4 @@ public class DetectingAccidentService extends Service implements SensorEventList
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-}
+}*/

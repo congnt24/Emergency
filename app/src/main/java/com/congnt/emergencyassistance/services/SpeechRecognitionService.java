@@ -116,7 +116,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
      */
     @Subscribe
     public void onEvent(EBE_StartStopService startOrstop) {
-        if (startOrstop.aBoolean) {
+        if (startOrstop.getValue()) {
             startListening();
             startForeground(101,
                     notification);

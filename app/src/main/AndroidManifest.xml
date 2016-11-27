@@ -58,7 +58,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activity.MainActivity" />
         </activity>
-        <activity android:name=".view.activity.EmergencyStateActivity" />
+        <activity android:name=".view.activity.EmergencyStateActivity"
+            android:launchMode= "singleInstance"/>
         <activity
             android:name=".view.activity.LoginActivity"
             android:label="@string/title_activity_login"
@@ -158,7 +159,10 @@
             android:label="Record Audio"
             android:permission="android.permission.RECORD_AUDIO" />
         <service
-            android:name=".services.DetectingAccidentService"
+            android:name=".services.LocationService"
+            android:label="Location Service" />
+        <service
+            android:name=".services.DetectingAccidentServiceNew"
             android:label="Detecting Accident" />
         <service
             android:name=".services.SpeechRecognitionService"

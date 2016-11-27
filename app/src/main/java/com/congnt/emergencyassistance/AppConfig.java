@@ -23,4 +23,5 @@ public class AppConfig {
     public static final long PARSE_DELAY_DURATION = 5000;
     public static final int PARSE_UPDATE_LOCATION_DURATION = 0;
     public static final int PARSE_UPDATE_LOCATION_DISPLACEMENT = 0;
+    public static final int ZOOM_LEVEL = 13;
 }

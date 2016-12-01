@@ -15,10 +15,14 @@ import com.congnt.emergencyassistance.MainActionBar;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.parse.LocationFollow;
 import com.congnt.emergencyassistance.entity.parse.ParseFollow;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Activity(transitionAnim = Activity.AnimationType.ANIM_LEFT_TO_RIGHT
@@ -32,6 +36,7 @@ public class FollowActivity extends AwesomeActivity implements View.OnClickListe
     private EditText etParseId;
     private Button btnSubmit;
     private Handler handler;
+    private List<LatLng> cacheList = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -61,7 +66,7 @@ public class FollowActivity extends AwesomeActivity implements View.OnClickListe
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mapFragment.getMap().clear();
+//                mapFragment.getMap().clear();
                 getFollowFromParse(etParseId.getText().toString());
                 handler.postDelayed(this, AppConfig.PARSE_DELAY_DURATION);
             }
@@ -77,7 +82,11 @@ public class FollowActivity extends AwesomeActivity implements View.OnClickListe
     public void done(ParseFollow object, ParseException e) {
         if (e == null) {
             //TODO: Get parse follow
-            mapFragment.addPolyline(object.getListLatLng());
+            List<LatLng> listLatLng = object.getListLatLng();
+            if (listLatLng.size() > cacheList.size()) {
+                mapFragment.addPolyline(listLatLng.subList(cacheList.size(), listLatLng.size()-1));
+                cacheList = object.getListLatLng();
+            }
         }
     }
 

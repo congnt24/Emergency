@@ -37,6 +37,7 @@ public class MapFragmentWithFusedLocationLite extends AwesomeFragment implements
             Manifest.permission.ACCESS_COARSE_LOCATION};
     private GoogleMap mMap;
     private boolean updatable;
+    private OnMapListener listener;
 
     public void setAddress(String s) {
         this.tv_address.setText(s);
@@ -160,13 +161,27 @@ public class MapFragmentWithFusedLocationLite extends AwesomeFragment implements
         getMap().addPolyline(options);
     }
 
+    public void setMyLocationEnabled(boolean value){
+        if (PermissionUtil.getInstance(context).checkMultiPermission(locationPermission)) {
+            mMap.setMyLocationEnabled(value);
+        }
+    }
+
+    public void setListener(OnMapListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (PermissionUtil.getInstance(context).checkMultiPermission(locationPermission)) {
-            mMap.getUiSettings().setScrollGesturesEnabled(enableGestures);
-            mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setScrollGesturesEnabled(enableGestures);
+        setMyLocationEnabled(true);
+        if (listener != null) {
+            listener.onMapReady();
         }
+    }
+
+    public interface OnMapListener{
+        void onMapReady();
     }
 }

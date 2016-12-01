@@ -47,6 +47,7 @@ public class TutorialActivity extends AwesomeActivity {
         viewPager = (ViewPager) root.findViewById(R.id.viewpager);
         CircleIndicator indicator = (CircleIndicator) root.findViewById(R.id.indicator);
         List<AwesomeFragment> listFragment = new ArrayList<>();
+        listFragment.add(TutorialFragment.newInstance(R.drawable.image_carcrash, R.string.tutorial_title_4, R.string.tutorial_desc_4, false));
         listFragment.add(TutorialFragment.newInstance(R.drawable.image_map, R.string.tutorial_title_1, R.string.tutorial_desc_1, false));
         listFragment.add(TutorialFragment.newInstance(R.drawable.image_ambulance, R.string.tutorial_title_2, R.string.tutorial_desc_2, false));
         listFragment.add(TutorialFragment.newInstance(R.drawable.image_map, R.string.tutorial_title_3, R.string.tutorial_desc_3, true));

@@ -1,9 +1,16 @@
+/*
 package com.congnt.emergencyassistance.view.activity;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -46,7 +53,7 @@ import com.congnt.emergencyassistance.entity.SettingSpeech;
 import com.congnt.emergencyassistance.entity.firebase.User;
 import com.congnt.emergencyassistance.services.DetectingAccidentServiceNew;
 import com.congnt.emergencyassistance.services.LocationService;
-import com.congnt.emergencyassistance.services.SpeechRecognitionServiceNew;
+import com.congnt.emergencyassistance.services.SpeechRecognitionService;
 import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.fragment.EmergencySoundFragment;
 import com.congnt.emergencyassistance.view.fragment.MainFragment;
@@ -72,22 +79,72 @@ import static com.congnt.emergencyassistance.EmergencyType.POLICE;
         , mainLayoutId = R.layout.layout_main
         , enableSearch = true)
 @NavigationDrawer
-public class MainActivity extends AwesomeActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivityBak extends AwesomeActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int REQUEST_LOGIN_FOR_SHARE_LOCATION = 3;
     private static final String TAG = "MainActivity";
     private static final int REQUEST_PROFILE = 1;
     private static final int REQUEST_LOGIN = 2;
     public ItemCountryEmergencyNumber countrynumber;
     public boolean isLogged;
+    private String[] permission = new String[]{
+            Manifest.permission.CALL_PHONE
+            , Manifest.permission.ACCESS_COARSE_LOCATION
+            , Manifest.permission.ACCESS_FINE_LOCATION
+            , Manifest.permission.READ_CONTACTS
+            , Manifest.permission.RECORD_AUDIO
+            , Manifest.permission.CAMERA
+            , Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     public MainApplication mainApplication;
     private DrawerLayout mDrawer;
     private ImageView mImgHeader;
     private TextView mTvHeader;
     private SwitchCompat switchCompat;
     private boolean isLoadUserProfile = true;
+    private Messenger mServiceMessenger;
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mServiceMessenger = new Messenger(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mServiceMessenger = null;
+        }
+    };
     private Intent service;
     private MainFragment mainFragment;
     private Intent detectingAccidentService;
+
+    public void unbindService() {
+        unbindService(mServiceConnection);
+    }
+
+    public void stopService() {
+        stopService(service);
+    }
+
+    public void sendRequestStartListening() {
+        Message msg = new Message();
+        msg.what = SpeechRecognitionService.START_LISTENING;
+        try {
+            mServiceMessenger.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendRequestStopListening() {
+        Message msg = new Message();
+        msg.what = SpeechRecognitionService.STOP_LISTENING;
+
+        try {
+            mServiceMessenger.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected int getLayoutId() {
@@ -107,7 +164,11 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             startActivity(new Intent(this, TutorialActivity.class));
         }
 
-        service = new Intent(this, SpeechRecognitionServiceNew.class);
+        service = new Intent(this, SpeechRecognitionService.class);
+        //REQUEST PERMISSION AND REQUIRE
+        if (!PermissionUtil.getInstance(this).checkMultiPermission(permission)) {
+            PermissionUtil.getInstance(this).requestPermissions(permission);
+        }
 
         initRequire();
 
@@ -118,13 +179,14 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         }
 
         //Init Service
-        if (!AndroidUtil.isServiceRunning(this, SpeechRecognitionServiceNew.class)) {
+        if (!AndroidUtil.isServiceRunning(this, SpeechRecognitionService.class)) {
             MySharedPreferences.getInstance(this).isListening.save(false);
             startService(service);
         }
+        if (mServiceMessenger == null) bindService(service, mServiceConnection, BIND_AUTO_CREATE);
         //Detect service
-        startService(new Intent(MainActivity.this, LocationService.class));
-        detectingAccidentService = new Intent(MainActivity.this, DetectingAccidentServiceNew.class);
+        startService(new Intent(MainActivityBak.this, LocationService.class));
+        detectingAccidentService = new Intent(MainActivityBak.this, DetectingAccidentServiceNew.class);
 //        startService(new Intent(MainActivity.this, DetectingAccidentService.class));
 
         //init nav
@@ -142,7 +204,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                     , R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            IntentUtil.requestNetwork(MainActivity.this);
+                            IntentUtil.requestNetwork(MainActivityBak.this);
                         }
                     }).create().show();
         }
@@ -152,7 +214,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                     , R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            PackageUtil.openPlayStore(MainActivity.this, PackageUtil.GOOGLE_APP);
+                            PackageUtil.openPlayStore(MainActivityBak.this, PackageUtil.GOOGLE_APP);
                         }
                     }).create().show();
         }
@@ -192,6 +254,13 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService();
+    }
+
+
     private void setupNavigationView() {
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         View headerView = getNavigationView().inflateHeaderView(R.layout.nav_main_header);
@@ -201,7 +270,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         mImgHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), REQUEST_LOGIN);
+                startActivityForResult(new Intent(MainActivityBak.this, LoginActivity.class), REQUEST_LOGIN);
                 mDrawer.closeDrawer(Gravity.LEFT);
             }
         });
@@ -249,9 +318,9 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             case R.id.nav_change_country:
                 startActivity(new Intent(this, ChangeCountryActivity.class));
                 break;
-//            case R.id.nav_history:
-//                startActivity(new Intent(this, HistoryActivity.class));
-//                break;
+            case R.id.nav_history:
+                startActivity(new Intent(this, HistoryActivity.class));
+                break;
             case R.id.nav_follow:
                 startActivity(new Intent(this, FollowActivity.class));
                 break;
@@ -280,6 +349,13 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {//Require login
+//                if (isLogged) {
+//                    MySharedPreferences.getInstance(MainActivity.this).shareLocationState.save(isChecked);
+//                } else {
+//                    //Start login activity for result
+//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                    startActivityForResult(intent, REQUEST_LOGIN_FOR_SHARE_LOCATION);
+//                }
                 //Start listening detect service
                 if (isChecked) {
                     startService(detectingAccidentService);
@@ -297,7 +373,28 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                 }
             }
         });
+//        switchCompat.setChecked(MySharedPreferences.getInstance(this).shareLocationState.load(false));
         return true;
+    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()){
+//            case R.id.action_add_friend:
+//
+//                break;
+//        }
+//        return true;
+//    }
+
+    public void createSlidingMenu() {
+//        SlidingF
     }
 
     @Override
@@ -327,9 +424,11 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         super.onResume();
     }
 
-    /**
+    */
+/**
      * Update user profile when user was login or update profile
-     */
+     *//*
+
     public void bindUserDataLogin() {
         //Bind user
         FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -363,3 +462,4 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     }
 
 }
+*/

@@ -1,12 +1,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="setting_contact_call"
         android:summary="@string/enable_contact_call_desc"
         android:title="@string/enable_contact_call" />
     <SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="setting_contact_sms"
         android:summary="@string/enable_contact_sms_desc"
         android:title="@string/enable_contact_sms" />
@@ -16,7 +16,7 @@
         android:summary="@string/enable_take_picture_desc"
         android:title="@string/enable_take_picture" />
     <SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="setting_record_audio"
         android:summary="@string/enable_record_desc"
         android:title="@string/enable_record" />

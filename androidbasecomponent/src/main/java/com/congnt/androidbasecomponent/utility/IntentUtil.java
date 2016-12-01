@@ -31,9 +31,9 @@ public class IntentUtil {
     public static void requestNetwork(Context context) {
         Intent intent = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+            intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
         }else{
-            intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+            intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
         }
         context.startActivity(intent);
     }

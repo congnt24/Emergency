@@ -5,7 +5,14 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <include layout="@layout/include_sms_view" />
+    <EditText
+        android:id="@+id/et_content"
+        style="@style/AppTheme2.EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:minLines="5"
+        android:text="@string/template_follow_default"/>
     <!--
 
         <CheckBox
@@ -17,6 +24,7 @@
     -->
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="10dp"
         android:id="@+id/recycler_contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>

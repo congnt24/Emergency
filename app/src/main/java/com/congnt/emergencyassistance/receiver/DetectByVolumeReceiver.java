@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import com.congnt.emergencyassistance.view.activity.EmergencyStateActivity;
 
+import static com.congnt.emergencyassistance.AppConfig.POLICE;
+
 /**
  * Created by congnt24 on 13/10/2016.
  */
@@ -32,7 +34,7 @@ public class DetectByVolumeReceiver extends BroadcastReceiver{
                 i.setClassName(context, EmergencyStateActivity.class.getName());
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 Bundle b = new Bundle();
-                b.putString("type", "POLICE");
+                b.putString("type", POLICE);
                 b.putString("number", "113");
                 i.putExtras(b);
                 context.startActivity(i);

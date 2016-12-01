@@ -13,14 +13,12 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.entity.DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartDetectingAccident;
-import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationService;
 import com.congnt.emergencyassistance.util.LocationUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,6 +38,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     private static final double ACCIDENT_THRESHOLD = 1;
     private static final double ACCIDENT_LOW_SPEED_THRESHOLD = 2;
     private static final double SSD_THRESHOLD = 2.06;
+    private static final double MPH2KMH = 1.60934;
     protected AudioManager mAudioManager;
     private long lastUpdate = 0;
     private int DURATION = 1000;
@@ -55,6 +54,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     private boolean stillInCar = false;
     private int counter = 0;
     private Timer timer;
+    public double maxSpeed, distance;
 
     @Override
     protected void initOnCreate() {
@@ -72,6 +72,9 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     @Subscribe
     public void onEvent(EBE_StartDetectingAccident item) {
         if (item.getValue()) {
+//            reset speed and distance
+            maxSpeed = 0;
+            distance = 0;
             startListening();
         } else {
             stopListening();
@@ -116,7 +119,10 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     //Implement method
 
     public boolean estimateAccident() {
-        EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech)));
+        if (maxSpeed < currentSpeech) {
+            maxSpeed = currentSpeech;
+        }
+        EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech, distance, maxSpeed)));
         double accident = currentAcceleration / ACCELERATION_THRESHOLD;
         if (accident >= ACCIDENT_THRESHOLD
 /* && currentSpeech >= VELOCITY_THRESHOLD*/
@@ -153,6 +159,8 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
         if (!isListening) {
             return;
         }
+        Location prevLocation = ((MainApplication) getApplication()).lastLocation;
+        distance += LocationUtils.distance(prevLocation, location);
         ((MainApplication) getApplication()).lastLocation = location;
         double lat = (location.getLatitude());
         double lng = (location.getLongitude());
@@ -160,7 +168,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
         if (previousLocation == null) {
             previousLocation = location;
         } else {
-            currentSpeech = LocationUtils.speed(previousLocation, location);
+            currentSpeech = LocationUtils.speed(previousLocation, location)*MPH2KMH;
             if (currentSpeech > VELOCITY_THRESHOLD) {
                 speedAboveThreshold = true;
             } else {    //Di chuyển dưới tốc độ 24

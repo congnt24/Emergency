@@ -109,11 +109,12 @@ public class SpeechRecognitionService extends Service implements RecognitionList
         }
     }
 
-    /**
-     * Handle event start or stop listening for speech
-     *
-     * @param startOrstop: true is start, false is stop
-     */
+//*
+//     * Handle event start or stop listening for speech
+//     *
+//     * @param startOrstop: true is start, false is stop
+
+
     @Subscribe
     public void onEvent(EBE_StartStopService startOrstop) {
         if (startOrstop.getValue()) {
@@ -181,7 +182,7 @@ public class SpeechRecognitionService extends Service implements RecognitionList
     }
 
 
-   /* @Override
+ @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d("AAA", "AAAA ON DESTROY");
@@ -191,20 +192,22 @@ public class SpeechRecognitionService extends Service implements RecognitionList
             mSpeechRecognizer.destroy();
         }
     }
-*/
+
+
 
     public void sendBroadcastToReceiver(Bundle b) {
         Intent i = new Intent("com.congnt.emergencyasistance.ACCIDENT_RECEIVER");
         i.putExtras(b);
         sendBroadcast(i);
     }
+//
+//*
+//     * Use Evenbus instead of binder
+//     *
+//     * @param intent
+//     * @return
 
-    /**
-     * Use Evenbus instead of binder
-     *
-     * @param intent
-     * @return
-     */
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

@@ -39,7 +39,7 @@
 
 
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name=".view.activity.SplashActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateUnchanged">
             <intent-filter>
@@ -47,6 +47,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.activity.MainActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateUnchanged">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
         </activity>
 
         <activity
@@ -166,6 +176,10 @@
             android:label="Detecting Accident" />
         <service
             android:name=".services.SpeechRecognitionService"
+            android:label="Speech Recognition"
+            android:permission="android.permission.RECORD_AUDIO" />
+        <service
+            android:name=".services.SpeechRecognitionServiceNew"
             android:label="Speech Recognition"
             android:permission="android.permission.RECORD_AUDIO" />
     <!--    <service

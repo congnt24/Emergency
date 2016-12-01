@@ -7,6 +7,9 @@ import android.*;
  */
 
 public class AppConfig {
+    public static final String POLICE = "police";
+    public static final String FIRE = "fire";
+    public static final String AMBULANCE = "ambulance";
     public static String[] locationPermission = new String[]{
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -17,9 +20,9 @@ public class AppConfig {
 
     public static final String FOLDER_MEDIA = "EmergencyAssistance";
     public static final String DETECT_ACCIDENT = "DETECT_ACCIDENT";
-    public static final String PARSE_APP_ID = "KSJ4KLJ5KJK435J3KSS9F9D8S9F8SD98F9SDF";
-    public static final String PARSE_CLIENT_KEY = "KSJ4KLJ5KJK435J3KSS9F9D8S9F8SD98F9SDF";
-    public static final String PARSE_SERVER = "http://192.168.1.169:1337/parse";
+    public static final String PARSE_APP_ID = "4dxj5BVSUkLohTyfZr54p2NWegFMXOJGhHmBGh7H";//KSJ4KLJ5KJK435J3KSS9F9D8S9F8SD98F9SDF
+    public static final String PARSE_CLIENT_KEY = "9nLjjVyYiSbwze7hNPQAyPa1FNp7ToRo88XdtkQW";
+    public static final String PARSE_SERVER = "https://parseapi.back4app.com";
     public static final long PARSE_DELAY_DURATION = 5000;
     public static final int PARSE_UPDATE_LOCATION_DURATION = 0;
     public static final int PARSE_UPDATE_LOCATION_DISPLACEMENT = 0;

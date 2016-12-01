@@ -31,17 +31,20 @@ import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.adapter.ContactAdapter;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
 import com.congnt.emergencyassistance.entity.ItemContact;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 import com.congnt.emergencyassistance.services.RecordAudioService;
 import com.congnt.emergencyassistance.view.dialog.DialogSendSMS;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmergencyStateActivity extends Activity implements Camera.PictureCallback, View.OnClickListener {
-
+    private static final String TAG = "EmergencyStateActivity";
     private FrameLayout previewHolder;
     private Handler handler;
     private TextView txtProgress;
@@ -58,6 +61,8 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
     private RecyclerView recyclerView;
     private ContactAdapter adapter;
     private java.lang.Runnable delayRunnable;
+    private boolean hasSpeech = MySharedPreferences.getInstance(this).isListening.load(false);
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,32 +73,35 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
         countDownTime = Long.parseLong(MySharedPreferences.getInstance(this).pref.getString("setting_countdown_time", "10")) * 1000;
         countrynumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
         initViews();
-        initEvent();
         VibratorUtil.vibrate(this, 2000);   //TODO: VIBRATOR NOT WORK
 
         //Show dialog
         if (getIntent().getExtras() != null) {
             Bundle b = getIntent().getExtras();
             //If is detecting accident
-            String type = b.getString("type", "POLICE");
+            final String type = b.getString("type", "POLICE");
             delayRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    finishCountdown();
+                    finishCountdown(type);
                 }
             };
-
-            if (type == AppConfig.DETECT_ACCIDENT) {
-                handler.postDelayed(delayRunnable, 30 * 1000);
+            if (type.equalsIgnoreCase(AppConfig.DETECT_ACCIDENT)) {
+                countDownTime = 30 * 1000;
             } else {
-                handler.postDelayed(delayRunnable, countDownTime);
+                //stop speech service
+                if (hasSpeech) EventBus.getDefault().post(new EBE_StartStopService(false));
             }
+            handler.postDelayed(delayRunnable, countDownTime);
         } else {
+            //stop speech service
+            if (hasSpeech) EventBus.getDefault().post(new EBE_StartStopService(false));
             handler.postDelayed(delayRunnable, countDownTime);
         }
+        initEvent();
     }
 
-    private void finishCountdown() {
+    private void finishCountdown(String type) {
         //Recorder
         startService(new Intent(EmergencyStateActivity.this, RecordAudioService.class));
         List<ItemContact> listContact = MySharedPreferences.getInstance(this).listContact.load(null);
@@ -112,7 +120,29 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
             if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_contact_call", false)) {
                 CommunicationUtil.callTo(EmergencyStateActivity.this, listContact.get(0).getContactNumber());
             } else {
-                CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.police);
+                switch (type) {
+                    case AppConfig.FIRE:
+                        CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.fire);
+                        break;
+                    case AppConfig.AMBULANCE:
+                        CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.ambulance);
+                        break;
+                    default:
+                        CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.police);
+                        break;
+                }
+            }
+        } else {
+            switch (type) {
+                case AppConfig.FIRE:
+                    CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.fire);
+                    break;
+                case AppConfig.AMBULANCE:
+                    CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.ambulance);
+                    break;
+                default:
+                    CommunicationUtil.callTo(EmergencyStateActivity.this, countrynumber.police);
+                    break;
             }
         }
         finish();
@@ -126,6 +156,8 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
             @Override
             public void onClick(View v) {
                 countdownTimer.cancel();
+                //stop speech service
+                if (hasSpeech) EventBus.getDefault().post(new EBE_StartStopService(true));
                 finish();
             }
         });

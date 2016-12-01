@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.congnt.androidbasecomponent.utility.GoogleApiUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
@@ -94,6 +95,7 @@ public class LocationService extends BaseForegroundService implements LocationLi
             stopUpdateLocationToParseSErver();
         }
         startListening();
+        Log.d(TAG, "onEvent: Start Parser server");
     }
 
     @Override
@@ -133,6 +135,7 @@ public class LocationService extends BaseForegroundService implements LocationLi
         ((MainApplication) getApplication()).setLastLocation(location);
         EventBus.getDefault().post(location);
         if (isFollow) {
+            Log.d(TAG, "onLocationChanged: Update parse server " + currentParseId);
             listLocation.add(new LocationFollow(application.lastLocation).toJson());
             ParseQuery<ParseFollow> query = ParseQuery.getQuery(ParseFollow.class);
             query.getInBackground(currentParseId, new GetCallback<ParseFollow>() {

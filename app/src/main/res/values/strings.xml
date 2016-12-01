@@ -157,6 +157,25 @@
     <string name="enable_contact_sms">Enable Contact SMS</string>
     <string name="enable_contact_sms_desc">While emergency is detected, it\'ll sms to first 3 persons in list contact instead of emergency number.</string>
     <string name="title_activity_follow">Follow</string>
+    <string name="notifi_ticker_recognition">Listening for your help.</string>
+    <string name="notifi_title_recognition">Detecting accident service.</string>
+    <string name="notifi_text_recognition">Listening for your accident.</string>
+    <string name="tutorial_title_4">Auto-detects serious car crashes</string>
+    <string name="tutorial_desc_4">Uses the internal sensors of your phone and speed from your location to automatically detect if you have been in a serious car crash and sends your location to your emergency contacts, even if you can\'t.</string>
+    <string name="require_permission_title">To keep you safe, we need the following permissions:</string>
+    <string name="location">Location</string>
+    <string name="permission_location_desc">We need to know your location so we can notify your contacts in case of emergency.</string>
+    <string name="readwritesms">Read/Write SMS</string>
+    <string name="permission_readwritesms_desc">Sending SMS allows us to inform your location to your emergency contacts in case of accident. Reading SMS lets us warn you if something has happened to them.</string>
+    <string name="permission_phone_desc">When you are in an emergency, call directly from the app to your country\'s emergency services, or one of your emergency contacts.</string>
+    <string name="grant_permission">GRANT PERMISSIONS</string>
+    <string name="record_audio">Record Audio</string>
+    <string name="permission_record_desc">When you are in an emergency, record audio from your app and save in a folder.</string>
+    <string name="write">Write External</string>
+    <string name="permission_write_desc">When you are in an emergency, we need to save image and audio to your folder.</string>
+    <string name="camera">Camera</string>
+    <string name="permission_camera_desc">When you are in an emergency, taking picture by rear and front camera then save in a folder.</string>
+    <string name="template_follow_default">Follow me with this ID:\n</string>
 
     <string-array name="commands_police">
         <item>Help</item>

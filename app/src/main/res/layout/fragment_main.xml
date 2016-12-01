@@ -27,20 +27,20 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.SwitchCompat
+        android:orientation="horizontal"
+        android:paddingRight="5dp">
+        <!--<android.support.v7.widget.SwitchCompat
             android:id="@+id/switch_start_service"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent" />-->
         <com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView
+            android:visibility="visible"
             android:id="@+id/speechview"
-            android:layout_width="200dp"
-            android:layout_height="40dp" />
+            android:layout_width="130dp"
+            android:layout_height="50dp" />
     </LinearLayout>
 
     <android.support.v7.widget.CardView
@@ -87,40 +87,48 @@
     </android.support.v7.widget.CardView>
 
     <ImageButton
-        android:id="@+id/ib_walk_mode"
+        android:id="@+id/ib_start_recognition"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/bg_circle"
-        android:src="@drawable/ic_share" />
-
+        android:layout_marginTop="54dp"
+        android:background="@drawable/selector_bg_circle"
+        android:src="@drawable/ic_volume_off_white_36dp"/>
     <ImageButton
-        android:id="@+id/ib_timmer"
+        android:id="@+id/ib_walk_mode"
+        android:layout_below="@id/ib_start_recognition"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_below="@id/ib_walk_mode"
         android:layout_marginTop="4dp"
-        android:background="@drawable/bg_circle"
-        android:src="@drawable/ic_timer" />
+        android:background="@drawable/selector_bg_circle"
+        android:src="@drawable/ic_share" />
 
     <ImageButton
         android:visibility="gone"
         android:id="@+id/ib_follow"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_below="@id/ib_timmer"
+        android:layout_below="@id/ib_walk_mode"
         android:layout_marginTop="4dp"
-        android:background="@drawable/bg_circle"
+        android:background="@drawable/selector_bg_circle"
         android:src="@drawable/ic_directions_run" />
 
     <ImageButton
         android:id="@+id/ib_location"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_below="@id/ib_follow"
+        android:layout_below="@id/ib_walk_mode"
         android:layout_marginTop="4dp"
-        android:background="@drawable/bg_circle"
+        android:background="@drawable/selector_bg_circle"
         android:src="@drawable/ic_location_off" />
+
+    <ImageButton
+        android:id="@+id/ib_timmer"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/ib_location"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/selector_bg_circle"
+        android:src="@drawable/ic_timer" />
     <!--<android.support.v7.widget.SwitchCompat
         android:id="@+id/sw_share_location"
         android:layout_width="wrap_content"

@@ -44,8 +44,8 @@ public class DetectBySpeechRecervier extends BroadcastReceiver {
                 List<ItemSettingSpeech> list = MySharedPreferences.getInstance(context).emergency_command.load(null);
                 for (ItemSettingSpeech item : list) {
                     for (String str : matches) {
-                        String command = item.getCommand().trim();
-                        String match = str.trim();
+                        String command = item.getCommand().trim().toLowerCase();
+                        String match = str.trim().toLowerCase();
                         if (command.equalsIgnoreCase(match) || match.contains(command) || command.contains(match)) {
                             Intent i = new Intent();
                             i.setClassName(context, EmergencyStateActivity.class.getName());

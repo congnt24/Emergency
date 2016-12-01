@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:text="Call POLICE in "
+            android:text="Call in "
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/md_white_1000" />
     </RelativeLayout>

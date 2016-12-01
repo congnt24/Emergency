@@ -38,8 +38,13 @@ import java.util.List;
 public class DialogFollow extends DialogFragment {
     private static final String TAG = "DialogFollow";
     private View rootView;
+
+    public EditText getEtContent() {
+        return etContent;
+    }
+
     private EditText etContent;
-    private Spinner spTemplate;
+//    private Spinner spTemplate;
     private RecyclerView recycler;
     private ContactSelectAdapter adapter;
     private List<ItemContact> listContact;
@@ -120,7 +125,7 @@ public class DialogFollow extends DialogFragment {
 
     private void initView() {
         etContent = (EditText) rootView.findViewById(R.id.et_content);
-        spTemplate = (Spinner) rootView.findViewById(R.id.sp_template);
+//        spTemplate = (Spinner) rootView.findViewById(R.id.sp_template);
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler_contact);
         //Setup Spinner
         SettingSpeech setting = null;
@@ -134,19 +139,19 @@ public class DialogFollow extends DialogFragment {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, templateMsg);
 //         Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spTemplate.setAdapter(dataAdapter);
-        spTemplate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                etContent.setText(templateMsg[position] + "\n");
-                etContent.setSelection(etContent.getText().length());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        spTemplate.setAdapter(dataAdapter);
+//        spTemplate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                etContent.setText(templateMsg[position] + "\n");
+//                etContent.setSelection(etContent.getText().length());
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
         //Recycler
         recycler.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         listContact = MySharedPreferences.getInstance(getActivity()).listContact.load(new ArrayList<ItemContact>());

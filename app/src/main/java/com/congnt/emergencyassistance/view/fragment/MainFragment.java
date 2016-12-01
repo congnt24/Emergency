@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +24,6 @@ import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.utility.FormatUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
-import com.congnt.androidbasecomponent.view.fragment.MapFragmentWithFusedLocation;
 import com.congnt.androidbasecomponent.view.speechview.RecognitionProgressView;
 import com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop;
 import com.congnt.emergencyassistance.AppConfig;
@@ -54,7 +53,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.iwgang.countdownview.CountdownView;
 
@@ -62,7 +60,7 @@ import cn.iwgang.countdownview.CountdownView;
  * Created by congnt24 on 25/09/2016.
  */
 
-public class MainFragment extends AwesomeFragment implements View.OnClickListener, MapFragmentWithFusedLocation.OnMapListener {
+public class MainFragment extends AwesomeFragment implements View.OnClickListener {
     private static final String TAG = "MainFragment";
     private static final int DIALOG_POLICE = 1;
     private static final int DIALOG_AMBULANCE = 3;
@@ -73,7 +71,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private FlatButtonWithIconTop btn_police;
     private FlatButtonWithIconTop btn_fire;
     private FlatButtonWithIconTop btn_ambulance;
-    private SwitchCompat btn_start_stop;
+    //    private SwitchCompat btn_start_stop;
+    private ImageButton ib_start_recognition;
     private TextView tvAcc;
     private TextView tvSpeed;
     private TextView tvMaxSpeed;
@@ -88,10 +87,12 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private Button btnCancel;
     private MainActivity mainActivity;
     private ImageButton ibLocation;
-//    private ImageButton ibFollow;
+    //    private ImageButton ibFollow;
     private boolean isShareLocation;
     private Handler handler = new Handler();
     private String currentParseId;
+    private boolean isStartRecognition;
+    private DialogFollow dialogFollow;
 
     public static AwesomeFragment newInstance() {
         return new MainFragment();
@@ -121,6 +122,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         tvSpeed = (TextView) rootView.findViewById(R.id.tv_speed);
         tvMaxSpeed = (TextView) rootView.findViewById(R.id.tv_max_speed);
         tvDistance = (TextView) rootView.findViewById(R.id.tv_distance);
+        ib_start_recognition = (ImageButton) rootView.findViewById(R.id.ib_start_recognition);
         //Init timmer
         initTimmer();
         //Init speech recognizer
@@ -135,6 +137,12 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         mapFragment = (MapFragmentWithFusedLocationLite) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         mapFragment.setUpdatable(false);
         mapFragment.setScrollGesturesEnabled(true);
+//        mapFragment.setListener(new MapFragmentWithFusedLocationLite.OnMapListener() {
+//            @Override
+//            public void onMapReady() {
+//                mapFragment.setMyLocationEnabled(false);
+//            }
+//        });
         mainActivity.mainApplication.setRequest_duration(2000);
         mainActivity.mainApplication.setRequest_displacement(0);
         new Handler().postDelayed(new Runnable() {
@@ -142,14 +150,15 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             public void run() {
                 EventBus.getDefault().post(new EBE_StartLocationService(true, false));
             }
-        }, 1000);
+        }, 1500);
     }
 
     private void initListener() {
         ibLocation.setOnClickListener(this);
 //        ibFollow.setOnClickListener(this);
         ibWalkMode.setOnClickListener(this);
-        btn_start_stop.setOnClickListener(this);
+//        btn_start_stop.setOnClickListener(this);
+        ib_start_recognition.setOnClickListener(this);
         btn_police.setOnClickListener(this);
         btn_fire.setOnClickListener(this);
         btn_ambulance.setOnClickListener(this);
@@ -219,9 +228,12 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
         speechView.setColors(colors);
         speechView.setBarMaxHeightsInDp(heights);
-        btn_start_stop = (SwitchCompat) rootView.findViewById(R.id.switch_start_service);
+//        btn_start_stop = (SwitchCompat) rootView.findViewById(R.id.switch_start_service);
         //If service is running, change start of btn to starty
-        btn_start_stop.setChecked(MySharedPreferences.getInstance(getActivity()).isListening.load(false));
+//        btn_start_stop.setChecked(MySharedPreferences.getInstance(getActivity()).isListening.load(false));
+        if (MySharedPreferences.getInstance(getActivity()).isListening.load(false)) {
+            ib_start_recognition.setImageResource(R.drawable.ic_volume_up_white_36dp);
+        }
     }
 
     /**
@@ -247,26 +259,26 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.switch_start_service:
-                SwitchCompat switchCompat = (SwitchCompat) v;
-                if (!switchCompat.isChecked()) {
-//                    mainActivity.sendRequestStopListening();
+            case R.id.ib_start_recognition:
+                if (isStartRecognition) {
+                    ib_start_recognition.setImageResource(R.drawable.ic_volume_off_white_36dp);
                     EventBus.getDefault().post(new EBE_StartStopService(false));
                     speechView.stop();
                 } else {
-//                    mainActivity.sendRequestStartListening();
+                    ib_start_recognition.setImageResource(R.drawable.ic_volume_up_white_36dp);
                     EventBus.getDefault().post(new EBE_StartStopService(true));
                     speechView.play();
                 }
+                isStartRecognition = !isStartRecognition;
                 break;
             case R.id.btn_call_ambulance:
-                call(DIALOG_AMBULANCE);
+                actionCall(DIALOG_AMBULANCE);
                 break;
             case R.id.btn_call_fire:
-                call(DIALOG_FIRE);
+                actionCall(DIALOG_FIRE);
                 break;
             case R.id.btn_call_police:
-                call(DIALOG_POLICE);
+                actionCall(DIALOG_POLICE);
                 break;
             case R.id.ib_walk_mode:
                 DialogSendSMS dialogSendSMS = new DialogSendSMS();
@@ -282,13 +294,16 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 break;
             case R.id.ib_location:
                 if (!isShareLocation) {  //enable
-                    DialogFollow dialogFollow = new DialogFollow();
+                    actionShareLocation();
+                    dialogFollow = new DialogFollow();
                     dialogFollow.setOnEventListener(new OnEventListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             ibLocation.setImageResource(R.drawable.ic_location_on);
                             isShareLocation = true;
-                            shareLocation();
+                            if (!TextUtils.isEmpty(currentParseId)) {
+                                EventBus.getDefault().post(new EBE_StartLocationFollowService(true, currentParseId));
+                            }
                         }
 
                         @Override
@@ -301,7 +316,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                     ibLocation.setImageResource(R.drawable.ic_location_off);
                     isShareLocation = false;
                     //stop follow service
-                    EventBus.getDefault().post(new EBE_StartLocationFollowService(true));
+                    EventBus.getDefault().post(new EBE_StartLocationFollowService(false));
 //                    stopUpdateLocationToParseSErver();
                 }
                 break;
@@ -312,11 +327,11 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         }
     }
 
-    private void shareLocation() {
+    private void actionShareLocation() {
         if (mainActivity.isLogged) {
 //            MySharedPreferences.getInstance(mainActivity).
             MySharedPreferences.getInstance(mainActivity).shareLocationState.save(isShareLocation);
-            if (isShareLocation) {
+//            if (isShareLocation) {
                 //run follow service
                 User user = MySharedPreferences.getInstance(mainActivity).userProfile.load(null);
                 final ParseFollow parseFollow = new ParseFollow(user.getEmail(), "0", "0", new ArrayList<String>());
@@ -325,12 +340,13 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                     public void done(ParseException e) {
                         if (e == null) {
                             currentParseId = parseFollow.getObjectId();
+                            Log.d(TAG, "actionShareLocation: ID "+currentParseId);
+                            dialogFollow.getEtContent().append(currentParseId);
                         }
                     }
                 });
-                EventBus.getDefault().post(new EBE_StartLocationFollowService(true, currentParseId));
 //                updateLocationToParseServer();
-            }
+//            }
         } else {
             //Start login activity for result
             Intent intent = new Intent(mainActivity, LoginActivity.class);
@@ -338,7 +354,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         }
     }
 
-    public void call(int dialogType) {
+    public void actionCall(int dialogType) {
         String title = "";
         String number = null;
         switch (dialogType) {
@@ -367,37 +383,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                         }
                     }
                 }).create().show();
-    }
-
-    @Override
-    public void onLocationChange(Location location) {
-        ((MainApplication) getActivity().getApplication()).setLastLocation(location);
-        mapFragment.animateCamera(location, AppConfig.ZOOM_LEVEL);
-        //Check country by location
-        setupCountry(location);
-    }
-
-    @Override
-    public void onConnected() {
-
-    }
-
-
-    private void setupCountry(Location location) {
-        countrynumber = MySharedPreferences.getInstance(mainActivity).countryNumber.load(null);
-        if (countrynumber == null) {
-            GeocodeCountry geocodeCountry = ReverseGeocodeCountry.getInstance(mainActivity).getCountryByLatLng(location.getLatitude(), location.getLongitude());
-            if (geocodeCountry != null) {
-                countrynumber = CountryUtil.getInstance(mainActivity).getItemCountryByName(geocodeCountry.getName());
-            } else {
-                String countryCode = AndroidUtil.getCountryCode();
-                countrynumber = CountryUtil.getInstance(mainActivity).getItemCountryByCode(countryCode);
-            }
-            setupEmergencyText();
-            MySharedPreferences.getInstance(mainActivity).countryNumber.save(countrynumber);
-            //update speech command by country
-            mainActivity.initSpeechCommand(countrynumber.countryCode);
-        }
     }
 
     //Eventbus subscriber
@@ -453,13 +438,36 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     @Subscribe
     public void onUpdateAccelerometer(EBE_DetectAccident detectAccident) {
         tvAcc.setText(getString(R.string.accelerometer) + " " + FormatUtil.formatDouble(detectAccident.getValue().accelerometer, 4));
-        tvSpeed.setText(getString(R.string.speed) + " " + FormatUtil.formatDouble(detectAccident.getValue().speed, 4));
+        tvSpeed.setText(getString(R.string.speed) + " " + FormatUtil.formatDouble(detectAccident.getValue().speed, 4) + " km/h");
+        tvMaxSpeed.setText(getString(R.string.max_speed) + " " + FormatUtil.formatDouble(detectAccident.getValue().maxSpeed, 4) + " km/h");
+        tvDistance.setText(getString(R.string.distance) + " " + FormatUtil.formatDouble(detectAccident.getValue().distance, 4));
     }
 
     @Subscribe
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "onLocationChanged: "+location.getLongitude());
+//        Log.d(TAG, "onLocationChanged: "+location.getLongitude());
+        //Check country by location
+        setupCountry(location);
         mapFragment.animateCamera(location, AppConfig.ZOOM_LEVEL);
         mapFragment.updateLocation(location);
     }
+
+    private void setupCountry(Location location) {
+        countrynumber = MySharedPreferences.getInstance(mainActivity).countryNumber.load(null);
+        if (countrynumber == null) {
+            GeocodeCountry geocodeCountry = ReverseGeocodeCountry.getInstance(mainActivity).getCountryByLatLng(location.getLatitude(), location.getLongitude());
+            if (geocodeCountry != null) {
+                countrynumber = CountryUtil.getInstance(mainActivity).getItemCountryByName(geocodeCountry.getName());
+            } else {
+                String countryCode = AndroidUtil.getCountryCode();
+                countrynumber = CountryUtil.getInstance(mainActivity).getItemCountryByCode(countryCode);
+            }
+            Log.d(TAG, "setupCountry: " + countrynumber.countryCode);
+            setupEmergencyText();
+            MySharedPreferences.getInstance(mainActivity).countryNumber.save(countrynumber);
+            //update speech command by country
+            mainActivity.initSpeechCommand(countrynumber.countryCode);
+        }
+    }
+
 }

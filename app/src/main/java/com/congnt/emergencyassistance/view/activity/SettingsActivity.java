@@ -87,7 +87,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || SettingSpeechFragment.class.getName().equals(fragmentName)
                 || SettingEmergencyFragment.class.getName().equals(fragmentName)
-                || SettingGeneralFragment.class.getName().equals(fragmentName);
+                || SettingGeneralFragment.class.getName().equals(fragmentName)
+                || SettingAutoFragment.class.getName().equals(fragmentName);
     }
 
     @Override
@@ -129,6 +130,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
     }
+
     public static class SettingEmergencyFragment extends PreferenceFragment {
 
         @Override
@@ -141,6 +143,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSwitchToValue(findPreference("setting_contact_sms"));
             bindPreferenceSummaryToValue(findPreference("setting_countdown_time"));
             bindPreferenceSummaryToValue(findPreference("setting_record_time"));
+        }
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                getActivity().finish();
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    public static class SettingAutoFragment extends PreferenceFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_auto_detect);
+            bindPreferenceSummaryToValue(findPreference("setting_auto_detect_countdown_time"));
         }
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {

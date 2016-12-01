@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeActivity;
 import com.congnt.androidbasecomponent.Awesome.AwesomeFragment;
@@ -136,7 +137,6 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
 
     private void initRequire() {
         //Requite network
-        //TODO: Require network
         if (!NetworkUtil.isNetworkConnected(this)) {
             DialogBuilder.confirmDialog(this, getString(R.string.require_network), getString(R.string.require_network_message)
                     , R.style.AppTheme2_AlertDialogStyle, new DialogInterface.OnClickListener() {
@@ -166,6 +166,12 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                             startActivity(intent);
                         }
                     }).create().show();
+        }
+    }
+    public void initNetwork(){
+        //Requite network
+        if (!NetworkUtil.isNetworkConnected(this)) {
+            Toast.makeText(this, "Please connect your device with internet.", Toast.LENGTH_SHORT).show();
         }
     }
 

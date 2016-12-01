@@ -176,6 +176,8 @@
     <string name="camera">Camera</string>
     <string name="permission_camera_desc">When you are in an emergency, taking picture by rear and front camera then save in a folder.</string>
     <string name="template_follow_default">Follow me with this ID:\n</string>
+    <string name="pref_header_detect">Auto detect accident</string>
+    <string name="setting_auto_detect_countdown_time_default">30</string>
 
     <string-array name="commands_police">
         <item>Help</item>

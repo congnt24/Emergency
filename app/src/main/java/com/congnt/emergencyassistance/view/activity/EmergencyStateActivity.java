@@ -73,7 +73,9 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
         countDownTime = Long.parseLong(MySharedPreferences.getInstance(this).pref.getString("setting_countdown_time", "10")) * 1000;
         countrynumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
         initViews();
-        VibratorUtil.vibrate(this, 2000);   //TODO: VIBRATOR NOT WORK
+        if (VibratorUtil.hasVibrator(this)) {
+            VibratorUtil.vibrate(this, 2000);   //TODO: VIBRATOR NOT WORK
+        }
 
         //Show dialog
         if (getIntent().getExtras() != null) {
@@ -87,7 +89,7 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
                 }
             };
             if (type.equalsIgnoreCase(AppConfig.DETECT_ACCIDENT)) {
-                countDownTime = 30 * 1000;
+                countDownTime = Long.parseLong(MySharedPreferences.getInstance(this).pref.getString("setting_countdown_time", "30")) * 1000;
             } else {
                 //stop speech service
                 if (hasSpeech) EventBus.getDefault().post(new EBE_StartStopService(false));

@@ -33,7 +33,7 @@ import java.util.Timer;
 public class DetectingAccidentServiceNew extends BaseForegroundService implements SensorEventListener2 {
     private static final String TAG = "DetectingAccident";
     private static final int DETECTING_ACCIDENT_FLAGS = 102;
-    private static final double VELOCITY_THRESHOLD = 24;
+    private static final double VELOCITY_THRESHOLD = 10;
     private static final double ACCELERATION_THRESHOLD = 3 * 9.8;
     private static final double ACCIDENT_THRESHOLD = 1;
     private static final double ACCIDENT_LOW_SPEED_THRESHOLD = 2;
@@ -122,10 +122,9 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
         if (maxSpeed < currentSpeech) {
             maxSpeed = currentSpeech;
         }
-        EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech, distance, maxSpeed)));
+        EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech, SSD, maxSpeed)));
         double accident = currentAcceleration / ACCELERATION_THRESHOLD;
-        if (accident >= ACCIDENT_THRESHOLD
-/* && currentSpeech >= VELOCITY_THRESHOLD*/
+        if (accident >= ACCIDENT_THRESHOLD && currentSpeech >= VELOCITY_THRESHOLD
                 ) {
             return true;
         }
@@ -168,7 +167,8 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
         if (previousLocation == null) {
             previousLocation = location;
         } else {
-            currentSpeech = LocationUtils.speed(previousLocation, location)*MPH2KMH;
+//            currentSpeech = LocationUtils.speed(previousLocation, location)*MPH2KMH;
+            currentSpeech = location.getSpeed();
             if (currentSpeech > VELOCITY_THRESHOLD) {
                 speedAboveThreshold = true;
             } else {    //Di chuyển dưới tốc độ 24

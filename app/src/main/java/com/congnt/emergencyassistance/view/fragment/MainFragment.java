@@ -265,6 +265,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                     EventBus.getDefault().post(new EBE_StartStopService(false));
                     speechView.stop();
                 } else {
+                    mainActivity.initNetwork();
                     ib_start_recognition.setImageResource(R.drawable.ic_volume_up_white_36dp);
                     EventBus.getDefault().post(new EBE_StartStopService(true));
                     speechView.play();
@@ -294,6 +295,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 break;
             case R.id.ib_location:
                 if (!isShareLocation) {  //enable
+                    mainActivity.initNetwork();
                     actionShareLocation();
                     dialogFollow = new DialogFollow();
                     dialogFollow.setOnEventListener(new OnEventListener<Void>() {

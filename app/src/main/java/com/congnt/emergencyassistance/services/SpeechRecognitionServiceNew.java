@@ -68,6 +68,7 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
         Log.d(TAG, "onCreate: " + Locale.getDefault().toString() + Locale.getDefault().getCountry());
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2000); // value to wait
 //        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500);
 //        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true); //ERror from server
@@ -169,17 +170,22 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
 
     @Override
     public void onResults(Bundle results) {
-        List<String> matches = results
-                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        Log.d("AAAA", matches.get(0));
-//        EventBus.getDefault().post(new EBE_Result(matches));
-        sendBroadcastToReceiver(results);
+//        List<String> matches = results
+//                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+//        Log.d("AAAA", matches.get(0));
+////        EventBus.getDefault().post(new EBE_Result(matches));
+//        sendBroadcastToReceiver(results);
         listenAgain();
     }
 
     @Override
     public void onPartialResults(Bundle partialResults) {
 
+        List<String> matches = partialResults
+                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        Log.d("AAAABBBBBBBB", matches.get(0));
+//        EventBus.getDefault().post(new EBE_Result(matches));
+        sendBroadcastToReceiver(partialResults);
     }
 
     @Override

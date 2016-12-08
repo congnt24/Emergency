@@ -39,9 +39,10 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     private static final double ACCIDENT_LOW_SPEED_THRESHOLD = 2;
     private static final double SSD_THRESHOLD = 2.06;
     private static final double MPH2KMH = 1.60934;
+    public double maxSpeed, distance;
     protected AudioManager mAudioManager;
     private long lastUpdate = 0;
-    private int DURATION = 1000;
+    private int DURATION = 300;
     private List<Double> list = new ArrayList<>();
     private double SSD = 0;
     private Notification notification;
@@ -54,7 +55,6 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     private boolean stillInCar = false;
     private int counter = 0;
     private Timer timer;
-    public double maxSpeed, distance;
 
     @Override
     protected void initOnCreate() {
@@ -83,7 +83,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
 
     @Override
     protected void initStart() {
-        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 
     }
 
@@ -168,7 +168,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
             previousLocation = location;
         } else {
 //            currentSpeech = LocationUtils.speed(previousLocation, location)*MPH2KMH;
-            currentSpeech = location.getSpeed();
+            currentSpeech = location.getSpeed() * MPH2KMH;
             if (currentSpeech > VELOCITY_THRESHOLD) {
                 speedAboveThreshold = true;
             } else {    //Di chuyển dưới tốc độ 24
@@ -184,6 +184,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
                         list.add(currentSpeech);
                         if (counter % 15 == 0) {//Calculate SSD every 15s
                             SSD = calculateSSD(list.toArray(new Double[list.size()]));
+                            Log.d(TAG, "onLocationChanged: SSD=" + SSD);
 //                            if (SSD > 2.06) {
 //                                stillInCar = true;
 //                            } else {
@@ -191,7 +192,6 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
 //                            }
                         }
                     }
-
                 }
             }
             sendBroadcastForAccident(estimateAccident());

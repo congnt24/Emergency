@@ -89,9 +89,11 @@ public class LocationService extends BaseForegroundService implements LocationLi
     public void onEvent(EBE_StartLocationFollowService item) {
         stopListening();
         if (item.getValue()) {
+            isForeground = true;
             currentParseId = "" + item.objectId;
             updateLocationToParseServer();
         } else {
+            isForeground = false;
             stopUpdateLocationToParseSErver();
         }
         startListening();
@@ -132,6 +134,9 @@ public class LocationService extends BaseForegroundService implements LocationLi
 
     @Override
     public void onLocationChanged(Location location) {
+        if ((location.hasAccuracy()) && (location.getAccuracy() > 400.0F)) {
+            return;
+        }
         ((MainApplication) getApplication()).setLastLocation(location);
         EventBus.getDefault().post(location);
         if (isFollow) {

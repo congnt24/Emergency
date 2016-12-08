@@ -45,6 +45,7 @@ import java.util.List;
 
 public class EmergencyStateActivity extends Activity implements Camera.PictureCallback, View.OnClickListener {
     private static final String TAG = "EmergencyStateActivity";
+    public static boolean isRunning = false;
     private FrameLayout previewHolder;
     private Handler handler;
     private TextView txtProgress;
@@ -57,17 +58,21 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
     private ItemCountryEmergencyNumber countrynumber;
     //    private CircleImageView[] contacts = new CircleImageView[4];
     private List<ItemContact> listContact;
-
     private RecyclerView recyclerView;
     private ContactAdapter adapter;
     private java.lang.Runnable delayRunnable;
-    private boolean hasSpeech = MySharedPreferences.getInstance(this).isListening.load(false);
-    ;
+    private boolean hasSpeech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if (!isRunning) {
+        isRunning = true;
+//        } else {
+//            finish();
+//        }
         setContentView(R.layout.activity_alert_dialog_new);
+        hasSpeech = MySharedPreferences.getInstance(this).isListening.load(false);
         //init variables
         handler = new Handler();
         countDownTime = Long.parseLong(MySharedPreferences.getInstance(this).pref.getString("setting_countdown_time", "10")) * 1000;
@@ -297,8 +302,13 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
 
     @Override
     public void finish() {
-        SoundUtil.getInstance().stop();
-        handler.removeCallbacks(delayRunnable);
+        isRunning = false;
+        try {
+            SoundUtil.getInstance().stop();
+            handler.removeCallbacks(delayRunnable);
+        } catch (Exception e) {
+            super.finish();
+        }
         super.finish();
     }
 

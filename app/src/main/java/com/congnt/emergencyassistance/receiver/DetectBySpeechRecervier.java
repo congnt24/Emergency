@@ -1,12 +1,11 @@
 package com.congnt.emergencyassistance.receiver;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MySharedPreferences;
@@ -19,7 +18,7 @@ import java.util.List;
  * Created by congnt24 on 12/10/2016.
  */
 
-public class DetectBySpeechRecervier extends BroadcastReceiver {
+public class DetectBySpeechRecervier extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -41,7 +40,7 @@ public class DetectBySpeechRecervier extends BroadcastReceiver {
                     String text = "";
                     for (String r : matches)
                         text += r + "\n";
-                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                     List<ItemSettingSpeech> list = MySharedPreferences.getInstance(context).emergency_command.load(null);
                     for (ItemSettingSpeech item : list) {
                         for (String str : matches) {

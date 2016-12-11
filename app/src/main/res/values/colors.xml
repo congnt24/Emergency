@@ -9,4 +9,5 @@
     <color name="colorTransparent">#787b1fa2</color>
     <color name="colorGreenTransparent">#601B5E20</color>
     <color name="colorTextPrimary">#111111</color>
+    <color name="colorTextSecondary">#FFFFFF</color>
 </resources>

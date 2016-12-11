@@ -15,11 +15,13 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
+import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.utility.ImageUtil;
 import com.congnt.androidbasecomponent.utility.SoundUtil;
@@ -68,6 +70,8 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
         super.onCreate(savedInstanceState);
 //        if (!isRunning) {
         isRunning = true;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        AndroidUtil.holdWakeLock(this);
 //        } else {
 //            finish();
 //        }
@@ -303,6 +307,7 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
     @Override
     public void finish() {
         isRunning = false;
+        AndroidUtil.releaseWakeLock();
         try {
             SoundUtil.getInstance().stop();
             handler.removeCallbacks(delayRunnable);

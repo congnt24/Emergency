@@ -106,7 +106,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     @Override
     protected void initAll(View rootView) {
         mainActivity = (MainActivity) getActivity();
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(MainFragment.this);
         //init firebase
         //get views
         countrynumber = ((MainActivity) getActivity()).countrynumber;
@@ -123,11 +123,11 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         tvMaxSpeed = (TextView) rootView.findViewById(R.id.tv_max_speed);
         tvDistance = (TextView) rootView.findViewById(R.id.tv_distance);
         ib_start_recognition = (ImageButton) rootView.findViewById(R.id.ib_start_recognition);
+        setupEmergencyNumber(rootView);
         //Init timmer
         initTimmer();
         //Init speech recognizer
         setupSpeechRecognitionService(rootView);
-        setupEmergencyNumber(rootView);
         initMapFragment();
         initListener();
     }
@@ -251,6 +251,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
     private void setupEmergencyText() {
         if (countrynumber == null) return;
+        Log.d(TAG, "setupEmergencyText() called");
         btn_police.setText("" + countrynumber.police);
         btn_fire.setText("" + countrynumber.fire);
         btn_ambulance.setText("" + countrynumber.ambulance);
@@ -295,25 +296,26 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 break;
             case R.id.ib_location:
                 if (!isShareLocation) {  //enable
-                    mainActivity.initNetwork();
-                    actionShareLocation();
-                    dialogFollow = new DialogFollow();
-                    dialogFollow.setOnEventListener(new OnEventListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            ibLocation.setImageResource(R.drawable.ic_location_on);
-                            isShareLocation = true;
-                            if (!TextUtils.isEmpty(currentParseId)) {
-                                EventBus.getDefault().post(new EBE_StartLocationFollowService(true, currentParseId));
+                    if (mainActivity.initNetwork()) {
+                        actionShareLocation();
+                        dialogFollow = new DialogFollow();
+                        dialogFollow.setOnEventListener(new OnEventListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                ibLocation.setImageResource(R.drawable.ic_location_on);
+                                isShareLocation = true;
+                                if (!TextUtils.isEmpty(currentParseId)) {
+                                    EventBus.getDefault().post(new EBE_StartLocationFollowService(true, currentParseId));
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onError(Void aVoid) {
+                            @Override
+                            public void onError(Void aVoid) {
 
-                        }
-                    });
-                    dialogFollow.show(getChildFragmentManager(), "Follow");
+                            }
+                        });
+                        dialogFollow.show(getChildFragmentManager(), "Follow");
+                    }
                 } else {    //diable
                     ibLocation.setImageResource(R.drawable.ic_location_off);
                     isShareLocation = false;
@@ -334,19 +336,19 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 //            MySharedPreferences.getInstance(mainActivity).
             MySharedPreferences.getInstance(mainActivity).shareLocationState.save(isShareLocation);
 //            if (isShareLocation) {
-                //run follow service
-                User user = MySharedPreferences.getInstance(mainActivity).userProfile.load(null);
-                final ParseFollow parseFollow = new ParseFollow(user.getEmail(), "0", "0", new ArrayList<String>());
-                parseFollow.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            currentParseId = parseFollow.getObjectId();
-                            Log.d(TAG, "actionShareLocation: ID "+currentParseId);
-                            dialogFollow.getEtContent().append(currentParseId);
-                        }
+            //run follow service
+            User user = MySharedPreferences.getInstance(mainActivity).userProfile.load(null);
+            final ParseFollow parseFollow = new ParseFollow(user.getEmail(), "0", "0", new ArrayList<String>());
+            parseFollow.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        currentParseId = parseFollow.getObjectId();
+                        Log.d(TAG, "actionShareLocation: ID " + currentParseId);
+                        dialogFollow.getEtContent().append(currentParseId);
                     }
-                });
+                }
+            });
 //                updateLocationToParseServer();
 //            }
         } else {
@@ -447,7 +449,6 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 
     @Subscribe
     public void onLocationChanged(Location location) {
-//        Log.d(TAG, "onLocationChanged: "+location.getLongitude());
         //Check country by location
         setupCountry(location);
         mapFragment.animateCamera(location, AppConfig.ZOOM_LEVEL);
@@ -464,7 +465,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 String countryCode = AndroidUtil.getCountryCode();
                 countrynumber = CountryUtil.getInstance(mainActivity).getItemCountryByCode(countryCode);
             }
-            Log.d(TAG, "setupCountry: " + countrynumber.countryCode);
+            Log.d(TAG, "onLocationChanged: " + countrynumber.countryCode);
             setupEmergencyText();
             MySharedPreferences.getInstance(mainActivity).countryNumber.save(countrynumber);
             //update speech command by country

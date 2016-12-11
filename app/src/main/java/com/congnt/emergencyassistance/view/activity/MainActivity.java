@@ -1,6 +1,5 @@
 package com.congnt.emergencyassistance.view.activity;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
@@ -33,7 +32,6 @@ import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.NetworkUtil;
 import com.congnt.androidbasecomponent.utility.PackageUtil;
-import com.congnt.androidbasecomponent.utility.PermissionUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
 import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
 import com.congnt.emergencyassistance.MainActionBar;
@@ -103,19 +101,14 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
     @Override
     protected void initialize(View mainView) {
         mainApplication = (MainApplication) getApplication();
-        //Show tutorial at the first time
-        if (MySharedPreferences.getInstance(this).isFirstTime.load(true)) {
-            startActivity(new Intent(this, TutorialActivity.class));
-        }
-
         service = new Intent(this, SpeechRecognitionServiceNew.class);
 
         initRequire();
 
         //update locale
-        ItemCountryEmergencyNumber countryEmergencyNumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
-        if (countryEmergencyNumber != null) {
-            AndroidUtil.updateLocaleByCountry(this, countryEmergencyNumber.countryCode);
+        countrynumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
+        if (countrynumber != null) {
+            AndroidUtil.updateLocaleByCountry(this, countrynumber.countryCode);
         }
 
         //Init Service
@@ -168,11 +161,14 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                     }).create().show();
         }
     }
-    public void initNetwork(){
+
+    public boolean initNetwork() {
         //Requite network
         if (!NetworkUtil.isNetworkConnected(this)) {
             Toast.makeText(this, "Please connect your device with internet.", Toast.LENGTH_SHORT).show();
+            return false;
         }
+        return true;
     }
 
     public void initSpeechCommand(String countryCode) {

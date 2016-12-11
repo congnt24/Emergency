@@ -6,13 +6,15 @@
     android:background="@color/colorPrimary"
     android:orientation="vertical"
     android:paddingLeft="@dimen/large"
-    android:paddingRight="@dimen/large">
+    android:paddingRight="@dimen/large"
+    android:paddingTop="@dimen/large">
 
     <ImageView
         android:id="@+id/iv_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="300dp" />
+        android:minHeight="300dp"
+        android:src="@drawable/image_app" />
 
     <TextView
         android:id="@+id/tv_title"

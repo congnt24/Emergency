@@ -39,6 +39,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     private static final double ACCIDENT_LOW_SPEED_THRESHOLD = 2;
     private static final double SSD_THRESHOLD = 2.06;
     private static final double MPH2KMH = 1.60934;
+    private static final double MS2KMH = 3.6;
     public double maxSpeed, distance;
     protected AudioManager mAudioManager;
     private long lastUpdate = 0;
@@ -124,8 +125,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
         }
         EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech, SSD, maxSpeed)));
         double accident = currentAcceleration / ACCELERATION_THRESHOLD;
-        if (accident >= ACCIDENT_THRESHOLD && currentSpeech >= VELOCITY_THRESHOLD
-                ) {
+        if (accident >= ACCIDENT_THRESHOLD && currentSpeech >= VELOCITY_THRESHOLD) {
             return true;
         }
         if (currentSpeech >= VELOCITY_THRESHOLD && counter < 30 && accident >= ACCIDENT_THRESHOLD) {
@@ -158,48 +158,50 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
         if (!isListening) {
             return;
         }
-        Location prevLocation = ((MainApplication) getApplication()).lastLocation;
-        distance += LocationUtils.distance(prevLocation, location);
-        ((MainApplication) getApplication()).lastLocation = location;
-        double lat = (location.getLatitude());
-        double lng = (location.getLongitude());
-        DecimalFormat df = new DecimalFormat("#.##");
-        if (previousLocation == null) {
-            previousLocation = location;
-        } else {
+        if (location.hasSpeed()) {
+            Location prevLocation = ((MainApplication) getApplication()).lastLocation;
+            distance += LocationUtils.distance(prevLocation, location);
+            ((MainApplication) getApplication()).lastLocation = location;
+            double lat = (location.getLatitude());
+            double lng = (location.getLongitude());
+            DecimalFormat df = new DecimalFormat("#.##");
+            if (previousLocation == null) {
+                previousLocation = location;
+            } else {
 //            currentSpeech = LocationUtils.speed(previousLocation, location)*MPH2KMH;
-            currentSpeech = location.getSpeed() * MPH2KMH;
-            if (currentSpeech > VELOCITY_THRESHOLD) {
-                speedAboveThreshold = true;
-            } else {    //Di chuyển dưới tốc độ 24
-                if (speedAboveThreshold) {   // nếu là Giảm tốc độ đột ngột
-                    counter = 0;
-                    speedAboveThreshold = false;
-                } else {    //Nếu vẫn di chuyển tốc dộ chậm
-                    if (counter < 30) {
-                        if (counter > 15) {
+                currentSpeech = location.getSpeed() * MS2KMH;
+                if (currentSpeech > VELOCITY_THRESHOLD) {
+                    speedAboveThreshold = true;
+                } else {    //Di chuyển dưới tốc độ 24
+                    if (speedAboveThreshold) {   // nếu là Giảm tốc độ đột ngột
+                        counter = 0;
+                        speedAboveThreshold = false;
+                    } else {    //Nếu vẫn di chuyển tốc dộ chậm
+                        if (counter < 30) {
+                            if (counter > 15) {
+                                list.add(currentSpeech);
+                            }
+                        } else {
                             list.add(currentSpeech);
-                        }
-                    } else {
-                        list.add(currentSpeech);
-                        if (counter % 15 == 0) {//Calculate SSD every 15s
-                            SSD = calculateSSD(list.toArray(new Double[list.size()]));
-                            Log.d(TAG, "onLocationChanged: SSD=" + SSD);
+                            if (counter % 15 == 0) {//Calculate SSD every 15s
+                                SSD = calculateSSD(list.toArray(new Double[list.size()]));
+                                Log.d(TAG, "onLocationChanged: SSD=" + SSD);
 //                            if (SSD > 2.06) {
 //                                stillInCar = true;
 //                            } else {
 //                                stillInCar = false;
 //                            }
+                            }
                         }
                     }
                 }
+                sendBroadcastForAccident(estimateAccident());
+                previousLocation = location;
             }
-            sendBroadcastForAccident(estimateAccident());
-            previousLocation = location;
+            String speedFormatted = df.format(currentSpeech);
+            Log.d(TAG, "onLocationChanged: lat: " + lat + " Lng: " + lng);
+            Log.d(TAG, "onLocationChanged: has speed: " + location.hasSpeed() + " Speed calculate: " + String.valueOf(speedFormatted) + " - getSpeed(): " + location.getSpeed());
         }
-        String speedMphFormatted = df.format(currentSpeech);
-        Log.d(TAG, "onLocationChanged: lat: " + lat + " Lng: " + lng);
-        Log.d(TAG, "onLocationChanged: has speed: " + location.hasSpeed() + " Speed calculate: " + String.valueOf(speedMphFormatted) + " - getSpeed(): " + location.getSpeed());
 //        Toast.makeText(this, "getSpeed(): " + location.getSpeed(), Toast.LENGTH_SHORT).show();
     }
 

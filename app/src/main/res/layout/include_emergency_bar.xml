@@ -18,7 +18,7 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             app:flat_icon="@drawable/police"
-            app:flat_text="113"
+            app:flat_text="911"
             app:flat_text_top="POLICE" />
 
         <com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop
@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             app:flat_icon="@drawable/fire"
-            app:flat_text="114"
+            app:flat_text="911"
             app:flat_text_top="FIRE" />
 
         <com.congnt.androidbasecomponent.view.widget.FlatButtonWithIconTop
@@ -38,7 +38,7 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             app:flat_icon="@drawable/ambulance"
-            app:flat_text="115"
+            app:flat_text="911"
             app:flat_text_top="AMBULANCE" />
     </LinearLayout>
 </LinearLayout>

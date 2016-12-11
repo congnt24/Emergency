@@ -14,6 +14,9 @@ import com.parse.ParseObject;
 
 public class MainApplication extends Application {
     public Location lastLocation;
+    private String lastAddress;
+    private long request_displacement = 1000;
+    private long request_duration = 3000;
 
     public String getLastAddress() {
         return lastAddress;
@@ -22,10 +25,6 @@ public class MainApplication extends Application {
     public void setLastAddress(String lastAddress) {
         this.lastAddress = lastAddress;
     }
-
-    private String lastAddress;
-    private long request_displacement = 0;
-    private long request_duration = 0;
 
     public Location getLastLocation() {
         return lastLocation;

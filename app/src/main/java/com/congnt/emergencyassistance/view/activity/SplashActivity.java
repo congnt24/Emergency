@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
+import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.karumi.dexter.MultiplePermissionsReport;
 
@@ -55,7 +56,14 @@ public class SplashActivity extends AppCompatActivity{
                 }
             });
         }else{
-            startActivity(new Intent(this, MainActivity.class));
+
+            //Show tutorial at the first time
+            if (MySharedPreferences.getInstance(this).isFirstTime.load(true)) {
+                startActivity(new Intent(this, TutorialActivity.class));
+            } else {
+                startActivity(new Intent(this, MainActivity.class));
+            }
+
             finish();
         }
     }

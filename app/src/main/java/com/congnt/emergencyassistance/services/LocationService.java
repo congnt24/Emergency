@@ -13,6 +13,7 @@ import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.PermissionUtil;
 import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MainApplication;
+import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartDetectingAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationFollowService;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartLocationService;
 import com.congnt.emergencyassistance.entity.parse.LocationFollow;
@@ -100,10 +101,23 @@ public class LocationService extends BaseForegroundService implements LocationLi
         Log.d(TAG, "onEvent: Start Parser server");
     }
 
+
+    @Subscribe
+    public void onEvent(EBE_StartDetectingAccident item) {
+        stopListening();
+        if (item.getValue()) {
+            isForeground = true;
+        } else {
+            isForeground = false;
+        }
+        startListening();
+        Log.d(TAG, "onEvent: Start Parser server");
+    }
+
     @Override
     protected void initStart() {
-        LocationUtil.setLocationRequest(mLocationRequest, ((MainApplication) getApplication()).getRequest_displacement()
-                , ((MainApplication) getApplication()).getRequest_duration());
+        LocationUtil.setLocationRequest(mLocationRequest, /*((MainApplication) getApplication()).getRequest_displacement()
+                , ((MainApplication) getApplication()).getRequest_duration()*/1000, 3000);
         requestLocationUpdate();
     }
 
@@ -138,6 +152,7 @@ public class LocationService extends BaseForegroundService implements LocationLi
             return;
         }
         ((MainApplication) getApplication()).setLastLocation(location);
+        Log.d(TAG, "onLocationChanged: xxxx ");
         EventBus.getDefault().post(location);
         if (isFollow) {
             Log.d(TAG, "onLocationChanged: Update parse server " + currentParseId);

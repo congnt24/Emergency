@@ -14,6 +14,10 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 
 /**
  * Created by congnt24 on 23/10/2016.
@@ -32,6 +36,28 @@ public class CameraUtil {
         } else {
             return false;
         }
+    }
+
+    public static Camera.Parameters getCameraParam(Camera cam){
+        Camera.Parameters params = cam.getParameters();
+        List<Camera.Size> sizes = params.getSupportedPictureSizes();
+        Camera.Size mSize = null;
+
+        Collections.sort(sizes, new Comparator<Camera.Size>() {
+            @Override
+            public int compare(Camera.Size t1, Camera.Size t2) {
+                return t1.width >= t2.width ? 1 : -1;
+            }
+        });
+        for (Camera.Size size : sizes) {
+            if (size.width >= 600) {
+                mSize = size;
+                break;
+            }
+        }
+        Log.i("CAMERA", "Available resolution: " + mSize.width + " " + mSize.height);
+        params.setPictureSize(mSize.width, mSize.height);
+        return params;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

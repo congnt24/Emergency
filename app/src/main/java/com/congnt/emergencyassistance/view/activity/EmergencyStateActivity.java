@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
+import com.congnt.androidbasecomponent.utility.CameraUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.androidbasecomponent.utility.ImageUtil;
 import com.congnt.androidbasecomponent.utility.SoundUtil;
@@ -43,6 +45,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class EmergencyStateActivity extends Activity implements Camera.PictureCallback, View.OnClickListener {
@@ -229,17 +233,18 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
                             cam = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
                             try {
                                 cam.setPreviewDisplay(cameraView.getHolder());
+                                cam.setParameters(CameraUtil.getCameraParam(cam));
+                                cam.startPreview();
+                                final Camera finalCamera = cam;
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finalCamera.takePicture(null, null, EmergencyStateActivity.this);
+                                    }
+                                }, 500);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            cam.startPreview();
-                            final Camera finalCamera = cam;
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    finalCamera.takePicture(null, null, EmergencyStateActivity.this);
-                                }
-                            }, 500);
                         }
                     });
                 }

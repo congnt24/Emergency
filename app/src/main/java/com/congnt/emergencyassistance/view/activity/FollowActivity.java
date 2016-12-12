@@ -19,6 +19,7 @@ import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
+import com.congnt.emergencyassistance.entity.ItemHistory;
 import com.congnt.emergencyassistance.entity.parse.ParseFollow;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.GetCallback;
@@ -89,6 +90,13 @@ public class FollowActivity extends AwesomeActivity implements View.OnClickListe
         });
         handler = new Handler();
         setupEmergencyNumber(mainView);
+        if (getIntent() != null) {
+            ItemHistory item = getIntent().getParcelableExtra("history");
+            if (item != null) {
+                List<LatLng> listLatLng = item.getListLocation();
+                mapFragment.addPolyline(listLatLng);
+            }
+        }
     }
 
     @Override

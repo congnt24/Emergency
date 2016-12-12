@@ -116,8 +116,8 @@ public class LocationService extends BaseForegroundService implements LocationLi
 
     @Override
     protected void initStart() {
-        LocationUtil.setLocationRequest(mLocationRequest, /*((MainApplication) getApplication()).getRequest_displacement()
-                , ((MainApplication) getApplication()).getRequest_duration()*/1000, 3000);
+        LocationUtil.setLocationRequest(mLocationRequest, ((MainApplication) getApplication()).getRequest_displacement()
+                , ((MainApplication) getApplication()).getRequest_duration());
         requestLocationUpdate();
     }
 

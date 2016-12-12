@@ -129,7 +129,6 @@ public class FileUtil {
             return;
         }
     }
-
     /**
      * It'll get all Files in a parentDir and return it
      * You need to check Permission using PermissionUtil to avoid crash

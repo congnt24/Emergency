@@ -33,15 +33,14 @@ dependencies {
     compile 'com.google.firebase:firebase-core:9.6.1'
     compile 'com.google.firebase:firebase-auth:9.6.1'
     compile 'com.parse:parse-android:1.13.1'
-//    UI
+    //    UI
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'com.github.iwgang:countdownview:2.1.2'
-
     testCompile 'junit:junit:4.12'
     compile project(':CountryCodePicker')
-    compile project(':slidingmenu')
     compile project(':reversegeocodecountry')
+    compile project(':galleryview')
 }
 
 

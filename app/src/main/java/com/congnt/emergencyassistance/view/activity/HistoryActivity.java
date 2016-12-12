@@ -1,17 +1,15 @@
 package com.congnt.emergencyassistance.view.activity;
 
-import android.support.v7.widget.GridLayoutManager;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.congnt.androidbasecomponent.Awesome.AwesomeActivity;
 import com.congnt.androidbasecomponent.Awesome.AwesomeLayout;
+import com.congnt.androidbasecomponent.adapter.AwesomeRecyclerAdapter;
 import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigateUp;
-import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.emergencyassistance.MainActionBar;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
@@ -20,7 +18,6 @@ import com.congnt.emergencyassistance.entity.ItemHistory;
 import com.congnt.emergencyassistance.entity.firebase.User;
 import com.congnt.emergencyassistance.entity.parse.ParseFollow;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -30,7 +27,7 @@ import java.util.List;
 @Activity(mainLayoutId = R.layout.activity_history,
         actionbarType = Activity.ActionBarType.ACTIONBAR_CUSTOM)
 @NavigateUp
-public class HistoryActivity extends AwesomeActivity {
+public class HistoryActivity extends AwesomeActivity implements AwesomeRecyclerAdapter.OnClickListener<ItemHistory> {
     private RecyclerView recycler;
     private HistoryAdapter adapter;
     private List<ItemHistory> listHistory = new ArrayList<>();
@@ -51,11 +48,11 @@ public class HistoryActivity extends AwesomeActivity {
         getFollowFromParse();
         recycler = (RecyclerView) mainView.findViewById(R.id.recycler_contact);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new HistoryAdapter(this, listHistory, null);
+        adapter = new HistoryAdapter(this, listHistory, this);
         recycler.setAdapter(adapter);
     }
 
-    public void getFollowFromParse(){
+    public void getFollowFromParse() {
         listHistory.clear();
         User user = MySharedPreferences.getInstance(this).userProfile.load(null);
         ParseQuery<ParseFollow> query = ParseQuery.getQuery(ParseFollow.class);
@@ -64,7 +61,11 @@ public class HistoryActivity extends AwesomeActivity {
             @Override
             public void done(List<ParseFollow> objects, ParseException e) {
                 for (int i = 0; i < objects.size(); i++) {
-                    listHistory.add(new ItemHistory(objects.get(i).getCreatedAt().toString(), "location", "type"));
+                    if (objects.get(i).getList().size() > 1) {
+                        ItemHistory itemHistory = new ItemHistory(objects.get(i).getCreatedAt().toString(), "location", "type");
+                        itemHistory.setListLocation(objects.get(i).getListLatLng());
+                        listHistory.add(itemHistory);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -82,5 +83,12 @@ public class HistoryActivity extends AwesomeActivity {
     public void onBackPressed() {
         finish();
         super.onBackPressed();
+    }
+
+    @Override
+    public void onClick(ItemHistory item, int position) {
+        Intent intent = new Intent(this, FollowActivity.class);
+        intent.putExtra("history", item);
+        startActivity(intent);
     }
 }

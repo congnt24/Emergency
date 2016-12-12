@@ -34,14 +34,14 @@
             android:id="@+id/nav_change_country"
             android:icon="@drawable/ic_language"
             android:title="@string/change_country" />
-        <!--<item
-            android:id="@+id/nav_history"
-            android:icon="@drawable/ic_history_black_36dp"
-            android:title="@string/history" />-->
         <item
             android:id="@+id/nav_follow"
             android:icon="@drawable/ic_people_black_36dp"
             android:title="@string/title_activity_follow" />
+        <item
+            android:id="@+id/nav_library"
+            android:icon="@drawable/ic_photo_library"
+            android:title="@string/manage" />
     </group>
     <group android:id="@+id/nav_group_communication">
         <item

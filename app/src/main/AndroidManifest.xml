@@ -138,6 +138,11 @@
             android:name=".view.activity.FollowActivity"
             android:label="@string/title_activity_follow">
         </activity>
+        <activity
+            android:name="com.etiennelawlor.imagegallery.library.activities.ImageGalleryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label=""
+            android:theme="@style/AppTheme2.ImageGalleryTheme" />
 
         <!--Receiver-->
         <receiver

@@ -7,6 +7,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TransparentSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
@@ -41,26 +43,26 @@ public class TransparentSurfaceView extends SurfaceView implements SurfaceHolder
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         try {
             this.camera.setPreviewDisplay(surfaceHolder);
-//            Camera.Parameters params = this.camera.getParameters();
-//            List<Camera.Size> sizes = params.getSupportedPictureSizes();
-//            Camera.Size mSize = null;
-//
-//            Collections.sort(sizes, new Comparator<Camera.Size>() {
-//                @Override
-//                public int compare(Camera.Size t1, Camera.Size t2) {
-//                    return t1.width >= t2.width ? 1 : -1;
-//                }
-//            });
-//            for (Camera.Size size : sizes) {
-//                if (size.width >= 1000) {
-//                    mSize = size;
-//                    break;
-//                }
-//            }
-//            Log.i("CAMERA", "Available resolution: " + mSize.width + " " + mSize.height);
-//
-//            params.setPictureSize(mSize.width, mSize.height);
-//            this.camera.setParameters(params);
+            Camera.Parameters params = this.camera.getParameters();
+            List<Camera.Size> sizes = params.getSupportedPictureSizes();
+            Camera.Size mSize = null;
+
+            Collections.sort(sizes, new Comparator<Camera.Size>() {
+                @Override
+                public int compare(Camera.Size t1, Camera.Size t2) {
+                    return t1.width >= t2.width ? 1 : -1;
+                }
+            });
+            for (Camera.Size size : sizes) {
+                if (size.width >= 600) {
+                    mSize = size;
+                    break;
+                }
+            }
+            Log.i("CAMERA", "Available resolution: " + mSize.width + " " + mSize.height);
+
+            params.setPictureSize(mSize.width, mSize.height);
+            this.camera.setParameters(params);
             this.camera.startPreview();
         } catch (IOException e) {
             e.printStackTrace();

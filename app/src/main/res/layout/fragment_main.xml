@@ -98,20 +98,11 @@
         android:layout_marginTop="54dp"
         android:background="@drawable/selector_bg_circle"
         android:src="@drawable/ic_volume_off_white_36dp"/>
-    <ImageButton
-        android:id="@+id/ib_walk_mode"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/ib_start_recognition"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/selector_bg_circle"
-        android:src="@drawable/ic_share" />
 
     <ImageButton
         android:id="@+id/ib_follow"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_below="@id/ib_walk_mode"
         android:layout_marginTop="4dp"
         android:background="@drawable/selector_bg_circle"
         android:src="@drawable/ic_directions_run"
@@ -121,7 +112,7 @@
         android:id="@+id/ib_location"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_below="@id/ib_walk_mode"
+        android:layout_below="@id/ib_start_recognition"
         android:layout_marginTop="4dp"
         android:background="@drawable/selector_bg_circle"
         android:src="@drawable/ic_location_off" />
@@ -134,6 +125,15 @@
         android:layout_marginTop="4dp"
         android:background="@drawable/selector_bg_circle"
         android:src="@drawable/ic_timer" />
+
+    <ImageButton
+        android:id="@+id/ib_walk_mode"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/ib_timmer"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/selector_bg_circle"
+        android:src="@drawable/ic_share" />
     <!--<android.support.v7.widget.SwitchCompat
         android:id="@+id/sw_share_location"
         android:layout_width="wrap_content"

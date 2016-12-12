@@ -42,6 +42,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     private static final double MS2KMH = 3.6;
     public double maxSpeed, distance;
     protected AudioManager mAudioManager;
+    Location prevLocation;
     private long lastUpdate = 0;
     private int DURATION = 300;
     private List<Double> list = new ArrayList<>();
@@ -103,6 +104,8 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
 
     }
 
+    //Implement method
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor mySensor = event.sensor;
@@ -117,13 +120,11 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
         }
     }
 
-    //Implement method
-
     public boolean estimateAccident() {
         if (maxSpeed < currentSpeech) {
             maxSpeed = currentSpeech;
         }
-        EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech, SSD, maxSpeed)));
+        EventBus.getDefault().post(new EBE_DetectAccident(new DetectAccident(currentAcceleration, currentSpeech, distance, maxSpeed)));
         double accident = currentAcceleration / ACCELERATION_THRESHOLD;
         if (accident >= ACCIDENT_THRESHOLD && currentSpeech >= VELOCITY_THRESHOLD) {
             return true;
@@ -137,7 +138,6 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
         return false;
 
     }
-
 
     public double calculateAcceleration(float[] values) {
         int sum = 0;
@@ -159,7 +159,10 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
             return;
         }
         if (location.hasSpeed()) {
-            Location prevLocation = ((MainApplication) getApplication()).lastLocation;
+            if (prevLocation == null) {
+                prevLocation = location;
+            }
+//            Location prevLocation = ((MainApplication) getApplication()).lastLocation;
             distance += LocationUtils.distance(prevLocation, location);
             ((MainApplication) getApplication()).lastLocation = location;
             double lat = (location.getLatitude());

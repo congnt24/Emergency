@@ -1,3 +1,4 @@
+/*
 package com.congnt.emergencyassistance.view.activity;
 
 import android.content.Intent;
@@ -114,4 +115,4 @@ public abstract class BaseSlidingActivity extends SlidingFragmentActivity {
         FragmentManager fm = getSupportFragmentManager();
         fragment.show(fm, tag);
     }
-}
+}*/

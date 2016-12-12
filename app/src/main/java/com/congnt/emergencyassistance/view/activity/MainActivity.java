@@ -2,6 +2,8 @@ package com.congnt.emergencyassistance.view.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -10,6 +12,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +32,14 @@ import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
+import com.congnt.androidbasecomponent.utility.FileUtil;
 import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.NetworkUtil;
 import com.congnt.androidbasecomponent.utility.PackageUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
 import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
+import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MainActionBar;
 import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.MySharedPreferences;
@@ -50,12 +56,17 @@ import com.congnt.emergencyassistance.util.CountryUtil;
 import com.congnt.emergencyassistance.view.fragment.EmergencySoundFragment;
 import com.congnt.emergencyassistance.view.fragment.MainFragment;
 import com.congnt.emergencyassistance.view.fragment.NearByFragment;
+import com.etiennelawlor.imagegallery.library.activities.FullScreenImageGalleryActivity;
+import com.etiennelawlor.imagegallery.library.activities.ImageGalleryActivity;
+import com.etiennelawlor.imagegallery.library.adapters.FullScreenImageGalleryAdapter;
+import com.etiennelawlor.imagegallery.library.adapters.ImageGalleryAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,6 +137,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         setupNavigationView();
         //init viewpager
         setupViewPager(mainView);
+        initManageGallery();
     }
 
     private void initRequire() {
@@ -235,6 +247,42 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         TabLayoutUtil.setColorSelectorIcons(tabLayout, R.color.tab_icon);
     }
 
+    private void initManageGallery() {
+        ImageGalleryActivity.setImageThumbnailLoader(new ImageGalleryAdapter.ImageThumbnailLoader() {
+            @Override
+            public void loadImageThumbnail(ImageView iv, String imageUrl, int dimension) {
+                if (!TextUtils.isEmpty(imageUrl)) {
+                    Picasso.with(iv.getContext()).load(new File(imageUrl))
+                            .resize(dimension, dimension).centerCrop().into(iv);
+                } else {
+                    iv.setImageDrawable(null);
+                }
+            }
+        });
+
+        FullScreenImageGalleryActivity.setFullScreenImageLoader(new FullScreenImageGalleryAdapter.FullScreenImageLoader() {
+            @Override
+            public void loadFullScreenImage(ImageView iv, String imageUrl, int width, final LinearLayout bglinearLayout) {
+                if (!TextUtils.isEmpty(imageUrl)) {
+                    Picasso.with(iv.getContext()).load(new File(imageUrl))
+                            .resize(width, 0).into(iv/*, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            bglinearLayout.setBackgroundColor(Color.WHITE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    }*/);
+                } else {
+                    iv.setImageDrawable(null);
+                }
+            }
+        });
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         mDrawer.closeDrawer(Gravity.LEFT);
@@ -251,9 +299,22 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             case R.id.nav_change_country:
                 startActivity(new Intent(this, ChangeCountryActivity.class));
                 break;
-//            case R.id.nav_history:
-//                startActivity(new Intent(this, HistoryActivity.class));
-//                break;
+            case R.id.nav_library:
+
+                Intent intent = new Intent(this, ImageGalleryActivity.class);
+                Bundle bundle = new Bundle();
+                ArrayList<String> alist = new ArrayList<String>();
+                List<File> list = FileUtil.getListFile(new File(Environment.getExternalStorageDirectory() + "/" + AppConfig.FOLDER_MEDIA), ".jpg");
+                if (list != null) {
+                    for (File file : list) {
+                        alist.add(file.getAbsolutePath());
+                    }
+                }
+                bundle.putStringArrayList(ImageGalleryActivity.KEY_IMAGES, alist);
+                bundle.putString(ImageGalleryActivity.KEY_TITLE, "Manage Photo");
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
             case R.id.nav_follow:
                 startActivity(new Intent(this, FollowActivity.class));
                 break;

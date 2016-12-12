@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- AppCompat Colors -->
+    <color name="transparent_grey_900_eighty">#CC212121</color>
+
+    <color name="colorPrimary">@color/md_deep_purple_500</color>
+    <color name="colorPrimaryDark">@color/md_blue_500</color>
+    <color name="colorAccent">#FFFFFF</color>
+    <color name="colorTabLayout">@color/colorPrimary</color>
+    <color name="tab_icon_select">@color/md_white_1000</color>
+    <color name="tab_icon_default">@color/colorPrimaryDark</color>
+    <color name="colorTransparent">#787b1fa2</color>
+    <color name="colorGreenTransparent">#601B5E20</color>
+    <color name="colorTextPrimary">#111111</color>
+    <color name="colorTextSecondary">#FFFFFF</color>
+
+</resources>

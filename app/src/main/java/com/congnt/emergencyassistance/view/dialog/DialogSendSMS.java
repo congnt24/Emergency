@@ -82,7 +82,7 @@ public class DialogSendSMS extends DialogFragment {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         rootView = inflater.inflate(R.layout.dialog_layout_sms, null);
         initView();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme2_SMSDialog);
         builder.setView(rootView);
         builder.setTitle("Send SMS")
                 .setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {

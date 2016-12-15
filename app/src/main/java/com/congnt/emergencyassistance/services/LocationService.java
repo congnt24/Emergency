@@ -73,7 +73,7 @@ public class LocationService extends BaseForegroundService implements LocationLi
         application = (MainApplication) getApplication();
         EventBus.getDefault().register(this);
         mGoogleApiClient = GoogleApiUtil.getInstance().getGoogleApiClient(this, this, this);
-        mLocationRequest = new LocationRequest();
+        mLocationRequest = LocationUtil.getLocationRequest(AppConfig.UPDATE_LOCATION_DISPLACEMENT, AppConfig.UPDATE_LOCATION_DURATION);
     }
 
     @Subscribe
@@ -92,10 +92,12 @@ public class LocationService extends BaseForegroundService implements LocationLi
         if (item.getValue()) {
             isForeground = true;
             currentParseId = "" + item.objectId;
-            updateLocationToParseServer();
+            isFollow = true;
+            mLocationRequest = LocationUtil.getLocationRequest(0, 0);
         } else {
             isForeground = false;
-            stopUpdateLocationToParseSErver();
+            isFollow = false;
+            mLocationRequest = LocationUtil.getLocationRequest(AppConfig.UPDATE_LOCATION_DISPLACEMENT, AppConfig.UPDATE_LOCATION_DURATION);
         }
         startListening();
         Log.d(TAG, "onEvent: Start Parser server");
@@ -107,17 +109,17 @@ public class LocationService extends BaseForegroundService implements LocationLi
         stopListening();
         if (item.getValue()) {
             isForeground = true;
+            mLocationRequest = LocationUtil.getLocationRequest(0, 0);
         } else {
             isForeground = false;
+            mLocationRequest = LocationUtil.getLocationRequest(AppConfig.UPDATE_LOCATION_DISPLACEMENT, AppConfig.UPDATE_LOCATION_DURATION);
         }
         startListening();
-        Log.d(TAG, "onEvent: Start Parser server");
+        Log.d(TAG, "onEvent: Start Detect server");
     }
 
     @Override
     protected void initStart() {
-        LocationUtil.setLocationRequest(mLocationRequest, ((MainApplication) getApplication()).getRequest_displacement()
-                , ((MainApplication) getApplication()).getRequest_duration());
         requestLocationUpdate();
     }
 
@@ -181,22 +183,5 @@ public class LocationService extends BaseForegroundService implements LocationLi
                 .checkMultiPermission(AppConfig.locationPermission)) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
-    }
-
-    private void updateLocationToParseServer() {
-        isFollow = true;
-        //change duration and displacement
-        cache_displacement = application.getRequest_displacement();
-        cache_duration = application.getRequest_duration();
-        application.setRequest_displacement(AppConfig.PARSE_UPDATE_LOCATION_DISPLACEMENT);
-        application.setRequest_duration(AppConfig.PARSE_DELAY_DURATION);
-        listLocation.clear();
-
-    }
-
-    private void stopUpdateLocationToParseSErver() {
-        isFollow = false;
-        application.setRequest_displacement(cache_displacement);
-        application.setRequest_duration(cache_duration);
     }
 }

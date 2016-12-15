@@ -4,8 +4,8 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/md_blue_A700</item>
-        <item name="colorControlActivated">@color/md_blue_900</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/md_blue_A700</item>
     </style>
 
     <style name="AppTheme2.NoActionBar">
@@ -20,14 +20,23 @@
         <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 
-    <style name="AppTheme2.AlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
+    <style name="AppTheme2.SMSDialog" parent="Theme.AppCompat.Dialog.Alert">
         <!-- Used for the buttons -->
         <item name="colorAccent">@color/md_blue_A700</item>
+        <item name="android:textColorPrimary">@color/md_black_1000</item>
+        <item name="android:background">@color/md_white_1000</item>
+        <!--<item name="android:windowTitleStyle">@style/DialogTitleTextStyle</item>-->
+    </style>
+
+    <style name="AppTheme2.AlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
         <!-- Used for the title and text -->
-        <!--<item name="android:textColorPrimary">#111111</item>-->
-        <!--<item name="android:background">@color/md_white_1000</item>-->
+        <item name="android:textColorPrimary">@color/md_white_1000</item>
+        <item name="android:background">@color/colorPrimary</item>
         <!--<item name="android:windowTitleStyle">@style/DialogTitleTextStyle</item>-->
     </style>
 

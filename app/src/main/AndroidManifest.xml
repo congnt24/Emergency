@@ -143,6 +143,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label=""
             android:theme="@style/AppTheme2.ImageGalleryTheme" />
+        <activity
+            android:name=".view.activity.ManageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="Manage"
+            android:theme="@style/AppTheme2.ImageGalleryTheme" />
 
         <!--Receiver-->
         <receiver

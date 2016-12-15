@@ -1,13 +1,29 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference
+    <!--<ListPreference
         android:key="setting_speed_unit"
         android:summary="Km/h"
-        android:title="Speed Unit" />
-
+        android:title="Speed Unit" />-->
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="setting_enable_volume"
+        android:summary="@string/enable_enable_volume_desc"
+        android:title="@string/enable_enable_volume" />
+    <EditTextPreference
+        android:defaultValue="@string/setting_auto_detect_countdown_time_default"
+        android:inputType="number"
+        android:key="setting_auto_detect_countdown_time"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/setting_detect_countdown_time" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="setting_mute_speech"
+        android:summary="@string/enable_mute_beep_sound_desc"
+        android:title="@string/enable_mute_beep_sound" />
     <SwitchPreference
         android:defaultValue="false"
         android:key="setting_call_to"
         android:summary="@string/enable_call_to_desc"
         android:title="@string/enable_call_to" />
-
 </PreferenceScreen>

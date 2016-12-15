@@ -3,7 +3,10 @@ package com.congnt.androidbasecomponent.utility;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
+
+import java.io.File;
 
 /**
  * Created by congnt24 on 24/09/2016.
@@ -47,6 +50,15 @@ public class SoundUtil {
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
     }
+
+
+    public void playSound(Context context, String path, MediaPlayer.OnCompletionListener listener) {
+        mediaPlayer = MediaPlayer.create(context, Uri.fromFile(new File(path)));
+        mediaPlayer.setOnCompletionListener(listener);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.start();
+    }
+
 
     public void stop() {
         if (mediaPlayer != null) {

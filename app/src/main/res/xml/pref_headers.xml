@@ -1,21 +1,20 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- These settings headers are only used on tablets. -->
-<!--
     <header
         android:fragment="com.congnt.emergencyassistance.view.activity.SettingsActivity$SettingGeneralFragment"
         android:icon="@drawable/ic_home"
-        android:title="@string/pref_header_general" />-->
+        android:title="@string/pref_header_general" />
     <header
         android:fragment="com.congnt.emergencyassistance.view.activity.SettingsActivity$SettingEmergencyFragment"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_shield"
         android:title="@string/pref_header_emergency" />
     <header
         android:fragment="com.congnt.emergencyassistance.view.fragment.SettingSpeechFragment"
         android:icon="@drawable/ic_record_voice_over_black"
         android:title="@string/pref_header_speech" />
-    <header
-        android:fragment="com.congnt.emergencyassistance.view.activity.SettingsActivity$SettingAutoFragment"
-        android:icon="@drawable/ic_shield"
-        android:title="@string/pref_header_detect" />
+    <!--    <header
+            android:fragment="com.congnt.emergencyassistance.view.activity.SettingsActivity$SettingAutoFragment"
+            android:icon="@drawable/ic_shield"
+            android:title="@string/pref_header_detect" />-->
 </preference-headers>

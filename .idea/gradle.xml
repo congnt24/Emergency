@@ -13,7 +13,6 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/galleryview" />
             <option value="$PROJECT_DIR$/reversegeocodecountry" />
-            <option value="$PROJECT_DIR$/slidingmenu" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

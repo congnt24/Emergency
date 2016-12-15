@@ -12,6 +12,7 @@ import android.speech.SpeechRecognizer;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.congnt.androidbasecomponent.utility.SoundUtil;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
@@ -50,6 +51,7 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
             startListening();
         } else {
             stopListening();
+            SoundUtil.setStreamMute(this, false);
         }
     }
 
@@ -78,6 +80,9 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
 
     @Override
     protected void initStart() {
+        if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_mute_speech", false)) {
+            SoundUtil.setStreamMute(this, true);
+        }
         mIsListening = true;
         MySharedPreferences.getInstance(this).isListening.save(mIsListening);
         mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
@@ -85,6 +90,7 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
 
     @Override
     protected void initStop() {
+        SoundUtil.setStreamMute(this, false);
         mIsListening = false;
         MySharedPreferences.getInstance(this).isListening.save(mIsListening);
         if (mSpeechRecognizer != null) {

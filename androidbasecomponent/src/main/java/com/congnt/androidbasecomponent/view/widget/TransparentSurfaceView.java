@@ -85,7 +85,7 @@ public class TransparentSurfaceView extends SurfaceView implements SurfaceHolder
         try {
             Camera.Parameters parameters = camera.getParameters();
             camera.setParameters(parameters);
-            camera.setDisplayOrientation(90);
+//            camera.setDisplayOrientation(90);
             camera.setPreviewDisplay(surfaceHolder);
             camera.startPreview();
 

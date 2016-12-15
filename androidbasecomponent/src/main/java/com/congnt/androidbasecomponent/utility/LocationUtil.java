@@ -64,10 +64,12 @@ public class LocationUtil {
         return str;
     }
 
-    public static void setLocationRequest(LocationRequest mLocationRequest, long displacement, long duration) {
+    public static LocationRequest getLocationRequest(long displacement, long duration) {
+        LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setSmallestDisplacement(displacement);
         mLocationRequest.setInterval(duration);
         mLocationRequest.setFastestInterval(duration);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        return mLocationRequest;
     }
 }

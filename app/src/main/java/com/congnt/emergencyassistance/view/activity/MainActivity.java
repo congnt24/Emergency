@@ -2,8 +2,6 @@ package com.congnt.emergencyassistance.view.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -32,14 +30,12 @@ import com.congnt.androidbasecomponent.annotation.Activity;
 import com.congnt.androidbasecomponent.annotation.NavigationDrawer;
 import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
-import com.congnt.androidbasecomponent.utility.FileUtil;
 import com.congnt.androidbasecomponent.utility.IntentUtil;
 import com.congnt.androidbasecomponent.utility.LocationUtil;
 import com.congnt.androidbasecomponent.utility.NetworkUtil;
 import com.congnt.androidbasecomponent.utility.PackageUtil;
 import com.congnt.androidbasecomponent.view.dialog.DialogBuilder;
 import com.congnt.androidbasecomponent.view.utility.TabLayoutUtil;
-import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MainActionBar;
 import com.congnt.emergencyassistance.MainApplication;
 import com.congnt.emergencyassistance.MySharedPreferences;
@@ -188,9 +184,12 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
             //get default command by country
             //init json
             SettingSpeech setting = CountryUtil.getSettingSpeechByCountry(this, countryCode);
+            if (setting == null) {
+                setting = CountryUtil.getSettingSpeechByCountry(this, "US");
+            }
             if (setting != null) {
                 List<ItemSettingSpeech> list = new ArrayList<>();
-                Log.d(TAG, "initSpeechCommand: " + setting.fire.size() + " " + setting.ambulance.size());
+                Log.d(TAG, "initSpeechCommand: " + setting.fire.size() + " " + setting.ambulance.size() + " - " + countryCode);
                 for (int i = 0; i < setting.fire.size(); i++) {
                     list.add(new ItemSettingSpeech(setting.fire.get(i).command, FIRE));
                 }
@@ -241,7 +240,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         TabLayout tabLayout = (TabLayout) root.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
         TabLayoutUtil.setCustomLayouts(tabLayout, R.layout.item_tab_tablayout);
-        TabLayoutUtil.setIcons(tabLayout, R.drawable.ic_home, R.drawable.ic_report_problem, R.drawable.ic_location_on, R.drawable.ic_directions_run);
+        TabLayoutUtil.setIcons(tabLayout, R.drawable.ic_home, R.drawable.ic_surround_sound_black_36dp, R.drawable.ic_location_on, R.drawable.ic_directions_run);
 //        TabLayoutUtil.setTexts(tabLayout, "Home", "Setting", "Near By", "Walking");
         //Best Solution
         TabLayoutUtil.setColorSelectorIcons(tabLayout, R.color.tab_icon);
@@ -301,8 +300,8 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                 break;
             case R.id.nav_library:
 
-                Intent intent = new Intent(this, ImageGalleryActivity.class);
-                Bundle bundle = new Bundle();
+                Intent intent = new Intent(this, ManageActivity.class);
+                /*Bundle bundle = new Bundle();
                 ArrayList<String> alist = new ArrayList<String>();
                 List<File> list = FileUtil.getListFile(new File(Environment.getExternalStorageDirectory() + "/" + AppConfig.FOLDER_MEDIA), ".jpg");
                 if (list != null) {
@@ -312,7 +311,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
                 }
                 bundle.putStringArrayList(ImageGalleryActivity.KEY_IMAGES, alist);
                 bundle.putString(ImageGalleryActivity.KEY_TITLE, "Manage Photo");
-                intent.putExtras(bundle);
+                intent.putExtras(bundle);*/
                 startActivity(intent);
                 break;
             case R.id.nav_follow:

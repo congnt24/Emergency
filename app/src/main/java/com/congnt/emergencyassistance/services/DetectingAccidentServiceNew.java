@@ -164,6 +164,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
             }
 //            Location prevLocation = ((MainApplication) getApplication()).lastLocation;
             distance += LocationUtils.distance(prevLocation, location);
+            prevLocation = location;
             ((MainApplication) getApplication()).lastLocation = location;
             double lat = (location.getLatitude());
             double lng = (location.getLongitude());

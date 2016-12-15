@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +32,7 @@ public class ImageGalleryFragment extends Fragment implements ImageGalleryAdapte
     // endregion
     private static ImageGalleryAdapter.ImageThumbnailLoader imageThumbnailLoader;
     // region Views
-    private Toolbar toolbar;
+//    private Toolbar toolbar;
     // endregion
     private RecyclerView recyclerView;
     // region Member Variables
@@ -77,7 +74,6 @@ public class ImageGalleryFragment extends Fragment implements ImageGalleryAdapte
             images = getArguments().getStringArrayList(KEY_IMAGES);
             title = getArguments().getString(KEY_TITLE);
         }
-
     }
 
     @Override
@@ -94,13 +90,13 @@ public class ImageGalleryFragment extends Fragment implements ImageGalleryAdapte
 
         bindViews();
 
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(title);
-        }
+//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+//
+//        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setTitle(title);
+//        }
 
         setUpRecyclerView();
 
@@ -136,7 +132,7 @@ public class ImageGalleryFragment extends Fragment implements ImageGalleryAdapte
     // region Helper Methods
     private void bindViews() {
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.rv);
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+//        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
     }
 
     private void setUpRecyclerView() {

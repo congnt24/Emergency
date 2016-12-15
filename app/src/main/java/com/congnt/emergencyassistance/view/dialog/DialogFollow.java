@@ -13,10 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.congnt.androidbasecomponent.utility.CommunicationUtil;
 import com.congnt.emergencyassistance.MySharedPreferences;
@@ -38,11 +36,6 @@ import java.util.List;
 public class DialogFollow extends DialogFragment {
     private static final String TAG = "DialogFollow";
     private View rootView;
-
-    public EditText getEtContent() {
-        return etContent;
-    }
-
     private EditText etContent;
 //    private Spinner spTemplate;
     private RecyclerView recycler;
@@ -51,10 +44,6 @@ public class DialogFollow extends DialogFragment {
     private String location = "";
     private String[] templateMsg;
     private OnEventListener<Void> listener;
-
-    public void setOnEventListener(OnEventListener<Void> listener) {
-        this.listener = listener;
-    }
 
     public static SettingSpeech getSettingSpeech(Context context) {
         SettingSpeech setting = null;
@@ -66,6 +55,14 @@ public class DialogFollow extends DialogFragment {
             setting = CountryUtil.getSettingSpeechByCountry(context, "us");
         }
         return setting;
+    }
+
+    public EditText getEtContent() {
+        return etContent;
+    }
+
+    public void setOnEventListener(OnEventListener<Void> listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -89,7 +86,7 @@ public class DialogFollow extends DialogFragment {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         rootView = inflater.inflate(R.layout.dialog_layout_follow, null);
         initView();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme2_SMSDialog);
         builder.setView(rootView);
         builder.setTitle("Send SMS")
                 .setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {

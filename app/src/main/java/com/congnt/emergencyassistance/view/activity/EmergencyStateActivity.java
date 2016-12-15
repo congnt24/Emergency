@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -45,8 +44,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class EmergencyStateActivity extends Activity implements Camera.PictureCallback, View.OnClickListener {
@@ -217,38 +214,41 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
     }
 
     private void initPicture() {
-        if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_take_picture", false)) {
-            final TransparentSurfaceView cameraView = new TransparentSurfaceView(this, Camera.open());
-            previewHolder.addView(cameraView);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    cameraView.getCamera().takePicture(null, null, new Camera.PictureCallback() {
-                        @Override
-                        public void onPictureTaken(byte[] data, Camera camera) {
-                            ImageUtil.createImageFromData(data, AppConfig.FOLDER_MEDIA);
-                            Camera cam = cameraView.getCamera();
-                            cam.stopPreview();
-                            cam.release();
-                            cam = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
-                            try {
-                                cam.setPreviewDisplay(cameraView.getHolder());
-                                cam.setParameters(CameraUtil.getCameraParam(cam));
-                                cam.startPreview();
-                                final Camera finalCamera = cam;
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finalCamera.takePicture(null, null, EmergencyStateActivity.this);
-                                    }
-                                }, 500);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+        try {
+            if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_take_picture", false)) {
+                final TransparentSurfaceView cameraView = new TransparentSurfaceView(this, Camera.open());
+                previewHolder.addView(cameraView);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cameraView.getCamera().takePicture(null, null, new Camera.PictureCallback() {
+                            @Override
+                            public void onPictureTaken(byte[] data, Camera camera) {
+                                ImageUtil.createImageFromData(data, AppConfig.FOLDER_MEDIA);
+                                Camera cam = cameraView.getCamera();
+                                cam.stopPreview();
+                                cam.release();
+                                cam = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+                                try {
+                                    cam.setPreviewDisplay(cameraView.getHolder());
+                                    cam.setParameters(CameraUtil.getCameraParam(cam));
+                                    cam.startPreview();
+                                    final Camera finalCamera = cam;
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            finalCamera.takePicture(null, null, EmergencyStateActivity.this);
+                                        }
+                                    }, 500);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                    });
-                }
-            }, 1000);
+                        });
+                    }
+                }, 1000);
+            }
+        } catch (Exception e) {
         }
     }
 

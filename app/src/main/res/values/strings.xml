@@ -144,7 +144,7 @@
     <string name="tutorial_desc_1">Your emergency contacts will receive a message with a link to the location of the accident, allowing them to call emergency services on your behalf and get help for you.</string>
     <string name="tutorial_desc_2">Emergency services will dispatch help you in record time thanks to your contacts call, highly reducing rescue time and saveing lives.</string>
     <string name="tutorial_desc_3">It work on the background and only when you are in a moving vehicle. No nead to open app every time you get on your car</string>
-    <string name="share_app_content">This app can save your life in case of emergency. Download Emergency Assistance at https://raw.githubusercontent.com/congnt24/congnt24.github.io/master/app-debug.apk</string>
+    <string name="share_app_content">This app can save your life in case of emergency. Download Emergency Assistance at https://www.dropbox.com/s/0ekdc21wot1vob2/app-debug.apk?dl=1</string>
     <string name="logout">Log Out</string>
     <string name="accelerometer">Accelerometer: </string>
     <string name="velocity">Velocity:</string>
@@ -179,6 +179,11 @@
     <string name="pref_header_detect">Auto detect accident</string>
     <string name="setting_auto_detect_countdown_time_default">30</string>
     <string name="manage">Manage</string>
+    <string name="setting_detect_countdown_time">Detect Accident Countdown Time</string>
+    <string name="enable_mute_beep_sound">Mute Beep Sound</string>
+    <string name="enable_mute_beep_sound_desc">Mute the beep sound of speech recognizer while enable detect accident by speech.</string>
+    <string name="enable_enable_volume">Enable Detect By Volumn Button</string>
+    <string name="enable_enable_volume_desc">Enable detect emergency state by using volumn button(Hold volumn button).</string>
 
     <string-array name="commands_police">
         <item>Help</item>

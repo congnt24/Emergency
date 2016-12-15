@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/galleryview/galleryview.iml" filepath="$PROJECT_DIR$/galleryview/galleryview.iml" />
       <module fileurl="file://$PROJECT_DIR$/reversegeocodecountry/reversegeocodecountry.iml" filepath="$PROJECT_DIR$/reversegeocodecountry/reversegeocodecountry.iml" />
-      <module fileurl="file://$PROJECT_DIR$/slidingmenu/slidingmenu.iml" filepath="$PROJECT_DIR$/slidingmenu/slidingmenu.iml" />
     </modules>
   </component>
 </project>

@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.congnt.emergencyassistance.AppConfig;
 import com.congnt.emergencyassistance.MainApplication;
+import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.entity.DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_DetectAccident;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartDetectingAccident;
@@ -34,7 +35,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     private static final String TAG = "DetectingAccident";
     private static final int DETECTING_ACCIDENT_FLAGS = 102;
     private static final double VELOCITY_THRESHOLD = 10;
-    private static final double ACCELERATION_THRESHOLD = 3 * 9.8;
+    private static double ACCELERATION_THRESHOLD = 3 * 9.8;
     private static final double ACCIDENT_THRESHOLD = 1;
     private static final double ACCIDENT_LOW_SPEED_THRESHOLD = 2;
     private static final double SSD_THRESHOLD = 2.06;
@@ -77,6 +78,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
 //            reset speed and distance
             maxSpeed = 0;
             distance = 0;
+            ACCELERATION_THRESHOLD = Double.parseDouble(MySharedPreferences.getInstance(this).pref.getString("setting_acce_threshold", "29.4"));
             startListening();
         } else {
             stopListening();

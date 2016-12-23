@@ -6,7 +6,7 @@
         android:summary="@string/enable_contact_call_desc"
         android:title="@string/enable_contact_call" />
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="setting_contact_sms"
         android:summary="@string/enable_contact_sms_desc"
         android:title="@string/enable_contact_sms" />

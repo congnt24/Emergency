@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="acce">
+        <item>3G</item>
+        <item>4G</item>
+    </string-array>
+    <string-array name="acce_value">
+        <item>29.4</item>
+        <item>39.2</item>
+    </string-array>
+</resources>

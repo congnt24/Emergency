@@ -118,8 +118,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_general);
             bindPreferenceSummaryToValue(findPreference("setting_auto_detect_countdown_time"));
             bindPreferenceSwitchToValue(findPreference("setting_enable_volume"));
-            bindPreferenceSwitchToValue(findPreference("setting_call_to"));
-//            bindPreferenceSummaryToValue(findPreference("setting_speed_unit"));
+//            bindPreferenceSwitchToValue(findPreference("setting_call_to"));
+            bindPreferenceSummaryToValue(findPreference("setting_acce_threshold"));
             bindPreferenceSwitchToValue(findPreference("setting_mute_speech"));
         }
         @Override

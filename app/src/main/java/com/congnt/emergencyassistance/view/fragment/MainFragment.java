@@ -1,6 +1,7 @@
 package com.congnt.emergencyassistance.view.fragment;
 
 import android.app.TimePickerDialog;
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,6 +45,7 @@ import com.congnt.emergencyassistance.view.activity.LoginActivity;
 import com.congnt.emergencyassistance.view.activity.MainActivity;
 import com.congnt.emergencyassistance.view.dialog.DialogFollow;
 import com.congnt.emergencyassistance.view.dialog.DialogSendSMS;
+import com.congnt.emergencyassistance.widget.ContactWidgetProvider;
 import com.congnt.reversegeocodecountry.GeocodeCountry;
 import com.congnt.reversegeocodecountry.ReverseGeocodeCountry;
 import com.parse.ParseException;
@@ -53,6 +55,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import cn.iwgang.countdownview.CountdownView;
 
@@ -179,6 +182,9 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 layoutCountDown.setVisibility(View.GONE);
                 //Start emergency dialog
                 Intent intent = new Intent(getActivity(), EmergencyStateActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", AppConfig.DETECT_TIMMER);
+                intent.putExtras(bundle);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -425,6 +431,15 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     }
 */
 
+
+    public void updateWidget() {
+        Intent intent = new Intent(mainActivity, ContactWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = {R.xml.widget_contact};
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        mainActivity.sendBroadcast(intent);
+    }
+
     /**
      * Update emergency number while country is changed
      *
@@ -470,6 +485,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
             MySharedPreferences.getInstance(mainActivity).countryNumber.save(countrynumber);
             //update speech command by country
             mainActivity.initSpeechCommand(countrynumber.countryCode);
+            updateWidget();
         }
     }
 

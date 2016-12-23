@@ -8,7 +8,8 @@ import com.congnt.androidbasecomponent.utility.SoundUtil;
 import com.congnt.emergencyassistance.R;
 
 public class EmergencySoundFragment extends AwesomeFragment implements View.OnClickListener {
-    private boolean isHelpmePlay = false;
+    private boolean isHelpmeMalePlay = false;
+    private boolean isHelpmeFemalePlay = false;
     private boolean isSirenPlay = false;
     private ImageButton male, female, siren;
 
@@ -39,11 +40,13 @@ public class EmergencySoundFragment extends AwesomeFragment implements View.OnCl
                 v.setSelected(!v.isSelected());
                 female.setSelected(false);
                 siren.setSelected(false);
-                if (!isHelpmePlay) {
-                    isHelpmePlay = true;
+                if (!isHelpmeMalePlay) {
+                    isHelpmeMalePlay = true;
+                    isSirenPlay = false;
+                    isHelpmeFemalePlay = false;
                     SoundUtil.getInstance().playSoundRepeat(getActivity(), R.raw.help_male);
                 } else {
-                    isHelpmePlay = false;
+                    isHelpmeMalePlay = false;
                     SoundUtil.getInstance().stop();
                 }
                 break;
@@ -51,11 +54,13 @@ public class EmergencySoundFragment extends AwesomeFragment implements View.OnCl
                 v.setSelected(!v.isSelected());
                 male.setSelected(false);
                 siren.setSelected(false);
-                if (!isHelpmePlay) {
-                    isHelpmePlay = true;
+                if (!isHelpmeFemalePlay) {
+                    isHelpmeFemalePlay = true;
+                    isHelpmeMalePlay = false;
+                    isSirenPlay = false;
                     SoundUtil.getInstance().playSoundRepeat(getActivity(), R.raw.help_female);
                 } else {
-                    isHelpmePlay = false;
+                    isHelpmeFemalePlay = false;
                     SoundUtil.getInstance().stop();
                 }
                 break;
@@ -64,6 +69,8 @@ public class EmergencySoundFragment extends AwesomeFragment implements View.OnCl
                 female.setSelected(false);
                 male.setSelected(false);
                 if (!isSirenPlay) {
+                    isHelpmeFemalePlay = false;
+                    isHelpmeMalePlay = false;
                     isSirenPlay = true;
                     SoundUtil.getInstance().playSoundRepeat(getActivity(), R.raw.police_siren);
                 } else {

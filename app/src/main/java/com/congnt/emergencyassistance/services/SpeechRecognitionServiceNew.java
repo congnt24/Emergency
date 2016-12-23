@@ -12,10 +12,12 @@ import android.speech.SpeechRecognizer;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.congnt.androidbasecomponent.utility.AndroidUtil;
 import com.congnt.androidbasecomponent.utility.SoundUtil;
 import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.congnt.emergencyassistance.entity.EventBusEntity.EBE_StartStopService;
+import com.congnt.emergencyassistance.entity.ItemCountryEmergencyNumber;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -75,14 +77,29 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
 //        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500);
 //        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true); //ERror from server
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
-
     }
+
+    /**
+     * Update emergency number while country is changed
+     *
+     * @param countrynumber
+     */
+    @Subscribe
+    public void onCountryChange(ItemCountryEmergencyNumber countrynumber) {
+        if (countrynumber != null) {
+            AndroidUtil.updateLocaleByCountry(this, countrynumber.countryCode);
+            Log.d(TAG, "Service onCountryChange: "+countrynumber.countryCode +" - "+ Locale.getDefault().getCountry());
+        }
+    }
+
 
     @Override
     protected void initStart() {
         if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_mute_speech", false)) {
             SoundUtil.setStreamMute(this, true);
         }
+//        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
+//        Log.d(TAG, "initStart: " + Locale.getDefault().toString() + Locale.getDefault().getCountry());
         mIsListening = true;
         MySharedPreferences.getInstance(this).isListening.save(mIsListening);
         mSpeechRecognizer.startListening(mSpeechRecognizerIntent);

@@ -65,6 +65,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -116,6 +117,7 @@ public class MainActivity extends AwesomeActivity implements NavigationView.OnNa
         countrynumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
         if (countrynumber != null) {
             AndroidUtil.updateLocaleByCountry(this, countrynumber.countryCode);
+            Log.d(TAG, "Mainactivity: "+countrynumber.countryCode +" - "+ Locale.getDefault().getCountry());
         }
 
         //Init Service

@@ -7,7 +7,6 @@ import android.os.Vibrator;
 
 public class VibratorUtil {
 
-    @TargetApi(11)
     public static boolean hasVibrator(Context context) {
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         return vibrator.hasVibrator();
@@ -18,7 +17,8 @@ public class VibratorUtil {
     }
 
     public static void vibrate(Context context, long milliseconds) {
-        vibrate(context, new long[]{milliseconds});
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(milliseconds);
     }
 
     public static void vibrate(Context context, long[] pattern) {

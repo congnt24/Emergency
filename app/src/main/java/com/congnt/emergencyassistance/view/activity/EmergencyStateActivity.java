@@ -65,6 +65,7 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
     private ContactAdapter adapter;
     private java.lang.Runnable delayRunnable;
     private boolean hasSpeech;
+    private long[] vibratorPattern = new long[]{1000, 200, 1000, 200};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,7 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
         countrynumber = MySharedPreferences.getInstance(this).countryNumber.load(null);
         initViews();
         if (VibratorUtil.hasVibrator(this)) {
-            VibratorUtil.vibrate(this, 2000);   //TODO: VIBRATOR NOT WORK
+            VibratorUtil.vibrate(this, vibratorPattern, 0);
         }
 
         //Show dialog
@@ -114,6 +115,10 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
     }
 
     private void finishCountdown(String type) {
+
+        if (VibratorUtil.hasVibrator(this)) {
+            VibratorUtil.cancel(this);
+        }
         //Recorder
         startService(new Intent(EmergencyStateActivity.this, RecordAudioService.class));
         List<ItemContact> listContact = MySharedPreferences.getInstance(this).listContact.load(null);
@@ -129,7 +134,9 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
                 }
             }
             //Call
-            if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_contact_call", false)) {
+
+            if (MySharedPreferences.getInstance(this).listContact.load(new ArrayList<ItemContact>()).size() > 0 &&
+                    MySharedPreferences.getInstance(this).pref.getBoolean("setting_contact_call", false)) {
                 CommunicationUtil.callTo(EmergencyStateActivity.this, listContact.get(0).getContactNumber());
             } else {
                 switch (type) {
@@ -313,6 +320,9 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
     public void finish() {
         isRunning = false;
         AndroidUtil.releaseWakeLock();
+        if (VibratorUtil.hasVibrator(this)) {
+            VibratorUtil.cancel(this);
+        }
         try {
             SoundUtil.getInstance().stop();
             handler.removeCallbacks(delayRunnable);

@@ -1,8 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--<ListPreference
-        android:key="setting_speed_unit"
-        android:summary="Km/h"
-        android:title="Speed Unit" />-->
+
     <SwitchPreference
         android:defaultValue="false"
         android:key="setting_enable_volume"
@@ -21,9 +18,14 @@
         android:key="setting_mute_speech"
         android:summary="@string/enable_mute_beep_sound_desc"
         android:title="@string/enable_mute_beep_sound" />
-    <SwitchPreference
+    <ListPreference
+        android:key="setting_acce_threshold"
+        android:title="Accelerometer Threshold"
+        android:entries="@array/acce"
+        android:entryValues="@array/acce_value"/>
+<!--    <SwitchPreference
         android:defaultValue="false"
         android:key="setting_call_to"
         android:summary="@string/enable_call_to_desc"
-        android:title="@string/enable_call_to" />
+        android:title="@string/enable_call_to" />-->
 </PreferenceScreen>

@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity{
                         @Override
                         public void onPermissionGranted(MultiplePermissionsReport response) {
                             if (response.areAllPermissionsGranted()){
-                                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                                startActivity(new Intent(SplashActivity.this, TutorialActivity.class));
                                 finish();
                             }
                         }

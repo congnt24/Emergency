@@ -40,6 +40,10 @@ import java.util.List;
         actionbarType = Activity.ActionBarType.ACTIONBAR_CUSTOM,
         mainLayoutId = R.layout.viewpager)
 public class ManageActivity extends AwesomeActivity {
+    private ViewPager viewPager;
+    private List<Fragment> listFragment ;
+    private TabLayout tabLayout;
+
     @Override
     protected int getLayoutId() {
         return 0;
@@ -53,13 +57,19 @@ public class ManageActivity extends AwesomeActivity {
     @Override
     protected void initialize(View mainView) {
         initManageGallery();
-        //init viewpager
-        setupViewPager(mainView);
+        viewPager = (ViewPager) mainView.findViewById(R.id.viewPager);
+        tabLayout = (TabLayout) mainView.findViewById(R.id.tabLayout);
     }
 
-    private void setupViewPager(View root) {
-        ViewPager viewPager = (ViewPager) root.findViewById(R.id.viewPager);
-        List<Fragment> listFragment = new ArrayList<>();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //init viewpager
+        setupViewPager();
+    }
+
+    private void setupViewPager() {
+        listFragment = new ArrayList<>();
         Bundle bundle = new Bundle();
         ArrayList<String> alist = new ArrayList<String>();
         List<File> list = FileUtil.getListFile(new File(Environment.getExternalStorageDirectory() + "/" + AppConfig.FOLDER_MEDIA), ".jpg");
@@ -71,18 +81,16 @@ public class ManageActivity extends AwesomeActivity {
         bundle.putStringArrayList(ImageGalleryActivity.KEY_IMAGES, alist);
         bundle.putString(ImageGalleryActivity.KEY_TITLE, "Manage");
 
-        ImageGalleryFragment imageGalleryFragment = ImageGalleryFragment.newInstance(bundle);
-        listFragment.add(imageGalleryFragment);
+        listFragment.add(ImageGalleryFragment.newInstance(bundle));
         listFragment.add(new AudioGalleryFragment());
 //        listFragment.add(WalkingFragment.newInstance());
         viewPager.setAdapter(new ViewPagerAdapter<>(getSupportFragmentManager(), listFragment));
         viewPager.setOffscreenPageLimit(listFragment.size() - 1);
         //Setup TabLayout
-        setupTabLayout(root, viewPager);
+        setupTabLayout(viewPager);
     }
 
-    private void setupTabLayout(View root, ViewPager viewPager) {
-        TabLayout tabLayout = (TabLayout) root.findViewById(R.id.tabLayout);
+    private void setupTabLayout(ViewPager viewPager) {
         tabLayout.setupWithViewPager(viewPager);
 //        TabLayoutUtil.setCustomLayouts(tabLayout, R.layout.item_tab_tablayout);
 //        TabLayoutUtil.setIcons(tabLayout, R.drawable.ic_home, R.drawable.ic_report_problem, R.drawable.ic_location_on, R.drawable.ic_directions_run);

@@ -76,6 +76,8 @@ public class FollowActivity extends AwesomeActivity implements View.OnClickListe
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                handler.removeCallbacksAndMessages(null);
+                cacheList.clear();
                 mapFragment.getMap().clear();
                 getFollowFromParse(etParseId.getText().toString());
                 handler.postDelayed(new Runnable() {

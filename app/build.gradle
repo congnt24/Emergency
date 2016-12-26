@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.congnt.emergencyassistance"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,24 +24,26 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':androidbasecomponent')
-    compile 'com.android.support:design:24.2.1'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:support-vector-drawable:24.2.1'
-    compile 'info.hoang8f:android-segmented:1.0.6'
-    compile 'com.google.firebase:firebase-core:9.6.1'
-    compile 'com.google.firebase:firebase-auth:9.6.1'
-    compile 'com.parse:parse-android:1.13.1'
     //    UI
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    compile 'com.github.iwgang:countdownview:2.1.2'
-    testCompile 'junit:junit:4.12'
     compile project(':CountryCodePicker')
     compile project(':reversegeocodecountry')
     compile project(':galleryview')
+    compile 'com.android.support:design:25.1.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.android.support:support-vector-drawable:25.1.0'
+    compile 'info.hoang8f:android-segmented:1.0.6'
+    compile 'com.google.firebase:firebase-core:10.0.1'
+    compile 'com.google.firebase:firebase-auth:10.0.1'
+    compile 'com.parse:parse-android:1.13.1'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    compile 'com.github.iwgang:countdownview:2.1.2'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    testCompile 'junit:junit:4.12'
 }
+
 
 
 apply plugin: 'com.google.gms.google-services'

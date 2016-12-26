@@ -3,6 +3,7 @@ package com.congnt.emergencyassistance.view.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -127,6 +128,7 @@ public class ProfileActivity extends AwesomeActivity {
     public void loadProfile() {
         User user = MySharedPreferences.getInstance(this).userProfile.load(null);
         if (user != null) {
+            Log.d(TAG, "loadProfile() called " + user.toString());
             tvValueName.setText(user.getName());
             tvValueDate.setText(user.getDate());
             tvValueGender.setText(user.getGender());
@@ -151,7 +153,7 @@ public class ProfileActivity extends AwesomeActivity {
     public void finish() {
         saveProfile(
                 new User(tvValueName.getText().toString(), tvValueDate.getText().toString()
-                        , tvValueGender.getText().toString(), tvValueAddress.getText().toString(), tvValuePhone.getText().toString())
+                        , tvValueAddress.getText().toString(), tvValueGender.getText().toString(), tvValuePhone.getText().toString())
         );
         setResult(RESULT_OK);
         super.finish();

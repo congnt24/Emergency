@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 public class PermissionUtil implements PermissionListener, MultiplePermissionsListener {
-    public static PermissionUtil instance;
+    private static PermissionUtil instance;
     private Context context;
 
     public PermissionUtil(Context context) {
@@ -93,7 +93,7 @@ public class PermissionUtil implements PermissionListener, MultiplePermissionsLi
 
             @Override
             public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-
+                token.continuePermissionRequest();
             }
         }, permissions);
     }

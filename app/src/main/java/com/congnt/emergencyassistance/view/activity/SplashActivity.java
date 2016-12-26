@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,13 +16,19 @@ import com.congnt.emergencyassistance.MySharedPreferences;
 import com.congnt.emergencyassistance.R;
 import com.karumi.dexter.MultiplePermissionsReport;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by congnt24 on 28/11/2016.
  */
 
 public class SplashActivity extends AppCompatActivity{
+    private static final String TAG = "SplashActivity";
     private String[] permission = new String[]{
             Manifest.permission.CALL_PHONE
+            , Manifest.permission.GET_ACCOUNTS
+            , Manifest.permission.SEND_SMS
             , Manifest.permission.ACCESS_COARSE_LOCATION
             , Manifest.permission.ACCESS_FINE_LOCATION
             , Manifest.permission.READ_CONTACTS
@@ -29,6 +36,7 @@ public class SplashActivity extends AppCompatActivity{
             , Manifest.permission.CAMERA
             , Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    private List<String> listPer = new ArrayList<>();
 
     private Button btn_grant;
     @Override
@@ -39,11 +47,18 @@ public class SplashActivity extends AppCompatActivity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //REQUEST PERMISSION AND REQUIRE
         if (!PermissionUtil.getInstance(this).checkMultiPermission(permission)) {
+            for (String s : permission) {
+                if (!PermissionUtil.getInstance(this).checkPermission(s)) {
+                    listPer.add(s);
+                }
+            }
+
             setContentView(R.layout.activity_splash);
             btn_grant = (Button) findViewById(R.id.btn_grant);
             btn_grant.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d(TAG, "onCreate: " + listPer.size());
                     PermissionUtil.getInstance(SplashActivity.this).requestPermissions(new PermissionUtil.MultiPermissionListenerGranted() {
                         @Override
                         public void onPermissionGranted(MultiplePermissionsReport response) {
@@ -52,7 +67,7 @@ public class SplashActivity extends AppCompatActivity{
                                 finish();
                             }
                         }
-                    }, permission);
+                    }, listPer.toArray(new String[]{}));
                 }
             });
         }else{

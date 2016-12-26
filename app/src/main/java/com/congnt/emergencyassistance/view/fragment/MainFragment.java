@@ -55,7 +55,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import cn.iwgang.countdownview.CountdownView;
 
@@ -79,7 +78,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
     private TextView tvAcc;
     private TextView tvSpeed;
     private TextView tvMaxSpeed;
-    private TextView tvDistance;
+    //    private TextView tvDistance;
     //Map fragment
     private MapFragmentWithFusedLocationLite mapFragment;
     private ItemCountryEmergencyNumber countrynumber;
@@ -124,7 +123,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         tvAcc = (TextView) rootView.findViewById(R.id.tv_acc);
         tvSpeed = (TextView) rootView.findViewById(R.id.tv_speed);
         tvMaxSpeed = (TextView) rootView.findViewById(R.id.tv_max_speed);
-        tvDistance = (TextView) rootView.findViewById(R.id.tv_distance);
+//        tvDistance = (TextView) rootView.findViewById(R.id.tv_distance);
         ib_start_recognition = (ImageButton) rootView.findViewById(R.id.ib_start_recognition);
         setupEmergencyNumber(rootView);
         //Init timmer
@@ -459,7 +458,7 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         tvAcc.setText(getString(R.string.accelerometer) + " " + FormatUtil.formatDouble(detectAccident.getValue().accelerometer, 4));
         tvSpeed.setText(getString(R.string.speed) + " " + FormatUtil.formatDouble(detectAccident.getValue().speed, 4) + " km/h");
         tvMaxSpeed.setText(getString(R.string.max_speed) + " " + FormatUtil.formatDouble(detectAccident.getValue().maxSpeed, 4) + " km/h");
-        tvDistance.setText(getString(R.string.distance) + " " + FormatUtil.formatDouble(detectAccident.getValue().distance, 4));
+//        tvDistance.setText(getString(R.string.distance) + " " + FormatUtil.formatDouble(detectAccident.getValue().distance, 4));
     }
 
     @Subscribe

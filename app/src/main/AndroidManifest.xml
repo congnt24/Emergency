@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:name=".MainApplication"
@@ -152,8 +153,8 @@
         <!--Receiver-->
         <receiver
             android:name=".widget.ContactWidgetProvider"
-            android:icon="@drawable/police"
-            android:label="Example Widget">
+            android:icon="@drawable/ic_launcher"
+            android:label="SOS Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

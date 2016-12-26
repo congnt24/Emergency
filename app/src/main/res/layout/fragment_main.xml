@@ -82,12 +82,12 @@
                 android:text="@string/max_speed"
                 android:textColor="@color/colorTextSecondary" />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/tv_distance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/distance"
-                android:textColor="@color/colorTextSecondary" />
+                android:textColor="@color/colorTextSecondary" />-->
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

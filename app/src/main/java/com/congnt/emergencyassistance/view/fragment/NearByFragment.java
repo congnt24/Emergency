@@ -82,7 +82,7 @@ public class NearByFragment extends AwesomeFragment implements View.OnClickListe
                         nearbyName = "police";
                         break;
                     case R.id.rb_nearby_fire:
-                        nearbyName = "fire station";
+                        nearbyName = "fire_station";
                         break;
                     case R.id.rb_nearby_hospital:
                         nearbyName = "hospital";

@@ -46,7 +46,7 @@ public class DetectBySpeechRecervier extends WakefulBroadcastReceiver {
                         for (String str : matches) {
                             String command = item.getCommand().trim().toLowerCase();
                             String match = str.trim().toLowerCase();
-                            if (command.equalsIgnoreCase(match) || match.contains(command) /*|| command.contains(match)*/) {
+                            if (command.equalsIgnoreCase(match) || match.contains(command)/* || command.contains(match)*/) {
                                 Intent i = new Intent();
                                 i.setClassName(context, EmergencyStateActivity.class.getName());
                                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

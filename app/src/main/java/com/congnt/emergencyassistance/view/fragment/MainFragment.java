@@ -145,8 +145,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
 //                mapFragment.setMyLocationEnabled(false);
 //            }
 //        });
-        mainActivity.mainApplication.setRequest_duration(2000);
-        mainActivity.mainApplication.setRequest_displacement(0);
+//        mainActivity.mainApplication.setRequest_duration(2000);
+//        mainActivity.mainApplication.setRequest_displacement(0);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -451,6 +451,9 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
         btn_ambulance.setText("" + countrynumber.ambulance);
         MySharedPreferences.getInstance(mainActivity).emergency_command.save(null);
         mainActivity.initSpeechCommand(countrynumber.countryCode);
+        if (countrynumber.countryCode.equalsIgnoreCase("US")){
+            CommunicationUtil.MAX_SMS_MESSAGE_LENGTH = 160;
+        }
     }
 
     @Subscribe
@@ -480,7 +483,8 @@ public class MainFragment extends AwesomeFragment implements View.OnClickListene
                 countrynumber = CountryUtil.getInstance(mainActivity).getItemCountryByCode(countryCode);
             }
             Log.d(TAG, "onLocationChanged: " + countrynumber.countryCode);
-            setupEmergencyText();
+//            setupEmergencyText();
+            EventBus.getDefault().post(countrynumber);
             MySharedPreferences.getInstance(mainActivity).countryNumber.save(countrynumber);
             //update speech command by country
             mainActivity.initSpeechCommand(countrynumber.countryCode);

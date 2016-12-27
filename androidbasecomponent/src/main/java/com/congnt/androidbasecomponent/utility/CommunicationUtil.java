@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,12 @@ import java.util.List;
 public class CommunicationUtil {
 
     private static final String INTENT_TYPE_TEXT = "text/plain";
-    private static int MAX_SMS_MESSAGE_LENGTH = 160;
+    public static int MAX_SMS_MESSAGE_LENGTH = 80;
 
     public static void sendSmsAuto(String phonenumber, String message) {
         SmsManager manager = SmsManager.getDefault();
         int length = message.length();
+        Log.d("SEND SMS AUTO", "sendSMS: "+phonenumber+": "+message);
         if (length > MAX_SMS_MESSAGE_LENGTH) {
             ArrayList<String> messagelist = manager.divideMessage(message);
             manager.sendMultipartTextMessage(phonenumber, null, messagelist, null, null);

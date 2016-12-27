@@ -86,6 +86,18 @@
       },
       {
         "command": "Ối giời ơi"
+      },
+      {
+        "command": "Chết người"
+      },
+      {
+        "command": "Đau quá"
+      },
+      {
+        "command": "Hiếp dâm"
+      },
+      {
+        "command": "Thả tôi ra"
       }
     ],
     "fire": [
@@ -101,10 +113,10 @@
     ],
     "ambulance": [
       {
-        "command": "Chết người rồi"
+        "command": "Chết người"
       },
       {
-        "command": "Bác sĩ ơi"
+        "command": "Bác sĩ"
       }
     ],
     "templateMessage": [

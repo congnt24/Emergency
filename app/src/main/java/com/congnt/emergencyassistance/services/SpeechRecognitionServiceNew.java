@@ -73,7 +73,7 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
         Log.d(TAG, "onCreate: " + Locale.getDefault().toString() + Locale.getDefault().getCountry());
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2000); // value to wait
+//        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 1000); // value to wait
 //        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500);
 //        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true); //ERror from server
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
@@ -88,6 +88,7 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
     public void onCountryChange(ItemCountryEmergencyNumber countrynumber) {
         if (countrynumber != null) {
             AndroidUtil.updateLocaleByCountry(this, countrynumber.countryCode);
+            mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
             Log.d(TAG, "Service onCountryChange: "+countrynumber.countryCode +" - "+ Locale.getDefault().getCountry());
         }
     }
@@ -193,11 +194,11 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
 
     @Override
     public void onResults(Bundle results) {
-//        List<String> matches = results
-//                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-//        Log.d("AAAA", matches.get(0));
-////        EventBus.getDefault().post(new EBE_Result(matches));
-//        sendBroadcastToReceiver(results);
+        List<String> matches = results
+                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        Log.d("RESULT : ", "Size "+matches.size()+" - " + matches.get(0));
+//        EventBus.getDefault().post(new EBE_Result(matches));
+        sendBroadcastToReceiver(results);
         listenAgain();
     }
 
@@ -206,7 +207,7 @@ public class SpeechRecognitionServiceNew extends BaseForegroundService implement
 
         List<String> matches = partialResults
                 .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        Log.d("AAAABBBBBBBB", matches.get(0));
+        Log.d("RESULT PARTIAL: ", "Size "+matches.size()+" - " + matches.get(0));
 //        EventBus.getDefault().post(new EBE_Result(matches));
         sendBroadcastToReceiver(partialResults);
     }

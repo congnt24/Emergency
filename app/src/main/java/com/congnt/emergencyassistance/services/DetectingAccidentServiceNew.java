@@ -45,7 +45,7 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
     protected AudioManager mAudioManager;
     Location prevLocation;
     private long lastUpdate = 0;
-    private int DURATION = 300;
+    private int DURATION = 80;
     private List<Double> list = new ArrayList<>();
     private double SSD = 0;
     private Notification notification;
@@ -114,11 +114,11 @@ public class DetectingAccidentServiceNew extends BaseForegroundService implement
         if (mySensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {    //Acc theo 1 Oxy : 2 chieu
             long curTime = System.currentTimeMillis();
             // only allow one update every 100ms.
-            if ((curTime - lastUpdate) > DURATION) {
-                lastUpdate = curTime;
+//            if ((curTime - lastUpdate) > DURATION) {
+//                lastUpdate = curTime;
                 currentAcceleration = calculateAcceleration(event.values);
                 sendBroadcastForAccident(estimateAccident());
-            }
+//            }
         }
     }
 

@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -66,18 +65,19 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
     private ContactAdapter adapter;
     private java.lang.Runnable delayRunnable;
     private boolean hasSpeech;
-    private long[] vibratorPattern = new long[]{1000, 200, 1000, 200};
+    private long[] vibratorPattern = new long[]{2000, 200, 2000, 200};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (!isRunning) {
-        isRunning = true;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        AndroidUtil.holdWakeLock(this);
-//        } else {
-//            finish();
-//        }
+        if (!isRunning) {
+            isRunning = true;
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+            AndroidUtil.holdWakeLock(this);
+        } else {
+            finish();
+        }
+        SoundUtil.setStreamMute(this, false);
         setContentView(R.layout.activity_alert_dialog_new);
         hasSpeech = MySharedPreferences.getInstance(this).isListening.load(false);
         //init variables
@@ -103,9 +103,9 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
             if (type.equalsIgnoreCase(AppConfig.DETECT_ACCIDENT)) {
                 countDownTime = Long.parseLong(MySharedPreferences.getInstance(this).pref.getString("setting_countdown_time", "30")) * 1000;
             } else {
-                //stop speech service
-                if (hasSpeech) EventBus.getDefault().post(new EBE_StartStopService(false));
             }
+            //stop speech service
+            if (hasSpeech) EventBus.getDefault().post(new EBE_StartStopService(false));
             handler.postDelayed(delayRunnable, countDownTime);
         } else {
             //stop speech service
@@ -212,6 +212,8 @@ public class EmergencyStateActivity extends Activity implements Camera.PictureCa
 
     private void initEvent() {
         //Alert sound
+//        if (MySharedPreferences.getInstance(this).pref.getBoolean("setting_mute_speech", false)){
+//        }
         SoundUtil.getInstance().playSound(this, R.raw.alert_sound);
         //Vibrator
         //TODO: vibrator

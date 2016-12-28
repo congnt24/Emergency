@@ -10,22 +10,37 @@
         "command": "Thieft"
       },
       {
-        "command": "Help me"
+        "command": "Rob"
       },
       {
         "command": "Murderous"
       },
       {
-        "command": "Robber"
+        "command": "Oh my god"
       },
       {
         "command": "Police"
       },
       {
-        "command": "I'm lost"
+        "command": "Help me"
       },
       {
-        "command": "Can you help me"
+        "command": "Deadly"
+      },
+      {
+        "command": "That's hurt"
+      },
+      {
+        "command": "Rape"
+      },
+      {
+        "command": "Release me"
+      },
+      {
+        "command": "Kidnap"
+      },
+      {
+        "command": "Forgive me"
       }
     ],
     "fire": [
@@ -34,6 +49,9 @@
       },
       {
         "command": "Stop fire"
+      },
+      {
+        "command": "Fire house"
       }
     ],
     "ambulance": [
@@ -42,6 +60,12 @@
       },
       {
         "command": "Doctor"
+      },
+      {
+        "command": "Deadman"
+      },
+      {
+        "command": "Hurt"
       }
     ],
     "templateMessage": [
@@ -98,6 +122,9 @@
       },
       {
         "command": "Thả tôi ra"
+      },
+      {
+        "command": "Bắt cóc"
       }
     ],
     "fire": [
@@ -108,7 +135,10 @@
         "command": "Dập lửa"
       },
       {
-        "command": "Cháy rồi"
+        "command": "Cháy nhà"
+      },
+      {
+        "command": "Hỏa hoạn"
       }
     ],
     "ambulance": [
@@ -117,6 +147,9 @@
       },
       {
         "command": "Bác sĩ"
+      },
+      {
+        "command": "Đau quá"
       }
     ],
     "templateMessage": [

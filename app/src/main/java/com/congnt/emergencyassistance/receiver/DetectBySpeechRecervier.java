@@ -3,6 +3,7 @@ package com.congnt.emergencyassistance.receiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.SpeechRecognizer;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.text.TextUtils;
@@ -20,12 +21,17 @@ import java.util.List;
 
 public class DetectBySpeechRecervier extends WakefulBroadcastReceiver {
 
+    static boolean isRunning;
+    private Handler handler =new Handler();
     @Override
     public void onReceive(Context context, Intent intent) {
         if (!EmergencyStateActivity.isRunning) {
             // Vibrate the mobile phone
             Bundle extras = intent.getExtras();
             if (extras != null) {
+                if (isRunning) {
+                    return;
+                }
                 if (!TextUtils.isEmpty(extras.getString("type")) && extras.getString("type").equalsIgnoreCase(AppConfig.DETECT_ACCIDENT)) {
                     Intent i = new Intent();
                     i.setClassName(context, EmergencyStateActivity.class.getName());
@@ -34,6 +40,13 @@ public class DetectBySpeechRecervier extends WakefulBroadcastReceiver {
                     b.putString("type", AppConfig.DETECT_ACCIDENT);
                     i.putExtras(b);
                     context.startActivity(i);
+                    isRunning = true;
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isRunning = false;
+                        }
+                    }, 500);
                 } else {
                     List<String> matches = extras
                             .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -54,6 +67,13 @@ public class DetectBySpeechRecervier extends WakefulBroadcastReceiver {
                                 b.putString("type", item.getEmergencyType().toString());
                                 i.putExtras(b);
                                 context.startActivity(i);
+                                isRunning = true;
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        isRunning = false;
+                                    }
+                                }, 500);
                                 return;
                             }
                         }

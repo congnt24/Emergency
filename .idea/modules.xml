@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CountryCodePicker/CountryCodePicker.iml" filepath="$PROJECT_DIR$/CountryCodePicker/CountryCodePicker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/EmergencyAssistance.iml" filepath="$PROJECT_DIR$/EmergencyAssistance.iml" />
       <module fileurl="file://$PROJECT_DIR$/androidbasecomponent/androidbasecomponent.iml" filepath="$PROJECT_DIR$/androidbasecomponent/androidbasecomponent.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/emergencyassistance.iml" filepath="$PROJECT_DIR$/emergencyassistance.iml" />
       <module fileurl="file://$PROJECT_DIR$/galleryview/galleryview.iml" filepath="$PROJECT_DIR$/galleryview/galleryview.iml" />
       <module fileurl="file://$PROJECT_DIR$/reversegeocodecountry/reversegeocodecountry.iml" filepath="$PROJECT_DIR$/reversegeocodecountry/reversegeocodecountry.iml" />
     </modules>

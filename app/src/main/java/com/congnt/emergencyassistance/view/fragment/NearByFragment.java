@@ -42,7 +42,7 @@ import retrofit2.Retrofit;
 
 public class NearByFragment extends AwesomeFragment implements View.OnClickListener {
     private static final int PROXIMITY_RADIUS = 10000;
-    private static final long DURATION = 1000;
+    private static final long DURATION = 600;
     private MapFragmentWithFusedLocationLite mapFragment;
     private Retrofit retrofit;
     private RecyclerView recyclerView;
